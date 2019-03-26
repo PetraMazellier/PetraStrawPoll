@@ -61,9 +61,9 @@ body {
     color: #212529;
     text-align: left;
     background-color: #fff;
-    background-image: url("nuage.jpg");
+    background-image: url(nuage.jpg);
 }
-nuage {
+.nuage {
     background-image: url(nuage.jpg);
 }
 
