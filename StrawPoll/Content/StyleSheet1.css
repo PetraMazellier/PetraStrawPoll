@@ -1,6 +1,10 @@
 ﻿body {
 }
 
+<<<<<<< HEAD
 .Backnuage {
+=======
+body.Backnuage {
+>>>>>>> bfb2c5ed7c9615573c343402166dbf702a73e55e
     background-image: url(nuage.jpg);
 }
