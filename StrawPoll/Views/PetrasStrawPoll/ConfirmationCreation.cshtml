@@ -7,11 +7,82 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>ConfirmationCreation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="StyleSheet1.css" />
+    <meta name="viewport" content="width=device-width" />
+
 </head>
-<body>
-    <div> 
+<body class="card bg-light  mb-3">
+    
+    <div class="card  mb-3">
+
+        <div class="card-header text-black-50 bg-primary border-primary text-center"><h1> <img src="../../Content/logo.jpg" />        Petra's Straw Poll</h1></div>
+        <div class="card-body bg-light  mb-3 text-primary">
+            <h2 class="card-title text-dark text-center">
+
+                Votre sondage est bien crée sur Petra's Straw Poll
+            </h2>
+            <p></p>
+
+            <fieldset>
+                <p class="bg-white text-danger card-text text-left">  Attention de bien garder le lien désactivé sur un lieu sûr ! </p>
+                <div class="form-group row">
+                    <label for="staticDesactiver" class="col-sm-2 text-dark col-form-label">Désactiver :</label>
+                    <div class="col-sm-10">
+
+                         <a href="@Url.Action("APropos")  "> <input type="text" readonly class="form-control-plaintext text-primary "  value="petraStrawPoll.com/désactiver/1rt234"></a>
+                    </div>
+                </div>
+            </fieldset>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <fieldset>
+                <p class="bg-white text-danger card-text text-left">  A partager avec vos amis   </p>
+                <div class="form-group row">
+                    <label for="staticVoter" class="col-sm-2 text-dark col-form-label">Vote :</label>
+                    <div class="col-sm-10">
+                        <a href="@Url.Action("Vote")  "> <input type="text" readonly class="form-control-plaintext text-primary " value="petraStrawPoll.com/voter/1234"></a>                       
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="staticResultat" class="col-sm-2 text-dark col-form-label">Résultat:</label>
+                    <div class="col-sm-10">
+                        <a href="@Url.Action("Resultat")  "> <input type="text" readonly class="form-control-plaintext text-primary " value="petraStrawPoll.com/resultat/1234"></a>
+                    </div>
+                </div>
+            </fieldset>
+
+        </div>
+        <p></p>
+        <fieldset style="text-align:center">
+            <a href="@Url.Action("Accueil")" class="btn btn-primary textall">Accueil</a>
+
+        </fieldset>
+        <p></p>
+        <p></p>
+        <div class="container-fluid card-group  card-footer text-white bg-primary mb-3 border-primary" ;">
+
+            <div class="card-body">
+                <h5 class="card-text"> <a href="@Url.Action("APropos") "><i class="fa fa-copyright text-white"> Copyright 2019 Petra Mazellier</i></a></h5>
+            </div>
+            <div class=" card-body">
+                <h5 class="card-text"> <a href="@Url.Action("Condition") "><i class="fa fa-info-circle text-white">  Conditions d'utilisation</i></a></h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-text"> <a href="@Url.Action("Confidentialite") "><i class="fa fa-lock text-white">  Confidentialité et cookies</i></a></h5>
+            </div>
+        </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
+

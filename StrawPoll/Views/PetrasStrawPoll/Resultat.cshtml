@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -8,7 +7,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Vote</title>
+    <title>Resultat</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <meta name="viewport" content="width=device-width" />
@@ -21,69 +20,63 @@
         <div class="card-header text-dark bg-primary mb-3 text-center"><h1> <img src="../../Content/logo.jpg" />                        Petra's Straw Poll</h1></div>
         <div class="card-body text-primary">
             <h2 class="card-title text-dark text-center">
-                Voter
+                Résultat
             </h2>
             <p></p>
             <form>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <input type="text" readonly class="form-control-plaintext text-center" id="question" value="Vous voulez manger ou ?">
+                        <input type="text" readonly class="form-control-plaintext text-center" value="Vous voulez manger ou ?">
                     </div>
                 </div>
-                <div class="form-check ">
-                    <input class="form-check-input  col" type="checkbox" value="" id="reponse1">
-                    <label class="form-check-label col" for="reponse1">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse1" value=" Restaurant Chinois">
-                    </label>
+                <div class="form-group row">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" Restaurant Japonais">
+                    <div class="progress col">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated " role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"></div>
+                    </div>
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" 60 %">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" 60 Votes">
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="checkbox" value="" id="reponse2">
-                    <label class="form-check-label col" for="reponse2">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse2" value=" Restaurant Japonais">
-                    </label>
+                <div class="form-group row">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" Restaurant Chinois">
+                    <div class="progress col">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated  " role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%"></div>
+                    </div>
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" 30 %">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" 30 Votes">
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="checkbox" value="" id="reponse3">
-                    <label class="form-check-label col" for="reponse3">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse3" value=" Restaurant Alsacien">
-                    </label>
+                <div class="form-group row">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" Restaurant Alsacien">
+                    <div class="progress col">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated  " role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%"></div>
+                    </div>
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" 10 %">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" 10 Votes">
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios1" value="option1" checked>
-                    <label class="form-check-label col" for="reponseRadios1">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse1" value=" Restaurant Chinois">
-                    </label>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext text-center" value="100 Votes">
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios2" value="option2">
-                    <label class="form-check-label col" for="reponseRadios2">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse2" value=" Restaurant Japonais">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios3" value="option3">
-                    <label class="form-check-label col" for="reponseRadios3">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse3" value=" Restaurant Alsacien">
-                    </label>
-                </div>
-
             </form>
         </div>
-        
+
+        <p></p>
         <p></p>
         <form>
             <div class="row">
                 <p class="col">   </p>
                 <div class="col">
-                    <a href="@Url.Action("Vote")" class="btn col  btn-primary  ">Voter</a>
+                    <a href="@Url.Action("Vote")" class="btn col  btn-primary  ">Voter</a>                   
                 </div>
                 <p class="col">   </p>
                 <div class="col">
-                    <a href="@Url.Action("Resultat")" class="btn col btn-primary  ">Résultat</a>
+                    <a href="@Url.Action("Resultat")" class="btn col btn-primary  ">Réactualisation</a>
                 </div>
                 <p class="col">   </p>
             </div>
         </form>
+
         <p></p>
         <p></p>
         <p></p>
