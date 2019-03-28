@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Vote</title>
+    <title>VoteDesactiver</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <meta name="viewport" content="width=device-width" />
@@ -21,8 +21,12 @@
         <div class="card-header text-dark bg-primary mb-3 text-center"><h1> <img src="../../Content/logo.jpg" />                        Petra's Straw Poll</h1></div>
         <div class="card-body text-primary">
             <h2 class="card-title text-dark text-center">
-                Voter
+                Désactivage du sondager
             </h2>
+            <p></p>
+            <h3 class="card-title text-danger text-center">
+                Voulez vous vraiement arrêter les votes ?
+            </h3>
             <p></p>
             <form>
                 <div class="form-group row">
@@ -31,38 +35,17 @@
                     </div>
                 </div>
                 <div class="form-check ">
-                    <input class="form-check-input  col" type="checkbox" value="" id="reponse1">
                     <label class="form-check-label col" for="reponse1">
                         <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse1" value=" Restaurant Chinois">
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="checkbox" value="" id="reponse2">
+                <div class="form-check ">
                     <label class="form-check-label col" for="reponse2">
                         <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse2" value=" Restaurant Japonais">
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input col" type="checkbox" value="" id="reponse3">
                     <label class="form-check-label col" for="reponse3">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse3" value=" Restaurant Alsacien">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios1" value="option1" checked>
-                    <label class="form-check-label col" for="reponseRadios1">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse1" value=" Restaurant Chinois">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios2" value="option2">
-                    <label class="form-check-label col" for="reponseRadios2">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse2" value=" Restaurant Japonais">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios3" value="option3">
-                    <label class="form-check-label col" for="reponseRadios3">
                         <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse3" value=" Restaurant Alsacien">
                     </label>
                 </div>
@@ -75,7 +58,7 @@
             <div class="row">
                 <p class="col">   </p>
                 <div class="col">
-                    <a href="@Url.Action("ConfirmationVote")" class="btn col  btn-primary  ">Voter</a>
+                    <a href="@Url.Action("ConfirmationDesactiver")" class="btn col  btn-primary  ">Confirmer</a>
                 </div>
                 <p class="col">   </p>
                 <div class="col">

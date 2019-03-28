@@ -13,10 +13,7 @@ namespace StrawPoll.Controllers
         {
             return View();
         }
-        public ActionResult Accueil1()
-        {
-            return View();
-        }
+
         public ActionResult Creation()
         {
             return View();
@@ -38,6 +35,34 @@ namespace StrawPoll.Controllers
             return View();
         }
         public ActionResult Confidentialite()
+        {
+            return View();
+        }
+        public ActionResult Resultat()
+        {
+            return View();
+        }
+        public ActionResult DejaVoter()
+        {
+            return View();
+        }
+        public ActionResult VoteInterdit()
+        {
+            return View();
+        }
+        public ActionResult ConfirmationVote()
+        {
+            return View();
+        }
+        public ActionResult ConfirmationDesactiver()
+        {
+            return View();
+        }
+        public ActionResult DesactiverInterdit()
+        {
+            return View();
+        }
+        public ActionResult VoteDesactiver()
         {
             return View();
         }

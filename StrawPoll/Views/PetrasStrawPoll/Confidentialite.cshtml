@@ -1,6 +1,4 @@
 ﻿
-
-
 @{
     Layout = null;
 }
@@ -10,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Confidentialite</title>
+    <title>Confidentialite</title>  
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <meta name="viewport" content="width=device-width" />
@@ -18,13 +16,15 @@
 </head>
 <body class="card bg-light  mb-3">
 
-    <div class="card border-primary mb-3" style="max-width: 100rem; ">
 
-        <div class="card-header text-black-50 bg-primary mb-3 text-center"><h1> <img src="../../Content/logo.jpg" />                        Petra's Straw Poll</h1></div>
+    <div class="card  mb-3">
+
+
+        <div class="card-header text-dark bg-primary mb-3 text-center"><h1> <img src="../../Content/logo.jpg" />                        Petra's Straw Poll</h1></div>
         <div class="card-body text-primary">
-            <h3 class="card-title text-black-50 text-center">
+            <h2 class="card-title text-dark text-center">
                 Confidentialité et cookies
-            </h3>
+            </h2>
             <p></p>
             <p class="card-text text-center">
                 <br> Le site Petra"s Straw Poll  conserve les cookies ainsi que l'adresse IP des votants pour gérer
@@ -32,8 +32,8 @@
                 leurs nombres de votes sur chaque sondage. <br />
                 <br> Il est développé dans le but de pouvoir créer, voter,
                 partager et éventuellement désactiver des sondages. <br />
-                
-</div>
+
+        </div>
         <div>
             <p></p>
             <p></p>
@@ -52,26 +52,25 @@
             <p></p>
             <p></p>
         </div>
-        <div class="card-group  card-footer text-white bg-primary mb-3 border-primary" style="max-width: 300rem ;">
+
+        <div class="container-fluid card-group  text-white bg-primary mb-3 border-primary" ;">
+
 
             <div class="card-body">
-                <h5 class="card-text"><link class="text-white "> <a href="@Url.Action("APropos") "><i class="fa fa-copyright"></i></a>  Copyright 2019 Petra Mazellier</link></h5>
+                <h5 class="card-text"> <a href="@Url.Action("APropos") "><i class="fa fa-copyright text-white"> Copyright 2019 Petra Mazellier</i></a></h5>
             </div>
             <div class=" card-body">
-                <h5 class="card-text"><link class="text-white "> <a href="@Url.Action("Condition") "><i class="fa fa-info-circle"></i> </a> Conditions d'utilisation</link></h5>
+                <h5 class="card-text"> <a href="@Url.Action("Condition") "><i class="fa fa-info-circle text-white">  Conditions d'utilisation</i></a></h5>
             </div>
             <div class="card-body">
-                <h5 class="card-text"><link class="text-white "> <a href="@Url.Action("Confidentialite") "><i class="fa fa-lock"></i> </a>  Confidentialité et cookies</link></h5>
+                <h5 class="card-text"> <a href="@Url.Action("Confidentialite") "><i class="fa fa-lock text-white">  Confidentialité et cookies</i></a></h5>
             </div>
         </div>
 
+    </div>
 
-
-
-        <div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
