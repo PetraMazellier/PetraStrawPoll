@@ -91,6 +91,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    <Content Include="Content\bootstrap.min.css" />
+>>>>>>> bfb2c5ed7c9615573c343402166dbf702a73e55e
+>>>>>>> 06ee1240c6a534a079eeb345775b91a9744fdb0e
     <Content Include="Content\StyleSheet1.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\esm\popper-utils.js" />
@@ -146,12 +153,19 @@
     <Content Include="Views\PetrasStrawPoll\Accueil.cshtml" />
     <Content Include="Views\PetrasStrawPoll\Condition.cshtml" />
     <Content Include="Views\PetrasStrawPoll\Resultat.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\PetrasStrawPoll\ConfirmationDesactiver.cshtml" />
     <Content Include="Views\PetrasStrawPoll\DejaVoter.cshtml" />
     <Content Include="Views\PetrasStrawPoll\ConfirmationVote.cshtml" />
     <Content Include="Views\PetrasStrawPoll\VoteDesactiver.cshtml" />
     <Content Include="Views\PetrasStrawPoll\VoteInterdit.cshtml" />
     <Content Include="Views\PetrasStrawPoll\DesactiverInterdit.cshtml" />
+=======
+    <Content Include="Views\PetrasStrawPoll\DejaVoter.cshtml" />
+    <Content Include="Views\PetrasStrawPoll\ConfirmationVote.cshtml" />
+    <Content Include="Views\PetrasStrawPoll\VoteDesactiver.cshtml" />
+    <Content Include="Views\PetrasStrawPoll\ConfirmationDesactiver.cshtml" />
+>>>>>>> 06ee1240c6a534a079eeb345775b91a9744fdb0e
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

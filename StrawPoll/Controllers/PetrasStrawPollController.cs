@@ -13,7 +13,11 @@ namespace StrawPoll.Controllers
         {
             return View();
         }
+<<<<<<< HEAD
 
+=======
+       
+>>>>>>> 06ee1240c6a534a079eeb345775b91a9744fdb0e
         public ActionResult Creation()
         {
             return View();
@@ -46,10 +50,13 @@ namespace StrawPoll.Controllers
         {
             return View();
         }
+<<<<<<< HEAD
         public ActionResult VoteInterdit()
         {
             return View();
         }
+=======
+>>>>>>> 06ee1240c6a534a079eeb345775b91a9744fdb0e
         public ActionResult ConfirmationVote()
         {
             return View();
@@ -58,10 +65,13 @@ namespace StrawPoll.Controllers
         {
             return View();
         }
+<<<<<<< HEAD
         public ActionResult DesactiverInterdit()
         {
             return View();
         }
+=======
+>>>>>>> 06ee1240c6a534a079eeb345775b91a9744fdb0e
         public ActionResult VoteDesactiver()
         {
             return View();
