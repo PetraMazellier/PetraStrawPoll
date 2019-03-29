@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.SqlClient, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.6.0\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -91,13 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-    <Content Include="Content\bootstrap.min.css" />
->>>>>>> bfb2c5ed7c9615573c343402166dbf702a73e55e
->>>>>>> 06ee1240c6a534a079eeb345775b91a9744fdb0e
     <Content Include="Content\StyleSheet1.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\esm\popper-utils.js" />
@@ -129,6 +125,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataAccess.cs" />
+    <Compile Include="Models\Reponse.cs" />
+    <Compile Include="Models\Sondage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -153,19 +152,12 @@
     <Content Include="Views\PetrasStrawPoll\Accueil.cshtml" />
     <Content Include="Views\PetrasStrawPoll\Condition.cshtml" />
     <Content Include="Views\PetrasStrawPoll\Resultat.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\PetrasStrawPoll\ConfirmationDesactiver.cshtml" />
     <Content Include="Views\PetrasStrawPoll\DejaVoter.cshtml" />
     <Content Include="Views\PetrasStrawPoll\ConfirmationVote.cshtml" />
     <Content Include="Views\PetrasStrawPoll\VoteDesactiver.cshtml" />
     <Content Include="Views\PetrasStrawPoll\VoteInterdit.cshtml" />
     <Content Include="Views\PetrasStrawPoll\DesactiverInterdit.cshtml" />
-=======
-    <Content Include="Views\PetrasStrawPoll\DejaVoter.cshtml" />
-    <Content Include="Views\PetrasStrawPoll\ConfirmationVote.cshtml" />
-    <Content Include="Views\PetrasStrawPoll\VoteDesactiver.cshtml" />
-    <Content Include="Views\PetrasStrawPoll\ConfirmationDesactiver.cshtml" />
->>>>>>> 06ee1240c6a534a079eeb345775b91a9744fdb0e
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -175,7 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
