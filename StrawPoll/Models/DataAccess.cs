@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
+using StrawPoll.Controllers;
 
 namespace StrawPoll.Models
 {
@@ -14,17 +15,41 @@ namespace StrawPoll.Models
             SqlConnection connection = new SqlConnection(SqlConnectionString);
             connection.Open();
             SqlCommand InsertSondage =
-                    new SqlCommand("INSERT INTO Sondage (NomSondage, MultiSondage, EtatSondage, NumSecurite, NombreVoteSondage) " +
-                    " VALUES (@nomSondage, @multiSondage, @etatSondage, @numSecurite, @nombreVoteSondage )", connection);
+                    new SqlCommand("INSERT INTO Sondage (NomSondage, MultiSondage, EtatSondage, NumSecurite) " +
+                    " VALUES (@nomSondage, @multiSondage, @etatSondage, @numSecurite)", connection);
             InsertSondage.Parameters.AddWithValue("@nomSondage", creationSondage.NomSondage);
             InsertSondage.Parameters.AddWithValue("@multiSondage", creationSondage.MultiSondage);
             InsertSondage.Parameters.AddWithValue("@etatSondage", creationSondage.EtatSondage);
-            InsertSondage.Parameters.AddWithValue("@numSecurite", creationSondage.NumSecurite);
-            InsertSondage.Parameters.AddWithValue("@nombreVoteSondage", creationSondage.NombreVoteSondage);
+            InsertSondage.Parameters.AddWithValue("@numSecurite", creationSondage.NumSecurite);          
 
             InsertSondage.ExecuteNonQuery();
 
             connection.Close();
+        }
+        public static bool RecupererIdSondage(Sondage model, out Sondage detailModel)
+        {
+
+            SqlConnection firstSelect = new SqlConnection(SqlConnectionString);
+            firstSelect.Open();
+            SqlCommand selectIdSondage =
+                new SqlCommand("SELECT TOP 1 IdSondage FROM Sondage WHERE NomSondage = @nomSondage ORDER BY IdSondage DESC", firstSelect);
+            selectIdSondage.Parameters.AddWithValue("@nomSondage", model.NomSondage);
+            SqlDataReader dataReader = selectIdSondage.ExecuteReader();
+
+            if (dataReader.Read())
+            {
+
+                int idSondage = (int)dataReader["IdSondage"];
+
+                detailModel = new Sondage(model.NomSondage, model.MultiSondage, model.NumSecurite, model.EtatSondage, idSondage);
+
+                return true;
+            }
+            else
+            {
+                detailModel = null;
+                return false;
+            }
         }
         public static bool RecupererSondage(int idSondage, out Sondage detailSondage)
         {
@@ -32,7 +57,7 @@ namespace StrawPoll.Models
             SqlConnection SelectSondage = new SqlConnection(SqlConnectionString);
             SelectSondage.Open();
             SqlCommand selectLecteur =
-                new SqlCommand("SELECT NomSondage, MultiSondage, EtatSondage, NumSecurite, NombreVoteSondage FROM Sondage where IdSondage = @idSondage", SelectSondage);
+                new SqlCommand("SELECT NomSondage, MultiSondage, EtatSondage, NumSecurite FROM Sondage where IdSondage = @idSondage", SelectSondage);
             selectLecteur.Parameters.AddWithValue("@idSondage", idSondage);
             SqlDataReader dataReader = selectLecteur.ExecuteReader();
 
@@ -42,8 +67,8 @@ namespace StrawPoll.Models
                 bool multiSondage = (bool)dataReader["MultiSondage"];
                 bool etatSondage = (bool)dataReader["EtatSondage"];
                 int numSecurite = (int)dataReader["NumSecurite"];
-                int nombreVoteSondage = (int)dataReader["NombreVoteSondage"];
-                detailSondage = new Sondage(nomSondage, multiSondage, numSecurite, etatSondage, nombreVoteSondage);
+               
+                detailSondage = new Sondage(nomSondage, multiSondage, numSecurite, etatSondage);
                 return true;
             }
             else
@@ -52,31 +77,7 @@ namespace StrawPoll.Models
                 return false;
             }
         }
-        public static int AjoutNombreVoteSondage(Sondage ajoutNombreSondage)
-        {
-            try
-            {
-                SqlConnection connection = new SqlConnection(SqlConnectionString);
-                connection.Open();
-                SqlCommand updateCommand = connection.CreateCommand();
-                updateCommand.CommandText = String.Format(
-                    "UPDATE Sondage " +
-                    "SET NombreVoteSondage =  @nombreVoteSondage " +
-                    "WHERE IdSondage =  @idSondage");
-
-                updateCommand.Parameters.AddWithValue("@idSondage", ajoutNombreSondage.IdSondage);
-                updateCommand.Parameters.AddWithValue("@nombreVoteSondage", ajoutNombreSondage.NombreVoteSondage);
-
-                int nombreSondageModifiees = updateCommand.ExecuteNonQuery();
-                return nombreSondageModifiees;
-            }
-
-            catch
-            {
-                throw new Exception("Problème base de donnée table Sondage !!!");
-            }
-
-        }
+       
         public static int DesactiverVoteSondage(Sondage desactiverSondage)
         {
             try
@@ -97,22 +98,25 @@ namespace StrawPoll.Models
                 throw new Exception("Problème base de donnée table Sondage !!!");
             }
         }
-        public static void CreationReponse(Sondage sondageCorrespondant, Reponse creationReponse)
+        public static void CreationReponse( CreationSondage reponseSaisie)
         {
-            SqlConnection connection = new SqlConnection(SqlConnectionString);
-            connection.Open();
-            SqlCommand InsertSondage =
-                    new SqlCommand("INSERT INTO Reponse (NomReponse, NombreVoteReponse, FKIdSondage) " +
-                    " VALUES (@nomReponse, @nombreVoteReponse, @fKIdSondage )", connection);
-            InsertSondage.Parameters.AddWithValue("@nomReponse", creationReponse.NomReponse);           
-            InsertSondage.Parameters.AddWithValue("@nombreVoteSondage", creationReponse.NombreVoteReponse);
-            InsertSondage.Parameters.AddWithValue("@fKIdSondage", sondageCorrespondant.IdSondage);
+            foreach (Reponse reponseDetail in reponseSaisie.ReponseAuNouveauSondage)
+            {
+                SqlConnection connection = new SqlConnection(SqlConnectionString);
+                connection.Open();
+                SqlCommand InsertSondage =
+                        new SqlCommand("INSERT INTO Reponse (NomReponse, NombreVoteReponse, FKIdSondage) " +
+                        " VALUES (@nomReponse, @nombreVoteReponse, @fKIdSondage )", connection);
+                InsertSondage.Parameters.AddWithValue("@nomReponse", reponseDetail.NomReponse);
+                InsertSondage.Parameters.AddWithValue("@nombreVoteReponse", reponseDetail.NombreVoteReponse);
+                InsertSondage.Parameters.AddWithValue("@fKIdSondage", reponseDetail.FKIdSondage);
 
-            InsertSondage.ExecuteNonQuery();
+                InsertSondage.ExecuteNonQuery();
 
-            connection.Close();
+                connection.Close();
+            }
         }
-        public static int AjoutNombreVoteReponse(Sondage sondageCorrespondant, Reponse ajoutNombreSondage)
+        public static int AjoutNombreVoteReponse( Reponse ajoutNombreSondage)
         {
             try
             {
@@ -124,8 +128,8 @@ namespace StrawPoll.Models
                     "SET NombreVoteReponse =  @nombreVoteReponse " +
                     "WHERE IdReponse =  @idReponse AND FKIdSondage = @fKIdSondage");
                 updateCommand.Parameters.AddWithValue("@idReponse", ajoutNombreSondage.IdReponse);
-                updateCommand.Parameters.AddWithValue("@fKIdSondage", sondageCorrespondant.IdSondage);
-                updateCommand.Parameters.AddWithValue("@nombreVoteSondage", ajoutNombreSondage.NombreVoteReponse);
+                updateCommand.Parameters.AddWithValue("@fKIdSondage", ajoutNombreSondage.FKIdSondage);
+                updateCommand.Parameters.AddWithValue("@nombreVoteReponse", ajoutNombreSondage.NombreVoteReponse);
 
                 int nombreSondageModifiees = updateCommand.ExecuteNonQuery();
                 return nombreSondageModifiees;

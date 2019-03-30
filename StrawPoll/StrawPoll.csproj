@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\StyleSheet1.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\esm\popper-utils.js" />
@@ -109,6 +110,7 @@
     <Content Include="Scripts\jquery-3.0.0.min.js" />
     <Content Include="Scripts\jquery-3.0.0.slim.js" />
     <Content Include="Scripts\jquery-3.0.0.slim.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -125,7 +127,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CreationSondage.cs" />
     <Compile Include="Models\DataAccess.cs" />
+    <Compile Include="Models\Erreur.cs" />
     <Compile Include="Models\Reponse.cs" />
     <Compile Include="Models\Sondage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,6 +162,10 @@
     <Content Include="Views\PetrasStrawPoll\VoteDesactiver.cshtml" />
     <Content Include="Views\PetrasStrawPoll\VoteInterdit.cshtml" />
     <Content Include="Views\PetrasStrawPoll\DesactiverInterdit.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\PetrasStrawPoll\Erreur.cshtml" />
+    <Content Include="Views\PetrasStrawPoll\CreationInvalide.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -174,6 +182,9 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -186,7 +197,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50675</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

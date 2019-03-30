@@ -1,4 +1,6 @@
-﻿@using StrawPoll.Models;
+﻿
+@using StrawPoll.Models
+@model ErreurGrave
 @{
     Layout = null;
 }
@@ -8,7 +10,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>VoteInterdit</title>
+    <title>Erreur</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <meta name="viewport" content="width=device-width" />
@@ -21,47 +23,23 @@
         <div class="card-header text-dark bg-primary mb-3 text-center"><h1> <img src="../../Content/logo.jpg" />                        Petra's Straw Poll</h1></div>
         <div class="card-body text-primary">
             <h2 class="card-title text-dark text-center">
-                Sondage désactivé
+                Programme s'est arrêté à cause d'un grave erreur
             </h2>
             <p></p>
             <h4 class="card-text text-center text-danger">
-                Vous ne pouvez plus voter car le sondage est arrêté !
+                Raison de l'arrêt du programme : @Model.MessageErreur !
             </h4>
             <h4 class="card-text text-center">
-                <br>   Accédez au résultat<br />
+                <br>   Prévienez l'administrateur !!<br />
                 <br>   <br />
             </h4>
 
 
-            <form>
-                <div class="row">
-                    <p class="col">   </p>
-                    <div class="col">
-                        <a href="@Url.Action("Accueil")" class="btn col  btn-primary  ">Accueil</a>
-                    </div>
-                    <p class="col">   </p>
-                    <div class="col">
-                        <a href="@Url.Action("Resultat")" class="btn col btn-primary  ">Résultat</a>
-                    </div>
-                    <p class="col">   </p>
-                </div>
-            </form>
-            <p></p>
-            <p></p>
-            <p></p>
             <p></p>
 
             <div class="container-fluid card-group   text-white bg-primary mb-3 border-primary" ;">
 
-                <div class="card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("APropos") "><i class="fa fa-copyright text-white"> Copyright 2019 Petra Mazellier</i></a></h5>
-                </div>
-                <div class=" card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("Condition") "><i class="fa fa-info-circle text-white">  Conditions d'utilisation</i></a></h5>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("Confidentialite") "><i class="fa fa-lock text-white ">  Confidentialité et cookies</i></a></h5>
-                </div>
+
             </div>
         </div>
     </div>

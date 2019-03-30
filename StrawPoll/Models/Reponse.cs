@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using StrawPoll.Controllers;
 
 namespace StrawPoll.Models
 {
@@ -12,16 +13,18 @@ namespace StrawPoll.Models
         public int IdReponse { get; private set; }
         public string NomReponse { get; private set; }
         public int NombreVoteReponse { get; private set; }
-      
+        public int FKIdSondage { get; private set; }
 
-        public Reponse(string nomReponse) : this (nomReponse, NOMBRE_DE_VOTE_PAR_DEFAULT)
+        public Reponse(string nomReponse, int fKIdSondage) : this (nomReponse, fKIdSondage, NOMBRE_DE_VOTE_PAR_DEFAULT)
         {           
             NomReponse = nomReponse;
+            FKIdSondage = fKIdSondage;
         }
-        public Reponse(string nomReponse, int nombreVote) 
+        public Reponse(string nomReponse, int fKIdSondage, int nombreVote) 
         {
             NombreVoteReponse = nombreVote;
             NomReponse = nomReponse;
+            FKIdSondage = fKIdSondage;
         }
         public void AjoutVoteReponse()
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using StrawPoll.Controllers;
 
 namespace StrawPoll.Models
 {
@@ -11,8 +12,7 @@ namespace StrawPoll.Models
     {
         private const bool ETAT_PAR_DEFAULT = false;
 
-        private const int NOMBRE_DE_VOTE_PAR_DEFAULT = 0;
-
+       
         public int IdSondage { get; private set; }
         public string NomSondage { get; private set; }
 
@@ -21,27 +21,32 @@ namespace StrawPoll.Models
         public bool MultiSondage { get; private set; }
         public bool EtatSondage { get; private set; }
         public int NumSecurite { get; private set; }
-        public int NombreVoteSondage { get; private set; }
+       
 
-        public Sondage(string nomSondage, bool multiSondage, int numSecurite) : this(nomSondage, multiSondage, numSecurite, ETAT_PAR_DEFAULT, NOMBRE_DE_VOTE_PAR_DEFAULT)
+        public Sondage(string nomSondage, bool multiSondage, int numSecurite) : this(nomSondage, multiSondage, numSecurite, ETAT_PAR_DEFAULT)
         {
             NomSondage = nomSondage;
             MultiSondage = multiSondage;
             NumSecurite = numSecurite;
 
         }
-        public Sondage(string nomSondage, bool multiSondage, int numSecurite, bool etatSondage, int nombreSondage)
+
+        public Sondage(string nomSondage, bool multiSondage, int numSecurite, bool etatSondage)
+        {
+            NomSondage = nomSondage;
+            MultiSondage = multiSondage;
+            NumSecurite = numSecurite;
+            EtatSondage = etatSondage;           
+        }
+        public Sondage(string nomSondage, bool multiSondage, int numSecurite, bool etatSondage, int idSondage)
         {
             NomSondage = nomSondage;
             MultiSondage = multiSondage;
             NumSecurite = numSecurite;
             EtatSondage = etatSondage;
-            NombreVoteSondage = nombreSondage;
+            IdSondage = idSondage;
         }
-        public void AjoutVoteSondage()
-        {
-            this.NombreVoteSondage = NombreVoteSondage + 1;
-        }
+
         public void DesactiverSondage()
         {
             this.EtatSondage = true;
