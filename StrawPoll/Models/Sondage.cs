@@ -12,7 +12,7 @@ namespace StrawPoll.Models
     {
         private const bool ETAT_PAR_DEFAULT = false;
 
-       
+
         public int IdSondage { get; private set; }
         public string NomSondage { get; private set; }
 
@@ -21,7 +21,7 @@ namespace StrawPoll.Models
         public bool MultiSondage { get; private set; }
         public bool EtatSondage { get; private set; }
         public int NumSecurite { get; private set; }
-       
+
 
         public Sondage(string nomSondage, bool multiSondage, int numSecurite) : this(nomSondage, multiSondage, numSecurite, ETAT_PAR_DEFAULT)
         {
@@ -36,7 +36,7 @@ namespace StrawPoll.Models
             NomSondage = nomSondage;
             MultiSondage = multiSondage;
             NumSecurite = numSecurite;
-            EtatSondage = etatSondage;           
+            EtatSondage = etatSondage;
         }
         public Sondage(string nomSondage, bool multiSondage, int numSecurite, bool etatSondage, int idSondage)
         {
@@ -50,6 +50,6 @@ namespace StrawPoll.Models
         public void DesactiverSondage()
         {
             this.EtatSondage = true;
-        }
+        }     
     }
 }

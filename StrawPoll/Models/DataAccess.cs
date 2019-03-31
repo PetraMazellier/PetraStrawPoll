@@ -56,10 +56,10 @@ namespace StrawPoll.Models
 
             SqlConnection SelectSondage = new SqlConnection(SqlConnectionString);
             SelectSondage.Open();
-            SqlCommand selectLecteur =
+            SqlCommand selectSondage =
                 new SqlCommand("SELECT NomSondage, MultiSondage, EtatSondage, NumSecurite FROM Sondage where IdSondage = @idSondage", SelectSondage);
-            selectLecteur.Parameters.AddWithValue("@idSondage", idSondage);
-            SqlDataReader dataReader = selectLecteur.ExecuteReader();
+            selectSondage.Parameters.AddWithValue("@idSondage", idSondage);
+            SqlDataReader dataReader = selectSondage.ExecuteReader();
 
             if (dataReader.Read())
             {
@@ -125,7 +125,7 @@ namespace StrawPoll.Models
                 SqlCommand updateCommand = connection.CreateCommand();
                 updateCommand.CommandText = String.Format(
                     "UPDATE Reponse " +
-                    "SET NombreVoteReponse =  @nombreVoteReponse " +
+                    "SET NombreVoteReponse =  NombreVoteReponse + 1 " +
                     "WHERE IdReponse =  @idReponse AND FKIdSondage = @fKIdSondage");
                 updateCommand.Parameters.AddWithValue("@idReponse", ajoutNombreSondage.IdReponse);
                 updateCommand.Parameters.AddWithValue("@fKIdSondage", ajoutNombreSondage.FKIdSondage);
@@ -137,9 +137,38 @@ namespace StrawPoll.Models
 
             catch
             {
-                throw new Exception("Problème base de donnée table Sondage !!!");
+                throw new Exception("Problème base de donnée table Réponse !!!");
             }
 
         }
+        public static List<Reponse> RecupererToutLesReponsesDuSondage(int idSondage)
+        {
+            List<Reponse> resultats = new List<Reponse>();
+            SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString);
+            sondageEnCours.Open();
+            SqlCommand selectSondage =
+               new SqlCommand("SELECT IdReponse, NomReponse, NombreVoteReponse FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
+            selectSondage.Parameters.AddWithValue("@fKIdSondage", idSondage);
+           
+            SqlDataReader dataReader = selectSondage.ExecuteReader();
+            while (dataReader.Read())
+            {
+                int idReponse = (int)dataReader["IdReponse"];
+                string nomReponse = (string)dataReader["NomReponse"];
+                int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
+               
+
+
+                Reponse detailList = new Reponse(nomReponse, idSondage, nombreVoteReponse,idReponse);
+
+                resultats.Add(detailList);
+            }
+            sondageEnCours.Close();
+
+            return resultats;
+
+        }
+       
+
     }
 }

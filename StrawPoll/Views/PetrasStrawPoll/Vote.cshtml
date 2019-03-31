@@ -1,4 +1,5 @@
 ﻿@using StrawPoll.Models;
+@model VoteSondage
 @{
     Layout = null;
 }
@@ -24,65 +25,65 @@
                 Voter
             </h2>
             <p></p>
-            <form>
-                <div class="form-group row">
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control-plaintext text-center" id="question" value="Vous voulez manger ou ?">
-                    </div>
-                </div>
-                <div class="form-check ">
-                    <input class="form-check-input  col" type="checkbox" value="" id="reponse1">
-                    <label class="form-check-label col" for="reponse1">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse1" value=" Restaurant Chinois">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="checkbox" value="" id="reponse2">
-                    <label class="form-check-label col" for="reponse2">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse2" value=" Restaurant Japonais">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="checkbox" value="" id="reponse3">
-                    <label class="form-check-label col" for="reponse3">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse3" value=" Restaurant Alsacien">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios1" value="option1" checked>
-                    <label class="form-check-label col" for="reponseRadios1">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse1" value=" Restaurant Chinois">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios2" value="option2">
-                    <label class="form-check-label col" for="reponseRadios2">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse2" value=" Restaurant Japonais">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input col" type="radio" name="reponseRadios" id="reponseRadios3" value="option3">
-                    <label class="form-check-label col" for="reponseRadios3">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse3" value=" Restaurant Alsacien">
-                    </label>
-                </div>
 
-            </form>
-        </div>
 
-        <p></p>
-        <form>
-            <div class="row">
-                <p class="col">   </p>
-                <div class="col">
-                    <a href="@Url.Action("ConfirmationVote")" class="btn col  btn-primary  ">Voter</a>
-                </div>
-                <p class="col">   </p>
-                <div class="col">
-                    <a href="@Url.Action("Resultat")" class="btn col btn-primary  ">Résultat</a>
-                </div>
-                <p class="col">   </p>
+            @if (Model.SondageAVoter.MultiSondage is true)
+            {
+                <form action="@Url.Action("SubmitMulti")">
+
+                    <h4 class="form-group row col-sm-10">
+
+                        <input type="text" readonly class="form-control-plaintext text-center" value="@Model.SondageAVoter.NomSondage">
+
+                    </h4>
+
+                    @foreach (var reponseCourant in Model.ReponseAVoterSondage)
+                    {
+                        <h4 class="form-check ">
+                            <input class="form-check-input  col" type="checkbox" name="@reponseCourant.IdReponse" id="@reponseCourant.IdReponse">
+                            <label class="form-check-label col" for="@reponseCourant.IdReponse">
+                                <input type="text" readonly class="form-control-plaintext text-primary  col" value="@reponseCourant.NomReponse">
+                               
+                            </label>
+                        </h4>
+                    }
+                    <fieldset style="text-align:center">
+                        <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
+                    </fieldset>                    
+                </form>
+            }
+            else
+            {
+                <form action="@Url.Action("SubmitUni")">
+
+                    <h4 class="form-group row col-sm-10">
+
+                        <input type="text" readonly class="form-control-plaintext text-center" value="@Model.SondageAVoter.NomSondage">
+
+                    </h4>
+
+                    @foreach (var reponseCourant in Model.ReponseAVoterSondage)
+                    {
+                        <h4 class="form-check">
+                            <input class="form-check-input col" type="radio" value="@reponseCourant.IdReponse" name="reponseRadios" id="@reponseCourant.IdReponse">
+                            <label class="form-check-label col" for="@reponseCourant.IdReponse">
+                                <input type="text" readonly class="form-control-plaintext text-primary  col" value="@reponseCourant.NomReponse">                             
+                            </label>
+                        </h4>
+                    }
+                    <fieldset style="text-align:center">
+                        <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
+                    </fieldset>    
+
+                </form>
+            }
             </div>
+        <p></p>
+       
+        <form>
+            <fieldset style="text-align:center">
+                <a href="@Url.Action("Resultat")" class="btn btn-primary  ">Résultat</a>
+            </fieldset>            
         </form>
         <p></p>
         <p></p>
