@@ -28,6 +28,17 @@ namespace StrawPoll.Models
                     return true;                
             }
         }
+        public static bool ChoixMultiple(string multiChoix)
+        {
+            switch (multiChoix)
+            {
+                case "on":
+                    return true;
+                
+                default:
+                    return false;
+            }
+        }
         public static int GetNumSecurite()
         {
             Random aleatoire = new Random();

@@ -1,4 +1,5 @@
 ﻿@using StrawPoll.Models;
+@model ConfirmationDesactiver
 @{
     Layout = null;
 }
@@ -12,7 +13,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <meta name="viewport" content="width=device-width" />
-
+    
 </head>
 <body class="card bg-light  mb-3">
 
@@ -40,7 +41,7 @@
                     </div>
                     <p class="col">   </p>
                     <div class="col">
-                        <a href="@Url.Action("Resultat")" class="btn col btn-primary  ">Résultat</a>
+                        <a href="@Url.Action("Resultat", new { idSondage = Model.IdSondage })" class="btn col btn-primary  ">Résultat</a>
                     </div>
                     <p class="col">   </p>
                 </div>

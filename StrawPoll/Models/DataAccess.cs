@@ -66,9 +66,10 @@ namespace StrawPoll.Models
                 string nomSondage = (string)dataReader["NomSondage"];
                 bool multiSondage = (bool)dataReader["MultiSondage"];
                 bool etatSondage = (bool)dataReader["EtatSondage"];
-                int numSecurite = (int)dataReader["NumSecurite"];
-               
-                detailSondage = new Sondage(nomSondage, multiSondage, numSecurite, etatSondage);
+                int numSecurite  = (int)dataReader["NumSecurite"];
+                
+
+                detailSondage = new Sondage(nomSondage, multiSondage, numSecurite, etatSondage, idSondage);
                 return true;
             }
             else
@@ -86,10 +87,9 @@ namespace StrawPoll.Models
                 connection.Open();
                 SqlCommand updateCommand = connection.CreateCommand();
                 updateCommand.CommandText = String.Format(
-                    "UPDATE Sondage " +
-                    "SET EtatSondage =  true " +
-                    "WHERE IdSondage =  @idSondage");
+                    "UPDATE Sondage SET EtatSondage =  'TRUE' WHERE IdSondage =  @idSondage");
                 updateCommand.Parameters.AddWithValue("@idSondage", desactiverSondage.IdSondage);
+                updateCommand.Parameters.AddWithValue("@etatSondage", desactiverSondage.EtatSondage);
                 int nombreSondageModifiees = updateCommand.ExecuteNonQuery();
                 return nombreSondageModifiees;
             }
@@ -147,7 +147,7 @@ namespace StrawPoll.Models
             SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString);
             sondageEnCours.Open();
             SqlCommand selectSondage =
-               new SqlCommand("SELECT IdReponse, NomReponse, NombreVoteReponse FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
+               new SqlCommand("SELECT IdReponse, NomReponse, NombreVoteReponse FROM Reponse WHERE FKIdSondage = @fKIdSondage ORDER BY NombreVoteReponse DESC", sondageEnCours);
             selectSondage.Parameters.AddWithValue("@fKIdSondage", idSondage);
            
             SqlDataReader dataReader = selectSondage.ExecuteReader();

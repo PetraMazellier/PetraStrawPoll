@@ -1,4 +1,5 @@
 ﻿@using StrawPoll.Models;
+@model VoteDesactiver
 @{
     Layout = null;
 }
@@ -28,29 +29,21 @@
                 Voulez vous vraiment arrêter les votes ?
             </h3>
             <p></p>
-            <form>
-                <div class="form-group row">
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control-plaintext text-center" id="question" value="Vous voulez manger ou ?">
-                    </div>
-                </div>
-                <div class="form-check ">
-                    <label class="form-check-label col" for="reponse1">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse1" value=" Restaurant Chinois">
-                    </label>
-                </div>
-                <div class="form-check ">
-                    <label class="form-check-label col" for="reponse2">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse2" value=" Restaurant Japonais">
-                    </label>
-                </div>
-                <div class="form-check">
-                    <label class="form-check-label col" for="reponse3">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" id="reponse3" value=" Restaurant Alsacien">
-                    </label>
-                </div>
-
-            </form>
+            <div>
+                <h4 class="card-title text-dark text-center col-sm-10">
+                    
+                        @Model.SondageADesactiver.NomSondage
+                   
+                </h4>
+                @foreach (var reponseCourant in Model.ReponseADesactiver)
+                {                    
+                    <div class="form-check form-check-label col text-center">
+                        
+                            @reponseCourant.NomReponse ?
+                      
+                    </div>                   
+                }
+            </div>
         </div>
 
         <p></p>
@@ -58,11 +51,11 @@
             <div class="row">
                 <p class="col">   </p>
                 <div class="col">
-                    <a href="@Url.Action("ConfirmationDesactiver")" class="btn col  btn-primary  ">Confirmer</a>
+                    <a href="@Url.Action("ConfirmationDesactiver", new { idSondage = Model.SondageADesactiver.IdSondage })" class="btn col  btn-primary  ">Confirmer</a>
                 </div>
                 <p class="col">   </p>
                 <div class="col">
-                    <a href="@Url.Action("Resultat")" class="btn col btn-primary  ">Résultat</a>
+                    <a href="@Url.Action("Resultat", new { idSondage = Model.SondageADesactiver.IdSondage })" class="btn col btn-primary  ">Résultat</a>
                 </div>
                 <p class="col">   </p>
             </div>

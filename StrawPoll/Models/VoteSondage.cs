@@ -9,8 +9,7 @@ namespace StrawPoll.Models
     public class VoteSondage
     {
         public Sondage SondageAVoter { get; private set; }
-        public List<Reponse> ReponseAVoterSondage { get; private set; }
-     //   public int NombreReponseTotal { get; private set; }
+        public List<Reponse> ReponseAVoterSondage { get; private set; }    
 
         public VoteSondage(Sondage sondageAVoter, List<Reponse> reponseAVoterSondage)
         {

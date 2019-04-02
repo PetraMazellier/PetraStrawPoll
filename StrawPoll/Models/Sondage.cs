@@ -45,11 +45,6 @@ namespace StrawPoll.Models
             NumSecurite = numSecurite;
             EtatSondage = etatSondage;
             IdSondage = idSondage;
-        }
-
-        public void DesactiverSondage()
-        {
-            this.EtatSondage = true;
-        }     
+        }         
     }
 }

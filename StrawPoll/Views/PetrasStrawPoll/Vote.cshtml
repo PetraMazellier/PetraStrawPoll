@@ -29,53 +29,65 @@
 
             @if (Model.SondageAVoter.MultiSondage is true)
             {
-                <form action="@Url.Action("SubmitMulti")">
+            <form action="@Url.Action("SubmitMulti")">
 
-                    <h4 class="form-group row col-sm-10">
+                <h4 class="form-group row col-sm-10">
 
-                        <input type="text" readonly class="form-control-plaintext text-center" value="@Model.SondageAVoter.NomSondage">
+                    @Model.SondageAVoter.NomSondage
 
-                    </h4>
+                </h4>
 
-                    @foreach (var reponseCourant in Model.ReponseAVoterSondage)
-                    {
-                        <h4 class="form-check ">
-                            <input class="form-check-input  col" type="checkbox" name="@reponseCourant.IdReponse" id="@reponseCourant.IdReponse">
-                            <label class="form-check-label col" for="@reponseCourant.IdReponse">
-                                <input type="text" readonly class="form-control-plaintext text-primary  col" value="@reponseCourant.NomReponse">
-                               
-                            </label>
-                        </h4>
-                    }
-                    <fieldset style="text-align:center">
-                        <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
-                    </fieldset>                    
-                </form>
+                @foreach (var reponseCourant in Model.ReponseAVoterSondage)
+                {
+                    <div class="form-check ">
+                        <input class="form-check-input  col" type="checkbox" name="@reponseCourant.IdReponse" id="@reponseCourant.IdReponse">
+                        <label class="form-check-label col" for="@reponseCourant.IdReponse">
+                            @reponseCourant.NomReponse
+                        </label>
+                    </div>
+                }
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <fieldset style="text-align:center">
+                    <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
+                </fieldset>
+            </form>
             }
             else
             {
-                <form action="@Url.Action("SubmitUni")">
+            <form action="@Url.Action("SubmitUni")">
 
-                    <h4 class="form-group row col-sm-10">
+                <h4 class="form-group row col-sm-10">
 
-                        <input type="text" readonly class="form-control-plaintext text-center" value="@Model.SondageAVoter.NomSondage">
+                    <input type="text" readonly class="form-control-plaintext text-center" value="@Model.SondageAVoter.NomSondage">
 
-                    </h4>
+                </h4>
 
-                    @foreach (var reponseCourant in Model.ReponseAVoterSondage)
-                    {
-                        <h4 class="form-check">
-                            <input class="form-check-input col" type="radio" value="@reponseCourant.IdReponse" name="reponseRadios" id="@reponseCourant.IdReponse">
-                            <label class="form-check-label col" for="@reponseCourant.IdReponse">
-                                <input type="text" readonly class="form-control-plaintext text-primary  col" value="@reponseCourant.NomReponse">                             
-                            </label>
-                        </h4>
-                    }
-                    <fieldset style="text-align:center">
-                        <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
-                    </fieldset>    
+                @foreach (var reponseCourant in Model.ReponseAVoterSondage)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input col" type="radio" value="@reponseCourant.IdReponse" name="reponseRadios" id="@reponseCourant.IdReponse">
+                        <label class="form-check-label col" for="@reponseCourant.IdReponse">
+                            @reponseCourant.NomReponse
+                        </label>
+                    </div>
+                }
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
 
-                </form>
+                <fieldset style="text-align:center">
+                    <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
+                </fieldset>
+
+            </form>
             }
             </div>
         <p></p>

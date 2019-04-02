@@ -74,16 +74,9 @@ namespace StrawPoll.Controllers
             }
             else
             {
-                bool multiSondage;
-                if (multiSondageString == "on")
-                {
-                    multiSondage = true;
-                }
-                else
-                {
-                    multiSondage = false;
-                }
+                
                 int entierUnChiffre = CreationSondage.GetNumSecurite();
+                bool multiSondage = CreationSondage.ChoixMultiple(multiSondageString);
                 Sondage nouveauSondage = new Sondage(question, multiSondage, entierUnChiffre);
                 List<Reponse> ReponseDuSondage = new List<Reponse>();
                 {
@@ -128,7 +121,8 @@ namespace StrawPoll.Controllers
         #region Envoi page web avec confirmation que la creation s'est bien passé
         public ActionResult ConfirmationCreation(int idSondage)
         {
-            return View();
+            ConfirmationCreation nouveauSondage = new ConfirmationCreation(idSondage);
+            return View(nouveauSondage);
         }
         #endregion
         #endregion
@@ -146,11 +140,15 @@ namespace StrawPoll.Controllers
         public ActionResult Vote(int idSondage)
         {
 
-            if (DataAccess.RecupererSondage(idSondage, out Sondage Model))
+            if (DataAccess.RecupererSondage(idSondage, out Sondage model))
             {
-                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(idSondage);
-              //  int nombreReponseTotal = toutLesReponseDuSondage.Count;
-                VoteSondage nouveauVote = new VoteSondage(Model, toutLesReponseDuSondage);
+                if (model.EtatSondage == true)
+                {
+                    return RedirectToAction("VoteInterdit", new{ idSondage = idSondage });
+                }
+                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(idSondage);              
+                VoteSondage nouveauVote = new VoteSondage(model, toutLesReponseDuSondage);
+                
                 return View(nouveauVote);
             }
             else
@@ -183,7 +181,7 @@ namespace StrawPoll.Controllers
             return View();
         }
 
-        public ActionResult SubmitUni(string radioreponse)
+        public ActionResult SubmitUni(int? radioreponse,int?id, int?id2)
         {
             return View();
         }
@@ -191,7 +189,7 @@ namespace StrawPoll.Controllers
         {
             return View();
         }
-        public ActionResult VoteInterdit()
+        public ActionResult VoteInterdit(int idSondage)
         {
             return View();
         }
@@ -231,23 +229,67 @@ namespace StrawPoll.Controllers
             }
             else
             {
-                string messageErreur = "Probleme en recuperant le sondage dunrésultat";
+                string messageErreur = "Probleme en recuperant le sondage d'un résultat";
                 return RedirectToAction("Erreur", new { messageErreur = messageErreur });
             }
            
         }
-        public ActionResult ConfirmationDesactiver()
+        public ActionResult VoteDesactiver(int idSondage)
         {
-            return View();
+
+            if (DataAccess.RecupererSondage(idSondage, out Sondage model))
+            {
+                if (model.EtatSondage == true)
+                {
+                    return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
+                }
+                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(idSondage);
+                VoteDesactiver nouveauDesactiver = new VoteDesactiver(model, toutLesReponseDuSondage);
+
+                return View(nouveauDesactiver);
+            }
+            else
+            {
+                string messageErreur = "Probleme en recuperant le sondage en votante";
+                return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+            }
+            
         }
-        public ActionResult DesactiverInterdit()
+        public ActionResult ConfirmationDesactiver(int idSondage)
         {
-            return View();
+            if (DataAccess.RecupererSondage(idSondage, out Sondage model))
+            {
+                if (model.EtatSondage == true)
+                {
+                    return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
+                }
+                
+                int nombreModifie = DataAccess.DesactiverVoteSondage(model);
+               if(nombreModifie == 1)
+                { 
+                ConfirmationDesactiver nouveauSondage = new ConfirmationDesactiver(idSondage);
+                return View(nouveauSondage);
+                }
+                else
+                {
+                    string messageErreur = "Probleme en desactivant le sondage";
+                    return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                }
+            }
+            else
+            {
+                string messageErreur = "Probleme en recuperant le sondage en desactivant";
+                return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+            }
+            
         }
-        public ActionResult VoteDesactiver()
+        public ActionResult DesactiverInterdit(int idSondage)
         {
-            return View();
+            DesactiverInterdit nouveauSondage = new DesactiverInterdit(idSondage);
+            return View(nouveauSondage);
+            
         }
+       
         public ActionResult Erreur(string messageErreur)
         {
             ErreurGrave erreurTrouve = new ErreurGrave(messageErreur);
