@@ -7,10 +7,13 @@ namespace StrawPoll.Models
 {
     public class ConfirmationCreation
     {
-        public int IdSondage { get; private set; }
-        public ConfirmationCreation (int idSondage)
+        public Sondage NouveauSondage { get; private set; }       
+
+        public ConfirmationCreation(Sondage nouveauSondage)
         {
-            IdSondage = idSondage;
+            NouveauSondage = nouveauSondage;
+      
         }
+      
     }
 }

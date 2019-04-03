@@ -14,24 +14,40 @@ namespace StrawPoll.Models
         public string NomReponse { get; private set; }
         public int NombreVoteReponse { get; private set; }
         public int FKIdSondage { get; private set; }
+        public int PourcentageVote { get; private set; }
 
-        public Reponse(string nomReponse, int fKIdSondage) : this(nomReponse, fKIdSondage, NOMBRE_DE_VOTE_PAR_DEFAULT)
+        public Reponse(string nomReponse, int fKIdSondage) 
         {
             NomReponse = nomReponse;
             FKIdSondage = fKIdSondage;
+            NombreVoteReponse = NOMBRE_DE_VOTE_PAR_DEFAULT;
+
         }
-        public Reponse(string nomReponse, int fKIdSondage, int nombreVote)
-        {
-            NombreVoteReponse = nombreVote;
+        public Reponse(string nomReponse, int fKIdSondage,int idReponse)
+        {         
             NomReponse = nomReponse;
             FKIdSondage = fKIdSondage;
+            IdReponse = idReponse;
         }
-        public Reponse(string nomReponse, int fKIdSondage, int nombreVote, int idReponse)
+        public Reponse(string nomReponse, int fKIdSondage, int nombreVote, int idReponse,int pourcentageVote)
         {
             NombreVoteReponse = nombreVote;
             NomReponse = nomReponse;
             FKIdSondage = fKIdSondage;
             IdReponse = idReponse;
+            PourcentageVote = pourcentageVote;
+        }
+        public static int GetPourcentageVote(Sondage model, int nombreVoteReponse)
+        {
+            if(model.NombreVoteTotal > 0)
+            {
+                return nombreVoteReponse * 100 / model.NombreVoteTotal;
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
         /*   public void AjoutVoteReponse()
            {

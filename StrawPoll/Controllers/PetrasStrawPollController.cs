@@ -73,11 +73,9 @@ namespace StrawPoll.Controllers
                 return RedirectToAction("CreationInvalide");
             }
             else
-            {
-                
-                int entierUnChiffre = CreationSondage.GetNumSecurite();
+            {     
                 bool multiSondage = CreationSondage.ChoixMultiple(multiSondageString);
-                Sondage nouveauSondage = new Sondage(question, multiSondage, entierUnChiffre);
+                Sondage nouveauSondage = new Sondage(question, multiSondage);
                 List<Reponse> ReponseDuSondage = new List<Reponse>();
                 {
                     DataAccess.CreationSondage(nouveauSondage);
@@ -98,9 +96,13 @@ namespace StrawPoll.Controllers
                         {
                             ReponseDuSondage.Add(quatriemeReponse);
                         }
+                        
                         CreationSondage listReponse = new CreationSondage(idModel, ReponseDuSondage);
-                        DataAccess.CreationReponse(listReponse);
-                        return RedirectToAction("ConfirmationCreation", new { idSondage = idModel.IdSondage });
+                        foreach (Reponse reponseDetail in listReponse.ReponseAuNouveauSondage)
+                        {
+                            DataAccess.CreationReponse(reponseDetail);
+                        }
+                        return RedirectToAction("ConfirmationCreation", new { idSondage = idModel.IdSondage ,numSecurite = nouveauSondage.NumSecurite});
                     }
                     else
                     {
@@ -119,10 +121,14 @@ namespace StrawPoll.Controllers
         }
         #endregion
         #region Envoi page web avec confirmation que la creation s'est bien passé
-        public ActionResult ConfirmationCreation(int idSondage)
+        public ActionResult ConfirmationCreation(int idSondage,int numSecurite)
         {
-            ConfirmationCreation nouveauSondage = new ConfirmationCreation(idSondage);
-            return View(nouveauSondage);
+            Sondage model = new Sondage(idSondage, numSecurite);
+           
+            ConfirmationCreation nouveauSondage = new ConfirmationCreation(model);
+                
+            return View(nouveauSondage);           
+            
         }
         #endregion
         #endregion
@@ -158,7 +164,7 @@ namespace StrawPoll.Controllers
             }
         }
         #endregion
-        public ActionResult SubmitMulti(string reponse1, string reponse2, string reponse3,string reponse4)
+        public ActionResult SubmitMulti(int? idSondage, string IdReponse, string reponse2, string reponse3,string reponse4)
         {
 
             /*   switch (toutLesReponseDuSondage.Count)
@@ -181,7 +187,7 @@ namespace StrawPoll.Controllers
             return View();
         }
 
-        public ActionResult SubmitUni(int? radioreponse,int?id, int?id2)
+        public ActionResult SubmitUni(int? idSondage,string reponseRadios)
         {
             return View();
         }
@@ -200,32 +206,19 @@ namespace StrawPoll.Controllers
         #endregion
         public ActionResult Resultat(int idSondage)
         {
-            if (DataAccess.RecupererSondage(idSondage, out Sondage Model))
+            if (DataAccess.RecupererSondage(idSondage, out Sondage model))
             {
-                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(idSondage);
-                int nombreReponseTotal = toutLesReponseDuSondage.Count;
-                int nombreVoteTotal = 0;
-                foreach (var reponseCourant in toutLesReponseDuSondage)
+                if (DataAccess.CompteNombreVoteTotal(model, out Sondage modelAvecTotalVote))
                 {
-                    nombreVoteTotal = nombreVoteTotal + reponseCourant.NombreVoteReponse;                   
+                    List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondageAvecNombreVote(modelAvecTotalVote);  
+                    ResultatSondage nouveauResultat = new ResultatSondage(modelAvecTotalVote, toutLesReponseDuSondage);
+                    return View(nouveauResultat);
                 }
-                List<int?> pourcentageReponse = new List<int?>();
-                int pourCentage;
-                foreach (var reponseCourant in toutLesReponseDuSondage)
+                else
                 {
-                    if (nombreVoteTotal != 0)
-                    {
-                        pourCentage = reponseCourant.NombreVoteReponse * 100 / nombreVoteTotal;
-                    }
-                    else
-                    {
-                        pourCentage = 0;
-                    }
-                    
-                    pourcentageReponse.Add(pourCentage);     
-                }               
-                ResultatSondage nouveauResultat = new ResultatSondage(Model, toutLesReponseDuSondage, pourcentageReponse, nombreReponseTotal, nombreVoteTotal);
-                return View(nouveauResultat);
+                    string messageErreur = "Probleme en recuperant le sondage d'un résultat";
+                    return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                }
             }
             else
             {
@@ -234,15 +227,11 @@ namespace StrawPoll.Controllers
             }
            
         }
-        public ActionResult VoteDesactiver(int idSondage)
+        public ActionResult VoteDesactiver(int idSondage, int numSecurite)
         {
 
-            if (DataAccess.RecupererSondage(idSondage, out Sondage model))
-            {
-                if (model.EtatSondage == true)
-                {
-                    return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
-                }
+            if (DataAccess.RecupererSondagePourDesactiver(idSondage, numSecurite, out Sondage model))
+            {               
                 List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(idSondage);
                 VoteDesactiver nouveauDesactiver = new VoteDesactiver(model, toutLesReponseDuSondage);
 
@@ -256,15 +245,15 @@ namespace StrawPoll.Controllers
             
         }
         public ActionResult ConfirmationDesactiver(int idSondage)
-        {
-            if (DataAccess.RecupererSondage(idSondage, out Sondage model))
-            {
-                if (model.EtatSondage == true)
+        {            
+                if (DataAccess.RecupererSondage(idSondage, out Sondage model))
                 {
-                    return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
-                }
-                
-                int nombreModifie = DataAccess.DesactiverVoteSondage(model);
+                    if (model.EtatSondage == true)
+                    {
+                        return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
+                    }
+                Sondage detailSondage = new Sondage(idSondage,model.NomSondage);
+                int nombreModifie = DataAccess.DesactiverVoteSondage(detailSondage);
                if(nombreModifie == 1)
                 { 
                 ConfirmationDesactiver nouveauSondage = new ConfirmationDesactiver(idSondage);

@@ -33,7 +33,7 @@
                     <label for="staticDesactiver" class="col-sm-2 text-dark col-form-label">Désactiver :</label>
                     <div class="col-sm-10">
 
-                        <a href="@Url.Action("APropos")  "> <input type="text" readonly class="form-control-plaintext btn btn-primary text-white " value="petraStrawPoll.com/désactiver/1rt234"></a>
+                        <a href="@Url.Action("APropos")  "> <input type="text" readonly class="form-control-plaintext btn btn-primary text-white " value="petraStrawPoll.com/désactiver/@Model.NouveauSondage.IdSondage/@Model.NouveauSondage.NumSecurite"></a>
                     </div>
                 </div>
             </fieldset>
@@ -42,19 +42,19 @@
             <p></p>
             <p></p>
             <p></p>
-            <p></p>@Model.IdSondage
+            <p></p>
             <fieldset>
                 <p class="bg-white text-danger card-text text-center">  A partager avec vos amis   </p>
                 <div class="form-group row">
                     <label for="staticVoter" class="col-sm-2 text-dark col-form-label">Vote :</label>
                     <div class="col-sm-10">
-                        <a href="@Url.Action("Vote", new { idSondage = Model.IdSondage })  "> <input type="text" readonly class="form-control-plaintext btn btn-primary text-white " value="petraStrawPoll.com/voter/1234"></a>
+                        <a href="@Url.Action("Vote", new { idSondage = Model.NouveauSondage.IdSondage })  "> <input type="text" readonly class="form-control-plaintext btn btn-primary text-white " value="petraStrawPoll.com/voter/@Model.NouveauSondage.IdSondage"></a>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="staticResultat" class="col-sm-2 text-dark col-form-label">Résultat:</label>
                     <div class="col-sm-10">
-                        <a href="@Url.Action("Resultat", new { idSondage = Model.IdSondage })  "> <input type="text" class=" form-control-plaintext btn btn-primary text-white" readonly value="petraStrawPoll.com/resultat/1234"></a>
+                        <a href="@Url.Action("Resultat", new { idSondage = Model.NouveauSondage.IdSondage })  "> <input type="text" class=" form-control-plaintext btn btn-primary text-white" readonly value="petraStrawPoll.com/resultat/@Model.NouveauSondage.IdSondage"></a>
                     </div>
                 </div>
             </fieldset>

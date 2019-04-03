@@ -39,12 +39,7 @@ namespace StrawPoll.Models
                     return false;
             }
         }
-        public static int GetNumSecurite()
-        {
-            Random aleatoire = new Random();
-            int entierUnChiffre = aleatoire.Next(10000); //Génère un entier compris entre 0 et 9999
-            return entierUnChiffre;
-        }
+        
 
     }
 }
