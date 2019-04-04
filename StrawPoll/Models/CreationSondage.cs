@@ -16,18 +16,7 @@ namespace StrawPoll.Models
             NouveauSondage = nouveauSondage;
             ReponseAuNouveauSondage = reponseAuNouveauSondage;
         }
-        public static bool IsValide(string nom)
-        {
-            switch (nom)
-            {
-                case "":
-                    return false;
-                case null:
-                return false;                   
-                default:
-                    return true;                
-            }
-        }
+       
         public static bool ChoixMultiple(string multiChoix)
         {
             switch (multiChoix)

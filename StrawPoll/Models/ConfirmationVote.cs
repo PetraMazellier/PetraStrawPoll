@@ -5,14 +5,12 @@ using System.Web;
 
 namespace StrawPoll.Models
 {
-    public class ConfirmationDesactiver
+    public class ConfirmationVote
     {
         public Sondage NouveauSondage { get; private set; }
-
-        public ConfirmationDesactiver(Sondage nouveauSondage)
+        public ConfirmationVote(Sondage nouveauSondage)
         {
             NouveauSondage = nouveauSondage;
-
         }
     }
 }

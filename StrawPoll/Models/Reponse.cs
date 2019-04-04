@@ -21,7 +21,11 @@ namespace StrawPoll.Models
             NomReponse = nomReponse;
             FKIdSondage = fKIdSondage;
             NombreVoteReponse = NOMBRE_DE_VOTE_PAR_DEFAULT;
-
+        }
+        public Reponse(int idReponse, int fKIdSondage)
+        {
+            IdReponse = idReponse;
+            FKIdSondage = fKIdSondage;    
         }
         public Reponse(string nomReponse, int fKIdSondage,int idReponse)
         {         

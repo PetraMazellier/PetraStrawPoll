@@ -68,7 +68,7 @@ namespace StrawPoll.Controllers
         /// <returns></returns>
         public ActionResult SubmitCreation(string question, string reponse1, string reponse2, string reponse3, string reponse4, string multiSondageString)
         {
-            if (!CreationSondage.IsValide(question) || !CreationSondage.IsValide(reponse1) || !CreationSondage.IsValide(reponse2) || (CreationSondage.IsValide(reponse4) & !CreationSondage.IsValide(reponse3)))
+            if (!Sondage.IsValide(question) || !Sondage.IsValide(reponse1) || !Sondage.IsValide(reponse2) || (Sondage.IsValide(reponse4) & !Sondage.IsValide(reponse3)))
             {
                 return RedirectToAction("CreationInvalide");
             }
@@ -87,12 +87,12 @@ namespace StrawPoll.Controllers
                         Reponse deuxiemeReponse = new Reponse(reponse2, idModel.IdSondage);
                         ReponseDuSondage.Add(deuxiemeReponse);
                         Reponse troisiemeReponse = new Reponse(reponse3, idModel.IdSondage);
-                        if (CreationSondage.IsValide(reponse3))
+                        if (Sondage.IsValide(reponse3))
                         {
                             ReponseDuSondage.Add(troisiemeReponse);
                         }
                         Reponse quatriemeReponse = new Reponse(reponse4, idModel.IdSondage);
-                        if (CreationSondage.IsValide(reponse4))
+                        if (Sondage.IsValide(reponse4))
                         {
                             ReponseDuSondage.Add(quatriemeReponse);
                         }
@@ -102,11 +102,14 @@ namespace StrawPoll.Controllers
                         {
                             DataAccess.CreationReponse(reponseDetail);
                         }
-                        return RedirectToAction("ConfirmationCreation", new { idSondage = idModel.IdSondage ,numSecurite = nouveauSondage.NumSecurite});
+                        return RedirectToAction("ConfirmationCreation", new { idSondage = idModel.IdSondage, numSecurite = nouveauSondage.NumSecurite});
                     }
                     else
                     {
-                        string messageErreur = "Probleme en recuperant l' Id du Sondage";
+                        string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
+                        string messageErreur = "Raison de l'arrêt du programme : Probleme en recuperant l' Id du Sondage";
+                        string commentaireErreur = "Prévienez l'administrateur !!";
+                        ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                         return RedirectToAction("Erreur", new { messageErreur = messageErreur });
                     }
                 }
@@ -121,14 +124,11 @@ namespace StrawPoll.Controllers
         }
         #endregion
         #region Envoi page web avec confirmation que la creation s'est bien passé
-        public ActionResult ConfirmationCreation(int idSondage,int numSecurite)
+        public ActionResult ConfirmationCreation(int idSondage, int numSecurite)
         {
             Sondage model = new Sondage(idSondage, numSecurite);
-           
-            ConfirmationCreation nouveauSondage = new ConfirmationCreation(model);
-                
-            return View(nouveauSondage);           
-            
+            ConfirmationCreation nouveauSondage = new ConfirmationCreation(model);                
+            return View(nouveauSondage);   
         }
         #endregion
         #endregion
@@ -152,19 +152,22 @@ namespace StrawPoll.Controllers
                 {
                     return RedirectToAction("VoteInterdit", new{ idSondage = idSondage });
                 }
-                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(idSondage);              
+                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(model);              
                 VoteSondage nouveauVote = new VoteSondage(model, toutLesReponseDuSondage);
                 
                 return View(nouveauVote);
             }
             else
             {
-                string messageErreur = "Probleme en recuperant le sondage en votante";
-                return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                string messageTitre = "Le Sondage n'existe pas ! ";
+                string messageErreur = "Veuillez redemander le numéro de sondage à votre ami svp !";
+                string commentaireErreur = "Vous pouvez retourner à l'accueil !!";
+                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                return RedirectToAction("Erreur", new { messageErreur = messageErreur });                
             }
         }
         #endregion
-        public ActionResult SubmitMulti(int? idSondage, string IdReponse, string reponse2, string reponse3,string reponse4)
+        public ActionResult SubmitMulti(int? idSondage, List<Reponse> reponseCourant)
         {
 
             /*   switch (toutLesReponseDuSondage.Count)
@@ -187,21 +190,70 @@ namespace StrawPoll.Controllers
             return View();
         }
 
-        public ActionResult SubmitUni(int? idSondage,string reponseRadios)
+        public ActionResult SubmitUni(int? idSondage,int? reponseRadios)
         {
-            return View();
+            if (Sondage.IsValideNumerique(idSondage.Value) & Sondage.IsValideNumerique(reponseRadios))
+            {
+                if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
+                {
+                    if (model.EtatSondage == true)
+                    {
+                        return RedirectToAction("VoteInterdit", new { idSondage = idSondage.Value });
+                    }
+                    else
+                    {
+                        Reponse detailReponse = new Reponse(reponseRadios.Value, idSondage.Value);
+                        int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
+                        if (nombreModifie == 1)
+                        {
+                            return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
+                        }
+                        else
+                        {
+                            string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
+                            string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
+                            string commentaireErreur = "Prévienez l'administrateur !!";
+                            ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                            return RedirectToAction("Erreur", new { messageErreur = messageErreur });                            
+                        }
+                    }
+                }
+                else
+                {
+                    string messageTitre = "Le Sondage n'existe pas ! ";
+                    string messageErreur = "Veuillez redemander le numéro de sondage à votre ami svp !";
+                    string commentaireErreur = "Vous pouvez retourner à l'accueil !!";
+                    ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                    return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                }
+            }
+            else
+            {
+                string messageTitre = "Le Sondage n'existe pas ! ";
+                string messageErreur = "Veuillez redemander le numéro de sondage à votre ami svp !";
+                string commentaireErreur = "Vous pouvez retourner à l'accueil !!";
+                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+            }
         }
-        public ActionResult DejaVoter()
+        public ActionResult DejaVoter(int idSondage)
         {
-            return View();
+            Sondage model = new Sondage(idSondage);
+            DejaVoter nouveauSondage = new DejaVoter(model);
+            return View(nouveauSondage);
+           
         }
         public ActionResult VoteInterdit(int idSondage)
         {
-            return View();
+            Sondage model = new Sondage(idSondage);
+            VoteInterdit nouveauSondage = new VoteInterdit(model);
+            return View(nouveauSondage);            
         }
-        public ActionResult ConfirmationVote()
+        public ActionResult ConfirmationVote(int idSondage)
         {
-            return View();
+            Sondage model = new Sondage(idSondage);
+            ConfirmationVote nouveauSondage = new ConfirmationVote(model);
+            return View(nouveauSondage);           
         }
         #endregion
         public ActionResult Resultat(int idSondage)
@@ -216,13 +268,19 @@ namespace StrawPoll.Controllers
                 }
                 else
                 {
-                    string messageErreur = "Probleme en recuperant le sondage d'un résultat";
-                    return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                    string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
+                    string messageErreur = "Raison de l'arrêt du programme : Probleme en recuperant le sondage d'un résultat";
+                    string commentaireErreur = "Prévienez l'administrateur !!";
+                    ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                    return RedirectToAction("Erreur", new { messageErreur = messageErreur });                    
                 }
             }
             else
             {
-                string messageErreur = "Probleme en recuperant le sondage d'un résultat";
+                string messageTitre = "Le Sondage n'existe pas ! ";
+                string messageErreur = "Veuillez redemander le numéro de sondage à votre ami svp !";
+                string commentaireErreur = "Vous pouvez retourner à l'accueil !!";
+                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                 return RedirectToAction("Erreur", new { messageErreur = messageErreur });
             }
            
@@ -232,19 +290,22 @@ namespace StrawPoll.Controllers
 
             if (DataAccess.RecupererSondagePourDesactiver(idSondage, numSecurite, out Sondage model))
             {               
-                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(idSondage);
+                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(model);
                 VoteDesactiver nouveauDesactiver = new VoteDesactiver(model, toutLesReponseDuSondage);
 
                 return View(nouveauDesactiver);
             }
             else
             {
-                string messageErreur = "Probleme en recuperant le sondage en votante";
-                return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                string messageTitre = "Le Sondage n'existe pas ! ";
+                string messageErreur = "Veuillez reverifier le numéro d'acces pour désactiver le sondage svp !";
+                string commentaireErreur = "Vous pouvez retourner à l'accueil !!";
+                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                return RedirectToAction("Erreur", new { messageErreur = messageErreur });               
             }
             
         }
-        public ActionResult ConfirmationDesactiver(int idSondage)
+        public ActionResult ConfirmationDesactiver(int idSondage )
         {            
                 if (DataAccess.RecupererSondage(idSondage, out Sondage model))
                 {
@@ -252,36 +313,42 @@ namespace StrawPoll.Controllers
                     {
                         return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
                     }
-                Sondage detailSondage = new Sondage(idSondage,model.NomSondage);
-                int nombreModifie = DataAccess.DesactiverVoteSondage(detailSondage);
-               if(nombreModifie == 1)
-                { 
-                ConfirmationDesactiver nouveauSondage = new ConfirmationDesactiver(idSondage);
-                return View(nouveauSondage);
-                }
-                else
-                {
-                    string messageErreur = "Probleme en desactivant le sondage";
-                    return RedirectToAction("Erreur", new { messageErreur = messageErreur });
-                }
+                    int nombreModifie = DataAccess.DesactiverVoteSondage(model);
+                    if(nombreModifie == 1)
+                    { 
+                    ConfirmationDesactiver nouveauSondage = new ConfirmationDesactiver(model);
+                    return View(nouveauSondage);
+                    }
+                    else
+                    {
+                        string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
+                        string messageErreur = "Raison de l'arrêt du programme : Probleme en desactivant le sondage";
+                        string commentaireErreur = "Prévienez l'administrateur !!";
+                        ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                        return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                    }                
             }
             else
             {
-                string messageErreur = "Probleme en recuperant le sondage en desactivant";
-                return RedirectToAction("Erreur", new { messageErreur = messageErreur });
+                string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
+                string messageErreur = "Raison de l'arrêt du programme : Probleme en desactivant le sondage";
+                        string commentaireErreur = "Prévienez l'administrateur !!";
+                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                return RedirectToAction("Erreur", new { messageErreur = messageErreur });               
             }
             
         }
-        public ActionResult DesactiverInterdit(int idSondage)
+        public ActionResult DesactiverInterdit(int idSondage )
         {
-            DesactiverInterdit nouveauSondage = new DesactiverInterdit(idSondage);
+            Sondage model = new Sondage(idSondage);
+            DesactiverInterdit nouveauSondage = new DesactiverInterdit(model);
             return View(nouveauSondage);
             
         }
        
-        public ActionResult Erreur(string messageErreur)
+        public ActionResult Erreur(string messageTitre, string messageErreur, string commentaireErreur)
         {
-            ErreurGrave erreurTrouve = new ErreurGrave(messageErreur);
+            ErreurGrave erreurTrouve = new ErreurGrave(messageTitre,messageErreur,commentaireErreur);
 
             return View(erreurTrouve);
         }

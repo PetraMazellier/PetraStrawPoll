@@ -33,7 +33,7 @@
                     <label for="staticDesactiver" class="col-sm-2 text-dark col-form-label">Désactiver :</label>
                     <div class="col-sm-10">
 
-                        <a href="@Url.Action("APropos")  "> <input type="text" readonly class="form-control-plaintext btn btn-primary text-white " value="petraStrawPoll.com/désactiver/@Model.NouveauSondage.IdSondage/@Model.NouveauSondage.NumSecurite"></a>
+                        <a href="@Url.Action("VoteDesactiver", new { idSondage = Model.NouveauSondage.IdSondage, numSecurite = Model.NouveauSondage.NumSecurite})   "> <input type="text" readonly class="form-control-plaintext btn btn-primary text-white " value="petraStrawPoll.com/désactiver/@Model.NouveauSondage.IdSondage@Model.NouveauSondage.NumSecurite"></a>
                     </div>
                 </div>
             </fieldset>

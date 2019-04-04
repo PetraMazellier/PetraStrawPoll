@@ -129,14 +129,17 @@
     </Compile>
     <Compile Include="Models\ConfirmationCreation.cs" />
     <Compile Include="Models\ConfirmationDesactiver.cs" />
+    <Compile Include="Models\ConfirmationVote.cs" />
     <Compile Include="Models\CreationSondage.cs" />
     <Compile Include="Models\DataAccess.cs" />
+    <Compile Include="Models\DejaVoter.cs" />
     <Compile Include="Models\DesactiverInterdit.cs" />
     <Compile Include="Models\Erreur.cs" />
     <Compile Include="Models\Reponse.cs" />
     <Compile Include="Models\ResultatSondage.cs" />
     <Compile Include="Models\Sondage.cs" />
     <Compile Include="Models\VoteDesactiver.cs" />
+    <Compile Include="Models\VoteInterdit.cs" />
     <Compile Include="Models\VoteSondage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -156,23 +156,21 @@ namespace StrawPoll.Models
             }
 
         }
-        public static List<Reponse> RecupererToutLesReponsesDuSondage(int idSondage)
+        public static List<Reponse> RecupererToutLesReponsesDuSondage(Sondage model)
         {
             List<Reponse> resultats = new List<Reponse>();
             SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString);
             sondageEnCours.Open();
             SqlCommand selectSondage =
                new SqlCommand("SELECT IdReponse, NomReponse FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
-            selectSondage.Parameters.AddWithValue("@fKIdSondage", idSondage);
+            selectSondage.Parameters.AddWithValue("@fKIdSondage", model.IdSondage);
 
             SqlDataReader dataReader = selectSondage.ExecuteReader();
             while (dataReader.Read())
             {
                 int idReponse = (int)dataReader["IdReponse"];
                 string nomReponse = (string)dataReader["NomReponse"];
-
-                Reponse detailList = new Reponse(nomReponse, idSondage, idReponse);
-
+                Reponse detailList = new Reponse(nomReponse, model.IdSondage, idReponse);
                 resultats.Add(detailList);
             }
             sondageEnCours.Close();
