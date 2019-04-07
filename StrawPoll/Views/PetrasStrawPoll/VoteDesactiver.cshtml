@@ -28,18 +28,23 @@
             </h3>
             <p></p>
             <div>
-                <h4 class="card-title text-dark text-center col-sm-10">
+                <h4 class="card-title mb3 text-center col-sm-10">
+                    Question :
 
-                    @Model.SondageADesactiver.NomSondage
-
+                    <label class="card-title text-dark text-center col-sm-10">
+                        @Model.SondageADesactiver.NomSondage
+                    </label>
                 </h4>
                 @foreach (var reponseCourant in Model.ReponseADesactiver)
                 {
-                    <div class="form-check form-check-label col text-center">
+                <h5 class="card-title  text-dark text-center col-sm-10">
+                    Réponse @reponseCourant.CompteurReponse : 
 
-                        @reponseCourant.NomReponse ?
-
-                    </div>
+                    <label class="card-title text-primary text-center col-sm-10">
+                        @reponseCourant.NomReponse
+                    </label>
+                </h5>
+                   
                 }
             </div>
         </div>
@@ -49,7 +54,7 @@
             <div class="row">
                 <p class="col">   </p>
                 <div class="col">
-                    <a href="@Url.Action("ConfirmationDesactiver", new { idSondage = Model.SondageADesactiver.IdSondage })" class="btn col  btn-primary  ">Confirmer</a>
+                    <a href="@Url.Action("ConfirmationDesactiver", new { idSondage = Model.SondageADesactiver.IdSondage , numSecurite = Model.SondageADesactiver.NumSecurite})" class="btn col  btn-primary  ">Confirmer</a>
                 </div>
                 <p class="col">   </p>
                 <div class="col">

@@ -8,14 +8,14 @@ namespace StrawPoll.Models
 {
     public class ResultatSondage
     {
-       
-            public Sondage SondageResultat { get; private set; }
-            public List<Reponse> ReponseResultatSondage { get; private set; }           
 
-            public ResultatSondage(Sondage sondageResultat, List<Reponse> reponseResultatSondage)
-            {
-                SondageResultat = sondageResultat;
-                ReponseResultatSondage = reponseResultatSondage;                
-            }      
+        public Sondage SondageResultat { get; private set; }
+        public List<Reponse> ReponseResultatSondage { get; private set; }
+
+        public ResultatSondage(Sondage sondageResultat, List<Reponse> reponseResultatSondage)
+        {
+            SondageResultat = sondageResultat;
+            ReponseResultatSondage = reponseResultatSondage;
+        }
     }
 }

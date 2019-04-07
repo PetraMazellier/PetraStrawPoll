@@ -130,7 +130,8 @@
     <Compile Include="Models\ConfirmationCreation.cs" />
     <Compile Include="Models\ConfirmationDesactiver.cs" />
     <Compile Include="Models\ConfirmationVote.cs" />
-    <Compile Include="Models\CreationSondage.cs" />
+    <Compile Include="Models\Creation.cs" />
+    <Compile Include="Models\CreationInvalide.cs" />
     <Compile Include="Models\DataAccess.cs" />
     <Compile Include="Models\DejaVoter.cs" />
     <Compile Include="Models\DesactiverInterdit.cs" />

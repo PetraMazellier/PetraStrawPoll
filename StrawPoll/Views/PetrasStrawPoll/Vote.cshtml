@@ -23,7 +23,10 @@
         </h2>
         <p></p>
         <h4 class="form-group row col-sm-10  ">
-            <label class="form-check-label col text-center">
+            <label class="form-check-label text-primary col text-center">
+                Question : 
+            </label>
+            <label class="form-check-label col text-dark text-left">
                 @Model.SondageAVoter.NomSondage
             </label>
         </h4>
@@ -31,47 +34,46 @@
         @if (Model.SondageAVoter.MultiSondage is true)
         {
 
-            <form action="@Url.Action("SubmitMulti", new { idSondage = Model.SondageAVoter.IdSondage })" method="post">
+        <form action="@Url.Action("SubmitMulti", new { idSondage = Model.SondageAVoter.IdSondage })" method="post">
 
 
-                @foreach (var reponseCourant in Model.ReponseAVoterSondage)
-                {
-                    <div class="form-check ">
-                        <input type="checkbox" readonly class="form-check-input col" value="" name="@reponseCourant.IdReponse" id="@reponseCourant.IdReponse">
-                        <label class="form-check-label col" for="@reponseCourant.IdReponse">
+            @foreach (var reponseCourant in Model.ReponseAVoterSondage)
+            {
+
+                <h5 class="form-group row">
+                    <label class="col-sm-2 col-form-label">Réponse @reponseCourant.CompteurReponse :</label>                    
+                        <input type="checkbox" readonly class="col-sm-10 form-check-input col" value="@reponseCourant.IdReponse" name="choix[]" id="@reponseCourant.IdReponse">
+                        <label class="form-check-label text-dark col" for="@reponseCourant.IdReponse">
                             @reponseCourant.NomReponse
-                        </label>
-                    </div>
+                        </label>                   
+                </h5>               
 
-                }
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-                <fieldset style="text-align:center">
-                    <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
-                </fieldset>
-            </form>
+            }
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <fieldset style="text-align:center">
+                <input type="submit" class="btn  btn-primary textall" value="      Voter       " />
+            </fieldset>
+        </form>
         }
         else
         {
             <form action="@Url.Action("SubmitUni", new { idSondage = Model.SondageAVoter.IdSondage })" method="post">
 
-
-
                 @foreach (var reponseCourant in Model.ReponseAVoterSondage)
                 {
-                    <div class="form-check ">
-                        <input class="form-check-input text-center col " type="radio" value="@reponseCourant.IdReponse" name="reponseRadios" id="l@reponseCourant.IdReponse">
-                        <label class="form-check-label text-center " for="l@reponseCourant.IdReponse">
-                            <input type="text" readonly class="form-control-plaintext text-primary  col" id="n@reponseCourant.IdReponse" value="@reponseCourant.NomReponse">
-
-
-                        </label>
-                    </div>
-
+                <h5 class="form-group row ">
+                    <label class="col-sm-2 col-form-label">Réponse @reponseCourant.CompteurReponse :</label>
+                    <input class="form-check-input text-center col " type="radio" value="@reponseCourant.IdReponse" name="reponseRadios" id="l@reponseCourant.IdReponse">
+                    <label class="form-check-label text-center " for="l@reponseCourant.IdReponse">
+                        <input type="text" readonly class="form-control-plaintext text-primary text-dark col" id="n@reponseCourant.IdReponse" value="@reponseCourant.NomReponse">
+                    </label>
+                </h5>
+               
                 }
 
                 <p></p>
@@ -94,17 +96,15 @@
         <div class="row">
             <p class="col">   </p>
             <div class="col">
-
                 <fieldset style="text-align:center">
-                    <a href="@Url.Action("Resultat", new { idSondage = Model.SondageAVoter.IdSondage })" class="btn btn-primary  ">Résultat</a>
+                    <a href="@Url.Action("Accueil")" class="btn btn-primary textall">Accueil</a>
                 </fieldset>
             </div>
             <p class="col">   </p>
             <div class="col">
                 <fieldset style="text-align:center">
-                    <a href="@Url.Action("Accueil")" class="btn btn-primary textall">Accueil</a>
-
-                </fieldset>
+                    <a href="@Url.Action("Resultat", new { idSondage = Model.SondageAVoter.IdSondage })" class="btn btn-primary  ">Résultat</a>
+                </fieldset>                
             </div>
             <p class="col">   </p>
         </div>

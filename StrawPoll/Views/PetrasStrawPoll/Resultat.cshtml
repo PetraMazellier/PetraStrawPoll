@@ -26,22 +26,20 @@
             <form>
                 <h3 class="form-group row col-sm-10">
 
-                    <input type="text" readonly class="form-control-plaintext text-center" value="@Model.SondageResultat.NomSondage">
-
+                    <input type="text" readonly class="form-control-plaintext col text-primary text-center" value="Question : ">
+                    <input type="text" readonly class="form-control-plaintext col text-left" value="@Model.SondageResultat.NomSondage">
                 </h3>
                 @foreach (var reponseCourant in Model.ReponseResultatSondage)
                 {
-
-
-                    <div class="form-group row">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" value="@reponseCourant.NomReponse" />
-                        <div class="col progress col">
-                            <div class=" progress-bar progress-bar-striped progress-bar-animated " role="progressbar" aria-valuenow="@(reponseCourant.PourcentageVote)" aria-valuemin="0" aria-valuemax="100" style="width: @(reponseCourant.PourcentageVote)%"></div>
-                        </div>
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" value=" @(reponseCourant.PourcentageVote) %">
-                        <input type="text" readonly class="form-control-plaintext text-primary  col" value=" @reponseCourant.NombreVoteReponse  Votes">
+                <h5 class="form-group row">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value="Réponse @reponseCourant.CompteurReponse : " />
+                    <input type="text" readonly class="form-control-plaintext text-dark  col" value="@reponseCourant.NomReponse" />
+                    <div class="col progress col">
+                        <div class=" progress-bar progress-bar-striped progress-bar-animated " role="progressbar" aria-valuenow="@(reponseCourant.PourcentageVote)" aria-valuemin="0" aria-valuemax="100" style="width: @(reponseCourant.PourcentageVote)%"></div>
                     </div>
-
+                    <input type="text" readonly class="form-control-plaintext text-dark  col" value=" @(reponseCourant.PourcentageVote) %">
+                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" @reponseCourant.NombreVoteReponse  Votes">
+                </h5>
                 }
                 <div class="form-group row">
                     <h2 class="col-sm-10">
@@ -50,7 +48,6 @@
                 </div>
             </form>
         </div>
-
         <p></p>
         <p></p>
         <form>
@@ -66,11 +63,9 @@
                 <p class="col">   </p>
             </div>
         </form>
-
         <p></p>
         <fieldset style="text-align:center">
             <a href="@Url.Action("Accueil")" class="btn btn-primary textall">Accueil</a>
-
         </fieldset>
         <p></p>
         <p></p>

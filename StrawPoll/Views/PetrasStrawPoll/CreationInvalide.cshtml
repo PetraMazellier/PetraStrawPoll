@@ -1,4 +1,5 @@
 ﻿@using StrawPoll.Models;
+@model CreationInvalide
 @{
     Layout = null;
 }
@@ -23,17 +24,12 @@
             </h2>
             <p></p>
             <h4 class="card-text text-center text-danger">
-                Vous devez saisir au moins une question et les deux premières réponses !
-            </h4>
-            <h4 class="card-text text-center text-danger">
-                Si vous saissiez la quatrième réponse vous devriez aussi saisir la troisieme réponse !!
-            </h4>
+                Vous devez saisir au moins une question et deux réponses !
+            </h4>           
             <h4 class="card-text text-center">
                 <br>   Recommencer s'il vous plaît<br />
                 <br>   <br />
             </h4>
-
-
             <form>
                 <div class="row">
                     <p class="col">   </p>
@@ -42,7 +38,7 @@
                     </div>
                     <p class="col">   </p>
                     <div class="col">
-                        <a href="@Url.Action("Creation")" class="btn col btn-primary  ">Créer un sondage</a>
+                        <a href="@Url.Action("Creation", new { nombreReponseMax = Model.NombreReponseMaximum })" class="btn col btn-primary  ">Créer un sondage</a>
                     </div>
                     <p class="col">   </p>
                 </div>

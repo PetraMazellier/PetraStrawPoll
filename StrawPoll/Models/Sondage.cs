@@ -23,21 +23,16 @@ namespace StrawPoll.Models
             NomSondage = nomSondage;
             MultiSondage = multiSondage;
             EtatSondage = ETAT_PAR_DEFAULT;
-            NumSecurite = GetNumSecurite();   
+            NumSecurite = GetNumSecurite();
         }
 
-        public Sondage(string nomSondage, bool multiSondage, bool etatSondage, int idSondage)
-        {
-            NomSondage = nomSondage;
-            MultiSondage = multiSondage;            
-            EtatSondage = etatSondage;
-            IdSondage = idSondage;
-        }
-        public Sondage(string nomSondage, bool multiSondage,int idSondage)
+        
+        public Sondage(string nomSondage, bool multiSondage,bool etatSondage, int idSondage)
         {
             NomSondage = nomSondage;
             MultiSondage = multiSondage;
-            IdSondage = idSondage;            
+            EtatSondage = etatSondage;
+            IdSondage = idSondage;
         }
         public Sondage(string nomSondage, bool multiSondage, int idSondage, int nombreVoteTotal)
         {
@@ -46,11 +41,12 @@ namespace StrawPoll.Models
             IdSondage = idSondage;
             NombreVoteTotal = nombreVoteTotal;
         }
-        public Sondage( int idSondage, string nomSondage, bool etatSondage)
-        {                           
+        public Sondage(int idSondage, string nomSondage, bool etatSondage, int numSecurite)
+        {
             IdSondage = idSondage;
+            NumSecurite = numSecurite;
             NomSondage = nomSondage;
-            EtatSondage = true;
+            EtatSondage = etatSondage;
         }
         public Sondage(int idSondage, string nomSondage)
         {
@@ -61,11 +57,11 @@ namespace StrawPoll.Models
         public Sondage(int idSondage, int numSecurite)
         {
             IdSondage = idSondage;
-            NumSecurite = numSecurite;           
+            NumSecurite = numSecurite;
         }
 
         public Sondage(int idSondage)
-        {            
+        {
             IdSondage = idSondage;
         }
         public static int GetNumSecurite()
@@ -74,27 +70,65 @@ namespace StrawPoll.Models
             int entierUnChiffre = aleatoire.Next(10000); //Génère un entier compris entre 0 et 9999
             return entierUnChiffre;
         }
+        
         public static bool IsValide(string nom)
         {
             switch (nom)
-            {
+            {                
                 case "":
-                    return false;
+                    return false;                       
+                case null:
+                    return false;                   
+                default:
+                    bool caractereTrouve = false;
+                    foreach (char c in nom)
+                    {
+                        if (c != ' ')
+                        {
+                            caractereTrouve = true;
+                        }
+                    }
+                    if (caractereTrouve == true)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }                   
+            }
+        }
+        public static bool IsValideNumerique(int? nombre)
+        {
+            switch (nombre)
+            {
                 case null:
                     return false;
                 default:
                     return true;
             }
         }
-        public static bool IsValideNumerique(int? nombre)
+        public int GetPourcentageVote(int nombreVoteReponse)
         {
-            switch (nombre)
-            {                
-                case null:
-                    return false;
-                default:                    
+            int pourcentageVote;
+            if (NombreVoteTotal > 0)
+            {
+                return pourcentageVote = nombreVoteReponse * 100 / NombreVoteTotal;
+            }
+            else
+            {
+                return pourcentageVote = 0;
+            }
+        }
+        public static bool ChoixMultiple(string multiChoix)
+        {
+            switch (multiChoix)
+            {
+                case "on":
                     return true;
-                   
+
+                default:
+                    return false;
             }
         }
     }
