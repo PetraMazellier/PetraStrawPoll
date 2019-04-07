@@ -197,7 +197,7 @@ namespace StrawPoll.Controllers
                     return View(nouveauVote);
                 }
                 #endregion
-                #region le sondage saisit n'existe pas et on envoie un message erreur on invitant la personne de redemander le numéro sondage à l'ami
+            #region le sondage saisit n'existe pas et on envoie un message erreur on invitant la personne de redemander le numéro sondage à l'ami
                 else
                 {
                     string messageTitre = "Le Sondage n'existe pas ! ";
@@ -548,7 +548,6 @@ namespace StrawPoll.Controllers
         }
         #endregion
         #endregion
-
         #region tous les pages concernant de la désactivation du sondage 
         #region Affichage de l'écran de désactivation
         /// <summary>
@@ -574,10 +573,13 @@ namespace StrawPoll.Controllers
 
                 if (DataAccess.RecupererSondagePourDesactiver(idSondage.Value, numSecurite.Value, out Sondage model))
                 {
+                    #region Le sondage est déja désactiver
                     if (model.EtatSondage == true)
                     {
                         return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
                     }
+                    #endregion
+                    #region On récupère tous les réponses et on affiche l'écran désactiver
                     else
                     {
                         List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(model);
@@ -585,7 +587,9 @@ namespace StrawPoll.Controllers
 
                         return View(nouveauDesactiver);
                     }
+                    #endregion
                 }
+                #region Le sondage n'existe pas on affiche message erreur en invitant la personne de vérifier le numéro de sondage
                 else
                 {
                     string messageTitre = "Le Sondage n'existe pas ! ";
@@ -603,9 +607,27 @@ namespace StrawPoll.Controllers
                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
             }
-
+            #endregion
         }
         #endregion
+        #region Déasactivation du sondage
+        /// <summary>
+        /// On récupère le sondage grâce du idSondage
+        /// si c'est bien passé
+        ///   on vérifie si le sondage est déjà désactivé
+        ///   si oui
+        ///      on envoi l'écran DesactiverInterdit
+        ///   sinon
+        ///      on désactive en mettant etatSondage à true
+        ///      si la mise à jour s'est bien passé
+        ///        on l'envoit à l'écran ConfirmationDesactiver
+        ///      sinon
+        ///        on envoi un message d'erreur avec possiblilité de revenir à l'accueil
+        ///  sinon on affiche message erreur  en invitant la personne de verifier son numéro de sondage avec possiblité de revenir à l'accueil           
+        /// </summary>
+        /// <param name="idSondage"></param>
+        /// <param name="numSecurite"></param>
+        /// <returns></returns>
         public ActionResult ConfirmationDesactiver(int idSondage, int numSecurite)
         {
             if (DataAccess.RecupererSondagePourDesactiver(idSondage, numSecurite, out Sondage model))
@@ -640,6 +662,8 @@ namespace StrawPoll.Controllers
             }
 
         }
+        #endregion
+        #region Affichage écran DesactiverInterdit dans le cas que le sondage est déjà désactiver
         public ActionResult DesactiverInterdit(int idSondage)
         {
             Sondage model = new Sondage(idSondage);
@@ -648,11 +672,14 @@ namespace StrawPoll.Controllers
 
         }
         #endregion
+        #endregion
+        #region L'écran Erreur est utilisé pour envoyer soit si poroblème avec la base de donnée soir que l'identifiant n'existe pas
         public ActionResult Erreur(string messageTitre, string messageErreur, string commentaireErreur)
         {
             ErreurGrave erreurTrouve = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
 
             return View(erreurTrouve);
         }
+        #endregion
     }
 }
