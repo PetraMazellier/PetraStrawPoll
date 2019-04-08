@@ -116,9 +116,9 @@ namespace StrawPoll.Controllers
                     #region si la création de réponse s'est mal passé on envoie message erreur avec possiblilté de retourner à l'accueil
                     else
                     {
-                        string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                        string messageErreur = "Raison de l'arrêt du programme : Probleme en recuperant l' Id du Sondage";
-                        string commentaireErreur = "Prévienez l'administrateur !!";
+                        string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                        string messageErreur = "Raison de l'arrêt du programme : Problème en récupérant l' Id du Sondage";
+                        string commentaireErreur = "Prévenez l'administrateur !!";
                         ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                         return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                     }
@@ -129,8 +129,8 @@ namespace StrawPoll.Controllers
                 else
                 {
                     string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                    string messageErreur = "Raison de l'arrêt du programme : Probleme en recuperant l' Id du Sondage";
-                    string commentaireErreur = "Prévienez l'administrateur !!";
+                    string messageErreur = "Raison de l'arrêt du programme : Problème en récuperant l' Id du Sondage";
+                    string commentaireErreur = "Prévenez l'administrateur !!";
                     ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                     return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                 }
@@ -281,12 +281,12 @@ namespace StrawPoll.Controllers
                                 return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
                             }
                             #endregion
-                                    #region Si il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
+                                    #region S' il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
                             else
                             {
-                                string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                                string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
-                                string commentaireErreur = "Prévienez l'administrateur !!";
+                                string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                                string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en votant le sondage";
+                                string commentaireErreur = "Prévenez l'administrateur !!";
                                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                             }
@@ -297,9 +297,9 @@ namespace StrawPoll.Controllers
                         #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
                     else
                     {
-                        string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                        string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
-                        string commentaireErreur = "Prévienez l'administrateur !!";
+                        string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                        string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en en votant le sondage";
+                        string commentaireErreur = "Prévenez l'administrateur !!";
                         ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                         return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
 
@@ -319,9 +319,9 @@ namespace StrawPoll.Controllers
             #region sinon on envoie un message d'erreur correpondant avec possiblilté de retourner à l'accueil
             else
             {
-                string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
-                string commentaireErreur = "Prévienez l'administrateur !!";
+                string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en en votant le sondage";
+                string commentaireErreur = "Prévenez l'administrateur !!";
                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
             }
@@ -385,9 +385,9 @@ namespace StrawPoll.Controllers
                                 #region Si il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
                                 else
                                 {
-                                    string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                                    string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
-                                    string commentaireErreur = "Prévienez l'administrateur !!";
+                                    string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                                    string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en en votant le sondage";
+                                    string commentaireErreur = "Prévenez l'administrateur !!";
                                     ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                                     return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                                 }
@@ -397,9 +397,9 @@ namespace StrawPoll.Controllers
                         #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
                             else
                             {
-                                string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                                string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
-                                string commentaireErreur = "Prévienez l'administrateur !!";
+                                string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                                string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en votant le sondage";
+                                string commentaireErreur = "Prévenez l'administrateur !!";
                                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                             }
@@ -411,9 +411,9 @@ namespace StrawPoll.Controllers
                     #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
                     else
                     {
-                        string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                        string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
-                        string commentaireErreur = "Prévienez l'administrateur !!";
+                        string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                        string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en votant le sondage";
+                        string commentaireErreur = "Prévenez l'administrateur !!";
                         ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                         return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                     }
@@ -431,8 +431,8 @@ namespace StrawPoll.Controllers
             #region sinon on envoie un message d'erreur correpondant avec possiblilté de retourner à l'accueil
             else
             {
-                string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                string messageErreur = "Raison de l'arrêt du programme : Probleme en en votant le sondage";
+                string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                string messageErreur = "Raison de l'arrêt du programme : Problème en en votant le sondage";
                 string commentaireErreur = "Prévienez l'administrateur !!";
                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
@@ -517,9 +517,9 @@ namespace StrawPoll.Controllers
                     else
                     {
                         #region Affichage d'un écran avec message d'erreur de problème de base de donnée
-                        string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                        string messageErreur = "Raison de l'arrêt du programme : Probleme en recuperant le sondage d'un résultat";
-                        string commentaireErreur = "Prévienez l'administrateur !!";
+                        string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                        string messageErreur = "Raison de l'arrêt du programme : Problème en récuperant le sondage d'un résultat";
+                        string commentaireErreur = "Prévenez l'administrateur !!";
                         ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                         return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                         #endregion
@@ -645,18 +645,18 @@ namespace StrawPoll.Controllers
                 }
                 else
                 {
-                    string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                    string messageErreur = "Raison de l'arrêt du programme : Probleme en desactivant le sondage";
-                    string commentaireErreur = "Prévienez l'administrateur !!";
+                    string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                    string messageErreur = "Raison de l'arrêt du programme : Problème en désactivant le sondage";
+                    string commentaireErreur = "Prévenez l'administrateur !!";
                     ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                     return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                 }
             }
             else
             {
-                string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                string messageErreur = "Raison de l'arrêt du programme : Probleme en desactivant le sondage";
-                string commentaireErreur = "Prévienez l'administrateur !!";
+                string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                string messageErreur = "Raison de l'arrêt du programme : Problème en désactivant le sondage";
+                string commentaireErreur = "Prévenez l'administrateur !!";
                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
             }
