@@ -8,8 +8,12 @@ namespace StrawPoll.Models
 {
     public class Sondage
     {
-        private const bool ETAT_PAR_DEFAULT = false;
-
+        private const bool ETAT_UNISONDAGE_DEFAULT = false;
+        private const bool ETAT_SONDAGE_NON_DESACTIVER = false;
+        private const bool ETAT_DESACTIVER = true;
+        private const int NOMBRE_DE_VOTE_TOTAL_PAR_DEFAULT = 0;
+        private const int NUMERO_SECURITE_INITIAL = 0;
+        private const int IDENTIFIANT_ZERO = 0;
         public int IdSondage { get; private set; }
         public string NomSondage { get; private set; }
         public bool MultiSondage { get; private set; }
@@ -18,70 +22,57 @@ namespace StrawPoll.Models
         public int NombreVoteTotal { get; private set; }
 
 
-        public Sondage(string nomSondage, bool multiSondage)
-        {
-            NomSondage = nomSondage;
-            MultiSondage = multiSondage;
-            EtatSondage = ETAT_PAR_DEFAULT;
-            NumSecurite = GetNumSecurite();
-        }
-
         
-        public Sondage(string nomSondage, bool multiSondage,bool etatSondage, int idSondage)
+        public Sondage(string nomSondage) 
         {
             NomSondage = nomSondage;
-            MultiSondage = multiSondage;
-            EtatSondage = etatSondage;
-            IdSondage = idSondage;
+            MultiSondage = ETAT_UNISONDAGE_DEFAULT;
+            EtatSondage = ETAT_SONDAGE_NON_DESACTIVER;
         }
-        public Sondage(string nomSondage, bool multiSondage, int idSondage, int nombreVoteTotal)
-        {
-            NomSondage = nomSondage;
-            MultiSondage = multiSondage;
-            IdSondage = idSondage;
-            NombreVoteTotal = nombreVoteTotal;
-        }
-        public Sondage(int idSondage, string nomSondage, bool etatSondage, int numSecurite)
-        {
-            IdSondage = idSondage;
-            NumSecurite = numSecurite;
-            NomSondage = nomSondage;
-            EtatSondage = etatSondage;
-        }
-        public Sondage(int idSondage, string nomSondage)
-        {
-            IdSondage = idSondage;
-            NomSondage = nomSondage;
-            EtatSondage = true;
-        }
-        public Sondage(int idSondage, int numSecurite)
-        {
-            IdSondage = idSondage;
-            NumSecurite = numSecurite;
-        }
-
         public Sondage(int idSondage)
         {
             IdSondage = idSondage;
         }
-        public static int GetNumSecurite()
+        
+        public Sondage(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, int numSecurite) 
+        {
+            NomSondage = nomSondage;
+            MultiSondage = multiSondage;
+            EtatSondage = etatSondage;
+            IdSondage = idSondage;
+            NumSecurite = numSecurite;
+        }
+
+        public Sondage(string nomSondage, bool multiSondage,   bool etatSondage,int idSondage, int numSecurite, int nombreVoteTotal)
+        {
+            NomSondage = nomSondage;
+            MultiSondage = multiSondage;
+            EtatSondage = etatSondage;
+            IdSondage = idSondage;
+            NumSecurite = numSecurite;
+            NombreVoteTotal = nombreVoteTotal;
+        }
+        public void GetNumSecurite()
         {
             Random aleatoire = new Random();
-            int entierUnChiffre = aleatoire.Next(10000); //Génère un entier compris entre 0 et 9999
-            return entierUnChiffre;
+            NumSecurite = aleatoire.Next(10000); //Génère un entier compris entre 0 et 9999            
         }
-        
-        public static bool IsValide(string nom)
+        public void DesactiverSondage()
         {
-            switch (nom)
-            {                
+            EtatSondage = true;
+                  
+        }
+        public bool IsValide()
+        {
+            switch (NomSondage)
+            {
                 case "":
-                    return false;                       
+                    return false;
                 case null:
-                    return false;                   
+                    return false;
                 default:
                     bool caractereTrouve = false;
-                    foreach (char c in nom)
+                    foreach (char c in NomSondage)
                     {
                         if (c != ' ')
                         {
@@ -95,7 +86,7 @@ namespace StrawPoll.Models
                     else
                     {
                         return false;
-                    }                   
+                    }
             }
         }
         public static bool IsValideNumerique(int? nombre)
@@ -108,28 +99,21 @@ namespace StrawPoll.Models
                     return true;
             }
         }
-        public int GetPourcentageVote(int nombreVoteReponse)
+
+        public void ChoixMultiple(string multiChoix)
         {
-            int pourcentageVote;
-            if (NombreVoteTotal > 0)
+
+            if (multiChoix == "on")
             {
-                return pourcentageVote = nombreVoteReponse * 100 / NombreVoteTotal;
+
+                MultiSondage = true;
             }
             else
             {
-                return pourcentageVote = 0;
+                MultiSondage = false;
             }
-        }
-        public static bool ChoixMultiple(string multiChoix)
-        {
-            switch (multiChoix)
-            {
-                case "on":
-                    return true;
 
-                default:
-                    return false;
-            }
+
         }
     }
 }

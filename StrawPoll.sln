@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrawPoll", "StrawPoll\Stra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F6A499B2-9291-4030-A759-1EF89260BCD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestStrawPoll", "UnitTestStrawPoll\UnitTestStrawPoll.csproj", "{5E604272-E61E-429C-8765-CC0742919F69}"
+	ProjectSection(ProjectDependencies) = postProject
+		{95B93A81-E6B9-4651-A8F5-B8BAAA4CC41C} = {95B93A81-E6B9-4651-A8F5-B8BAAA4CC41C}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +22,10 @@ Global
 		{95B93A81-E6B9-4651-A8F5-B8BAAA4CC41C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95B93A81-E6B9-4651-A8F5-B8BAAA4CC41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95B93A81-E6B9-4651-A8F5-B8BAAA4CC41C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E604272-E61E-429C-8765-CC0742919F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E604272-E61E-429C-8765-CC0742919F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E604272-E61E-429C-8765-CC0742919F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E604272-E61E-429C-8765-CC0742919F69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

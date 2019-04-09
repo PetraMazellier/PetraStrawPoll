@@ -10,21 +10,23 @@ namespace StrawPoll.Models
     public class DataAccess
     {
         const string SqlConnectionString = @"Server=.\SQLExpress;Database=StrawPoll;Trusted_Connection=Yes";
-        public static void CreationSondage(Sondage creationSondage)
+        public static int CreationSondage(Sondage creationSondage)
         {
+            int recupIdSondage = 0;
             SqlConnection connection = new SqlConnection(SqlConnectionString);
             connection.Open();
             SqlCommand InsertSondage =
-                    new SqlCommand("INSERT INTO Sondage (NomSondage, MultiSondage, EtatSondage, NumSecurite) " +
-                    " VALUES (@nomSondage, @multiSondage, @etatSondage, @numSecurite)", connection);
+                    new SqlCommand("INSERT INTO Sondage  (NomSondage, MultiSondage, EtatSondage, NumSecurite) " +
+                    "OUTPUT INSERTED.IdSondage  VALUES (@nomSondage, @multiSondage, @etatSondage, @numSecurite)", connection);
             InsertSondage.Parameters.AddWithValue("@nomSondage", creationSondage.NomSondage);
             InsertSondage.Parameters.AddWithValue("@multiSondage", creationSondage.MultiSondage);
             InsertSondage.Parameters.AddWithValue("@etatSondage", creationSondage.EtatSondage);
             InsertSondage.Parameters.AddWithValue("@numSecurite", creationSondage.NumSecurite);
 
             InsertSondage.ExecuteNonQuery();
-
+            recupIdSondage= (int)InsertSondage.ExecuteScalar();
             connection.Close();
+            return recupIdSondage;
         }
         public static bool RecupererIdSondage(Sondage model, out Sondage detailModel)
         {
@@ -32,14 +34,14 @@ namespace StrawPoll.Models
             SqlConnection firstSelect = new SqlConnection(SqlConnectionString);
             firstSelect.Open();
             SqlCommand selectIdSondage =
-                new SqlCommand("SELECT TOP 1 IdSondage FROM Sondage WHERE NomSondage = @nomSondage ORDER BY IdSondage DESC", firstSelect);
+                new SqlCommand("SELECT TOP 1 IdSondage  FROM Sondage WHERE NomSondage = @nomSondage ORDER BY IdSondage DESC", firstSelect);
             selectIdSondage.Parameters.AddWithValue("@nomSondage", model.NomSondage);
             SqlDataReader dataReader = selectIdSondage.ExecuteReader();
 
             if (dataReader.Read())
             {
-                int idSondage = (int)dataReader["IdSondage"];
-                detailModel = new Sondage(idSondage);
+                int idSondage = (int)dataReader["IdSondage"];                
+                detailModel = new Sondage(model.NomSondage, model.MultiSondage, model.EtatSondage, idSondage, model.NumSecurite);
                 return true;
             }
             else
@@ -48,13 +50,12 @@ namespace StrawPoll.Models
                 return false;
             }
         }
-        public static bool RecupererSondage(int idSondage, out Sondage detailSondage)
-        {
+        public static bool RecupererSondage(int idSondage, out Sondage detailSondage)        {
 
             SqlConnection SelectSondage = new SqlConnection(SqlConnectionString);
             SelectSondage.Open();
             SqlCommand selectSondage =
-                new SqlCommand("SELECT NomSondage,EtatSondage, MultiSondage FROM Sondage where IdSondage = @idSondage", SelectSondage);
+                new SqlCommand("SELECT NomSondage,EtatSondage, MultiSondage,NumSecurite FROM Sondage where IdSondage = @idSondage", SelectSondage);
             selectSondage.Parameters.AddWithValue("@idSondage", idSondage);
             SqlDataReader dataReader = selectSondage.ExecuteReader();
 
@@ -62,9 +63,9 @@ namespace StrawPoll.Models
             {
                 string nomSondage = (string)dataReader["NomSondage"];
                 bool etatSondage = (bool)dataReader["EtatSondage"];
-
                 bool multiSondage = (bool)dataReader["MultiSondage"];
-                detailSondage = new Sondage(nomSondage, multiSondage, etatSondage, idSondage);
+                int numSecurite = (int)dataReader["NumSecurite"];
+                detailSondage = new Sondage(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
                 return true;
             }
             else
@@ -78,7 +79,7 @@ namespace StrawPoll.Models
             SqlConnection SelectSondage = new SqlConnection(SqlConnectionString);
             SelectSondage.Open();
             SqlCommand selectSondage =
-                new SqlCommand("SELECT NomSondage,  EtatSondage, NumSecurite FROM Sondage where IdSondage = @idSondage AND NumSecurite = @numSecurite", SelectSondage);
+                new SqlCommand("SELECT NomSondage, MultiSondage, EtatSondage, NumSecurite FROM Sondage where IdSondage = @idSondage AND NumSecurite = @numSecurite", SelectSondage);
             selectSondage.Parameters.AddWithValue("@idSondage", idSondage);
             selectSondage.Parameters.AddWithValue("@numSecurite", numSecurite);
             SqlDataReader dataReader = selectSondage.ExecuteReader();
@@ -86,8 +87,10 @@ namespace StrawPoll.Models
             if (dataReader.Read())
             {
                 string nomSondage = (string)dataReader["NomSondage"];               
-                bool etatSondage = (bool)dataReader["EtatSondage"];  
-                detailSondage = new Sondage(idSondage, nomSondage, etatSondage, numSecurite);
+                bool etatSondage = (bool)dataReader["EtatSondage"];
+                bool multiSondage = (bool)dataReader["MultiSondage"];
+                detailSondage = new Sondage(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
+                
                 return true;
             }
             else
@@ -119,18 +122,20 @@ namespace StrawPoll.Models
 
         public static void CreationReponse(Reponse reponseSaisie)
         {
+           // int recupIdReponse = 0;
             SqlConnection connection = new SqlConnection(SqlConnectionString);
             connection.Open();
             SqlCommand InsertSondage =
-                    new SqlCommand("INSERT INTO Reponse (NomReponse, NombreVoteReponse, FKIdSondage) " +
-                    " VALUES (@nomReponse, @nombreVoteReponse, @fKIdSondage )", connection);
+                    new SqlCommand("INSERT INTO Reponse  (NomReponse, NombreVoteReponse, FKIdSondage) " +
+                    " OUTPUT INSERTED.IdReponse  VALUES (@nomReponse, @nombreVoteReponse, @fKIdSondage )", connection);
             InsertSondage.Parameters.AddWithValue("@nomReponse", reponseSaisie.NomReponse);
             InsertSondage.Parameters.AddWithValue("@nombreVoteReponse", reponseSaisie.NombreVoteReponse);
             InsertSondage.Parameters.AddWithValue("@fKIdSondage", reponseSaisie.FKIdSondage);
 
             InsertSondage.ExecuteNonQuery();
-
+         //   recupIdReponse = (int)InsertSondage.ExecuteScalar();
             connection.Close();
+           // return recupIdReponse;
         }
         public static bool RecupererReponse( int idReponse,int fKIdSondage, out Reponse detailReponse)
         {
@@ -138,7 +143,7 @@ namespace StrawPoll.Models
             SqlConnection SelectReponse = new SqlConnection(SqlConnectionString);
             SelectReponse.Open();
             SqlCommand selectSondage =
-                new SqlCommand("SELECT NombreVoteReponse FROM Reponse WHERE IdReponse = @idReponse AND FKIdSondage = fKIdSondage", SelectReponse);
+                new SqlCommand("SELECT NombreVoteReponse, NomReponse FROM Reponse WHERE IdReponse = @idReponse AND FKIdSondage = fKIdSondage", SelectReponse);
             selectSondage.Parameters.AddWithValue("@idReponse", idReponse);
             selectSondage.Parameters.AddWithValue("@fKIdSondage", fKIdSondage);
             SqlDataReader dataReader = selectSondage.ExecuteReader();
@@ -146,8 +151,9 @@ namespace StrawPoll.Models
             if (dataReader.Read())
             {
                 int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
-                
-                detailReponse = new Reponse(idReponse, nombreVoteReponse, fKIdSondage);
+                string nomReponse = (string)dataReader["NomReponse"];
+
+                detailReponse = new Reponse(nomReponse, fKIdSondage,idReponse, nombreVoteReponse);
                 return true;
             }
             else
@@ -188,7 +194,7 @@ namespace StrawPoll.Models
             SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString);
             sondageEnCours.Open();
             SqlCommand selectSondage =
-               new SqlCommand("SELECT IdReponse, NomReponse FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
+               new SqlCommand("SELECT IdReponse, NomReponse, NombreVoteReponse FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
             selectSondage.Parameters.AddWithValue("@fKIdSondage", model.IdSondage);
 
             SqlDataReader dataReader = selectSondage.ExecuteReader();
@@ -197,7 +203,8 @@ namespace StrawPoll.Models
                 compteur = compteur + 1;
                 int idReponse = (int)dataReader["IdReponse"];
                 string nomReponse = (string)dataReader["NomReponse"];
-                Reponse detailList = new Reponse(nomReponse, model.IdSondage, idReponse,compteur);
+                int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
+                Reponse detailList = new Reponse(nomReponse, model.IdSondage, idReponse,nombreVoteReponse,compteur);              
                 resultats.Add(detailList);
             }
             sondageEnCours.Close();
@@ -221,12 +228,9 @@ namespace StrawPoll.Models
                 compteur = compteur + 1;
                 int idReponse = (int)dataReader["IdReponse"];
                 string nomReponse = (string)dataReader["NomReponse"];
-                int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
-                int pourcentageVote = modelAvecTotalVote.GetPourcentageVote( nombreVoteReponse);
-
-
-                Reponse detailList = new Reponse(nomReponse,modelAvecTotalVote.IdSondage, nombreVoteReponse, idReponse,pourcentageVote,compteur);
-
+                int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];  
+                Reponse detailList = new Reponse(nomReponse,modelAvecTotalVote.IdSondage,idReponse, nombreVoteReponse,compteur);
+                detailList.GetPourcentageVote(modelAvecTotalVote.NombreVoteTotal);
                 resultats.Add(detailList);
             }
             sondageEnCours.Close();
@@ -249,7 +253,8 @@ namespace StrawPoll.Models
                 int nombreVoteTotal = (int)dataReader["NombreVoteTotal"];
 
 
-                modelAvecNombreTotal = new Sondage(model.NomSondage, model.MultiSondage, model.IdSondage, nombreVoteTotal);
+                modelAvecNombreTotal = new Sondage(model.NomSondage, model.MultiSondage,model.EtatSondage, model.IdSondage,model.NumSecurite, nombreVoteTotal);
+           
                 return true;
             }
             else

@@ -75,15 +75,20 @@ namespace StrawPoll.Controllers
         public ActionResult SubmitCreation(int nombreReponseMaximum, string question, string[] reponse, string multiSondageString)
         {
             #region Contrôle que la question et au moins deux réponses sont saisie
+            Sondage nouveauSondage = new Sondage(question);
             int nombreDeReponseValide = 0;
+            nouveauSondage.ChoixMultiple(multiSondageString);
+            nouveauSondage.GetNumSecurite();
+            
             for (int i = 0; i < reponse.Length; i++)
             {
-                if (Sondage.IsValide(reponse[i]))
+                Reponse testReponse = new Reponse(reponse[i]);
+                if (testReponse.IsValide())
                 {
                     nombreDeReponseValide = nombreDeReponseValide + 1;                    
                 }
             }
-            if (!Sondage.IsValide(question) || nombreDeReponseValide < 2 )
+            if (!nouveauSondage.IsValide() || nombreDeReponseValide < 2 )
             {
                 return RedirectToAction("CreationInvalide", new { nombreReponseMaximum = nombreReponseMaximum });
             }
@@ -92,25 +97,24 @@ namespace StrawPoll.Controllers
             else
             {
                 #region création du sondage avec le numéro sécurité et multiSondage
-                bool multiSondage = Sondage.ChoixMultiple(multiSondageString);
-                Sondage nouveauSondage = new Sondage(question, multiSondage);
-                DataAccess.CreationSondage(nouveauSondage);
+                
+                int idSondageCreation = DataAccess.CreationSondage(nouveauSondage);
                 if (DataAccess.RecupererIdSondage(nouveauSondage, out Sondage idModel))
                 {
                     #region Création autant de réponses que saisie
                     int nombreTotalCreer = 0;
                     for (int i = 0; i < reponse.Length; i++)
                     {
-                        if (Sondage.IsValide(reponse[i]))
-                        {
-                            Reponse reponseDetail = new Reponse(reponse[i], idModel.IdSondage);
+                        Reponse reponseDetail = new Reponse(reponse[i], idSondageCreation);
+                        if (reponseDetail.IsValide())
+                        {                           
                             DataAccess.CreationReponse(reponseDetail);
                             nombreTotalCreer = nombreTotalCreer + 1;
                         }
                     }
                     if (nombreTotalCreer > 1)
                     {
-                        return RedirectToAction("ConfirmationCreation", new { idSondage = idModel.IdSondage, numSecurite = nouveauSondage.NumSecurite });
+                        return RedirectToAction("ConfirmationCreation", new { idSondage = idSondageCreation, numSecurite = nouveauSondage.NumSecurite });
                     }
                     #endregion
                     #region si la création de réponse s'est mal passé on envoie message erreur avec possiblilté de retourner à l'accueil
@@ -150,9 +154,21 @@ namespace StrawPoll.Controllers
         #region Envoi page web avec confirmation pour dire que la creation s'est bien passé
         public ActionResult ConfirmationCreation(int idSondage, int numSecurite)
         {
-            Sondage model = new Sondage(idSondage, numSecurite);
-            ConfirmationCreation nouveauSondage = new ConfirmationCreation(model);
-            return View(nouveauSondage);
+
+            if (DataAccess.RecupererSondagePourDesactiver(idSondage, numSecurite, out Sondage model))
+            {
+
+                ConfirmationCreation nouveauSondage = new ConfirmationCreation(model);
+                return View(nouveauSondage);
+            }
+            else
+            {
+                string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
+                string messageErreur = "Raison de l'arrêt du programme : Problème en récuperant le sondage créer";
+                string commentaireErreur = "Prévenez l'administrateur !!";
+                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
+            }
         }
         #endregion
         #endregion
@@ -636,8 +652,8 @@ namespace StrawPoll.Controllers
                 {
                     return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
                 }
-                Sondage desactiverSondage = new Sondage(idSondage, model.NomSondage);
-                int nombreModifie = DataAccess.DesactiverVoteSondage(desactiverSondage);
+                model.DesactiverSondage();
+                int nombreModifie = DataAccess.DesactiverVoteSondage(model);
                 if (nombreModifie == 1)
                 {
                     ConfirmationDesactiver nouveauSondage = new ConfirmationDesactiver(model);

@@ -7,11 +7,11 @@ namespace StrawPoll.Models
 {
     public class DesactiverInterdit
     {
-        public Sondage NouveauSondage { get; private set; }
+        public Sondage SondageDesactiverInterdit { get; private set; }
 
-        public DesactiverInterdit(Sondage nouveauSondage)
+        public DesactiverInterdit(Sondage sondageDesactiverInterdit)
         {
-            NouveauSondage = nouveauSondage;
+            SondageDesactiverInterdit = sondageDesactiverInterdit;
 
         }
     }

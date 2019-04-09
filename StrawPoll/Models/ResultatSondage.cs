@@ -16,6 +16,7 @@ namespace StrawPoll.Models
         {
             SondageResultat = sondageResultat;
             ReponseResultatSondage = reponseResultatSondage;
-        }
+        }       
+        
     }
 }
