@@ -18,36 +18,32 @@ namespace StrawPoll.Models
         public int PourcentageVote { get; private set; }
         public int CompteurReponse { get; private set; }
 
-        public Reponse(string nomReponse) 
+        public Reponse(string nomReponse, int fKIdSondage, int idReponse, int nombreVoteReponse, int compteurReponse)
         {
-            NomReponse = nomReponse;
 
-        }
-       public Reponse(string nomReponse, int fKIdSondage) 
-        {
-            NomReponse = nomReponse;
-            FKIdSondage = fKIdSondage;
-
-        }
-        
-      
-        public Reponse(string nomReponse, int fKIdSondage,int idReponse, int nombreVoteReponse) 
-        {
             NombreVoteReponse = nombreVoteReponse;
             NomReponse = nomReponse;
             FKIdSondage = fKIdSondage;
             IdReponse = idReponse;
-
-        }
-        public Reponse(string nomReponse, int fKIdSondage, int idReponse, int nombreVoteReponse,int compteurReponse)
-        {
-        
-            NombreVoteReponse = nombreVoteReponse;
-            NomReponse = nomReponse;
-            FKIdSondage = fKIdSondage;
-            IdReponse = idReponse;            
             CompteurReponse = compteurReponse;
         }
+        
+        public static Reponse AvantTestSaisieValide(string nomReponse)
+        {
+            return new Reponse(nomReponse, 0, 0, 0, 0);
+        }
+      
+        public static Reponse AvantInsertionEnBDD(string nomReponse, int fKIdSondage)
+        {
+            
+            return new Reponse(nomReponse, fKIdSondage, 0, 0, 0);
+        }
+       
+        public static Reponse RecuperationDansLaBDD(string nomReponse, int fKIdSondage, int idReponse, int nombreVoteReponse)
+        {
+            return new Reponse(nomReponse, fKIdSondage, idReponse, nombreVoteReponse, 0);           
+
+        }        
 
         public bool IsValide()
         {

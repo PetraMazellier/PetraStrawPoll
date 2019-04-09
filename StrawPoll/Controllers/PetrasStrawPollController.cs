@@ -75,20 +75,20 @@ namespace StrawPoll.Controllers
         public ActionResult SubmitCreation(int nombreReponseMaximum, string question, string[] reponse, string multiSondageString)
         {
             #region Contrôle que la question et au moins deux réponses sont saisie
-            Sondage nouveauSondage = new Sondage(question);
+            Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
             int nombreDeReponseValide = 0;
             nouveauSondage.ChoixMultiple(multiSondageString);
             nouveauSondage.GetNumSecurite();
-            
+
             for (int i = 0; i < reponse.Length; i++)
             {
-                Reponse testReponse = new Reponse(reponse[i]);
+                Reponse testReponse = Reponse.AvantTestSaisieValide(reponse[i]);
                 if (testReponse.IsValide())
                 {
-                    nombreDeReponseValide = nombreDeReponseValide + 1;                    
+                    nombreDeReponseValide = nombreDeReponseValide + 1;
                 }
             }
-            if (!nouveauSondage.IsValide() || nombreDeReponseValide < 2 )
+            if (!nouveauSondage.IsValide() || nombreDeReponseValide < 2)
             {
                 return RedirectToAction("CreationInvalide", new { nombreReponseMaximum = nombreReponseMaximum });
             }
@@ -97,48 +97,38 @@ namespace StrawPoll.Controllers
             else
             {
                 #region création du sondage avec le numéro sécurité et multiSondage
-                
+
                 int idSondageCreation = DataAccess.CreationSondage(nouveauSondage);
-                if (DataAccess.RecupererIdSondage(nouveauSondage, out Sondage idModel))
+
+                #region Création autant de réponses que saisie
+                int nombreTotalCreer = 0;
+                for (int i = 0; i < reponse.Length; i++)
                 {
-                    #region Création autant de réponses que saisie
-                    int nombreTotalCreer = 0;
-                    for (int i = 0; i < reponse.Length; i++)
+                    Reponse reponseDetail = Reponse.AvantInsertionEnBDD(reponse[i], idSondageCreation);
+                    if (reponseDetail.IsValide())
                     {
-                        Reponse reponseDetail = new Reponse(reponse[i], idSondageCreation);
-                        if (reponseDetail.IsValide())
-                        {                           
-                            DataAccess.CreationReponse(reponseDetail);
-                            nombreTotalCreer = nombreTotalCreer + 1;
-                        }
+                        int idReponseCreation = DataAccess.CreationReponse(reponseDetail);
+                        nombreTotalCreer = nombreTotalCreer + 1;
                     }
-                    if (nombreTotalCreer > 1)
-                    {
-                        return RedirectToAction("ConfirmationCreation", new { idSondage = idSondageCreation, numSecurite = nouveauSondage.NumSecurite });
-                    }
-                    #endregion
-                    #region si la création de réponse s'est mal passé on envoie message erreur avec possiblilté de retourner à l'accueil
-                    else
-                    {
-                        string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                        string messageErreur = "Raison de l'arrêt du programme : Problème en récupérant l' Id du Sondage";
-                        string commentaireErreur = "Prévenez l'administrateur !!";
-                        ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-                        return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
-                    }
-                    #endregion
+                }
+                if (nombreTotalCreer > 1)
+                {
+                    return RedirectToAction("ConfirmationCreation", new { idSondage = idSondageCreation, numSecurite = nouveauSondage.NumSecurite });
                 }
                 #endregion
-                #region si la création du sondage s'est mal passé on envoie message erreur avec possiblilité de retourner à l'accueil
+                #region si la création de réponse s'est mal passé on envoie message erreur avec possiblilté de retourner à l'accueil
                 else
                 {
-                    string messageTitre = "Programme s'est arrêté à cause d'un grave erreur ! ";
-                    string messageErreur = "Raison de l'arrêt du programme : Problème en récuperant l' Id du Sondage";
+                    string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                    string messageErreur = "Raison de l'arrêt du programme : Problème en récupérant l' Id du Sondage";
                     string commentaireErreur = "Prévenez l'administrateur !!";
                     ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                     return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                 }
                 #endregion
+
+                #endregion
+
             }
             #endregion
         }
@@ -196,7 +186,7 @@ namespace StrawPoll.Controllers
         public ActionResult Vote(int? idSondage)
         {
             #region Récuperer le sondage et tous les réponses correpondant pour le vote
-            if (Sondage.IsValideNumerique(idSondage))
+            if (!(idSondage is null))
             {
 
                 if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
@@ -213,7 +203,7 @@ namespace StrawPoll.Controllers
                     return View(nouveauVote);
                 }
                 #endregion
-            #region le sondage saisit n'existe pas et on envoie un message erreur on invitant la personne de redemander le numéro sondage à l'ami
+                #region le sondage saisit n'existe pas et on envoie un message erreur on invitant la personne de redemander le numéro sondage à l'ami
                 else
                 {
                     string messageTitre = "Le Sondage n'existe pas ! ";
@@ -258,15 +248,15 @@ namespace StrawPoll.Controllers
         public ActionResult SubmitMulti(int? idSondage, int?[] choix)
         {
             #region Test si le sondage existe 
-           
-            if (Sondage.IsValideNumerique(idSondage))
+            if (!(idSondage is null))
+
             {
                 if (!(choix is null))
                 {
                     #region si il y a une vote on récupère le sondage 
                     if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
                     {
-                     
+
                         #region si le sondage est désactiver on l'envoie au VoteInterdit il ne pourrait pas voter mais voir le résultat par contre
                         if (model.EtatSondage == true)
                         {
@@ -291,13 +281,13 @@ namespace StrawPoll.Controllers
                                     #endregion
                                 }
                             }
-                                    #region Si le vote s'est bien passé on envoi au ConfirmationVote
+                            #region Si le vote s'est bien passé on envoi au ConfirmationVote
                             if (nombreTotalModifie > 0)
                             {
                                 return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
                             }
                             #endregion
-                                    #region S' il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
+                            #region S' il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
                             else
                             {
                                 string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
@@ -307,10 +297,10 @@ namespace StrawPoll.Controllers
                                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                             }
                             #endregion
-                        }                       
+                        }
                     }
                     #endregion
-                        #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
+                    #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
                     else
                     {
                         string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
@@ -320,11 +310,11 @@ namespace StrawPoll.Controllers
                         return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
 
                     }
-                    
+
                 }
                 #endregion
-                #endregion                
-                    #region sinon on renvoi à la page vote pour que la personne vote
+                #endregion
+                #region sinon on renvoi à la page vote pour que la personne vote
                 else
                 {
                     return RedirectToAction("Vote", new { idSondage = idSondage });
@@ -367,16 +357,16 @@ namespace StrawPoll.Controllers
         public ActionResult SubmitUni(int? idSondage, int? reponseRadios)
         {
             #region Test si le sondage existe
-            
-            if (Sondage.IsValideNumerique(idSondage))
+
+            if (!(idSondage is null))
             {
                 #region si sondage existe est on a voté
-                if (Sondage.IsValideNumerique(reponseRadios))
+                if (!(idSondage is null))
                 {
                     #region si il y a une vote on récupère le sondage 
                     if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
                     {
-                       
+
                         #region si le sondage est désactiver on l'envoie au VoteInterdit il ne pourrait pas voter mais voir le résultat par contre
                         if (model.EtatSondage == true)
                         {
@@ -410,7 +400,7 @@ namespace StrawPoll.Controllers
                             }
                             #endregion
                             #endregion
-                        #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
+                            #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
                             else
                             {
                                 string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
@@ -422,7 +412,7 @@ namespace StrawPoll.Controllers
                         }
                         #endregion
                     }
-                    
+
                     #endregion
                     #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
                     else
@@ -467,7 +457,7 @@ namespace StrawPoll.Controllers
 
         public ActionResult DejaVoter(int idSondage)
         {
-            Sondage model = new Sondage(idSondage);
+            Sondage model = Sondage.RecupererIdSondagePourEcranSuivant(idSondage);
             DejaVoter nouveauSondage = new DejaVoter(model);
             return View(nouveauSondage);
 
@@ -482,7 +472,7 @@ namespace StrawPoll.Controllers
         /// <returns></returns>
         public ActionResult VoteInterdit(int idSondage)
         {
-            Sondage model = new Sondage(idSondage);
+            Sondage model = Sondage.RecupererIdSondagePourEcranSuivant(idSondage);
             VoteInterdit nouveauSondage = new VoteInterdit(model);
             return View(nouveauSondage);
         }
@@ -496,7 +486,7 @@ namespace StrawPoll.Controllers
         /// <returns></returns>
         public ActionResult ConfirmationVote(int idSondage)
         {
-            Sondage model = new Sondage(idSondage);
+            Sondage model = Sondage.RecupererIdSondagePourEcranSuivant(idSondage);
             ConfirmationVote nouveauSondage = new ConfirmationVote(model);
             return View(nouveauSondage);
         }
@@ -518,7 +508,7 @@ namespace StrawPoll.Controllers
         public ActionResult Resultat(int? idSondage)
         {
             #region Récuperer le sondage si il existe
-            if (Sondage.IsValideNumerique(idSondage))
+            if (!(idSondage is null))
             {
                 if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
                 {
@@ -542,7 +532,7 @@ namespace StrawPoll.Controllers
                     }
                 }
                 #endregion
-            #region sinon on envoi un écran en invitant la peronne de verifier son numéro de sondage
+                #region sinon on envoi un écran en invitant la peronne de verifier son numéro de sondage
                 else
                 {
                     string messageTitre = "Le Sondage n'existe pas ! ";
@@ -584,7 +574,8 @@ namespace StrawPoll.Controllers
         public ActionResult VoteDesactiver(int? idSondage, int? numSecurite)
         {
 
-            if (Sondage.IsValideNumerique(idSondage) & Sondage.IsValideNumerique(numSecurite))
+            if (!(idSondage is null) &
+                !(numSecurite is null))
             {
 
                 if (DataAccess.RecupererSondagePourDesactiver(idSondage.Value, numSecurite.Value, out Sondage model))
@@ -682,7 +673,7 @@ namespace StrawPoll.Controllers
         #region Affichage écran DesactiverInterdit dans le cas que le sondage est déjà désactiver
         public ActionResult DesactiverInterdit(int idSondage)
         {
-            Sondage model = new Sondage(idSondage);
+            Sondage model = Sondage.RecupererIdSondagePourEcranSuivant(idSondage);
             DesactiverInterdit nouveauSondage = new DesactiverInterdit(model);
             return View(nouveauSondage);
 
