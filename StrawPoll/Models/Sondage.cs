@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using StrawPoll.Controllers;
+using System.Collections.Specialized;
+using System.Net;
+
 
 namespace StrawPoll.Models
 {
@@ -100,5 +103,8 @@ namespace StrawPoll.Models
 
 
         }
+
+        
+       
     }
 }

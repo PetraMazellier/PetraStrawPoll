@@ -187,7 +187,7 @@ namespace StrawPoll.Models
             return resultats;
 
         }
-        public static List<Reponse> RecupererToutLesReponsesDuSondageAvecNombreVote(Sondage modelAvecTotalVote)
+        public static List<Reponse> RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(Sondage modelAvecTotalVote)
         {
             List<Reponse> resultats = new List<Reponse>();
             int compteur = 0;

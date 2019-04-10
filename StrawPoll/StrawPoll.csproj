@@ -176,6 +176,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\PetrasStrawPoll\Erreur.cshtml" />
     <Content Include="Views\PetrasStrawPoll\CreationInvalide.cshtml" />
+    <Content Include="Views\Shared\MaDisposition.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

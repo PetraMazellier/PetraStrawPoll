@@ -1,29 +1,16 @@
 ﻿@using StrawPoll.Models;
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/MaDisposition.cshtml";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Accueil</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <meta name="viewport" content="width=device-width" />
-
-</head>
-<body class="card bg-light  mb-3">
-    <header>
-        <div class="card-header text-dark bg-primary  mb-3 text-center"><h1> <img src="../../Content/logo.jpg" />        Petra's Straw Poll</h1></div>
-        <div class="card-body bg-light text-primary">
-            <h2 class="card-title text-dark text-center">
-                Bienvenue sur Petra's Straw Poll
-            </h2>
-        </div>
-    </header>
+@{
+    ViewBag.Title = "Accueil";
+}
+@section Title
+{
+                    Bienvenue sur Petra's Straw Poll
+}
+                
     <p></p>
     <p></<p>
     <p class="card-body bg-light text-primary card-text text-center">  Sur Petra's Straw Poll vous pouvez créer des sondages de paille simples anonyme et sans enregistrement d'un compte. Nous avons optimisé la création et le processus de vote, de sorte qu'il n'a pas d'importance où vos amis ou membres de la famille sont, ils peuvent voter parfaitement facile sur votre Straw Poll créé et partagé avant. Explicite, Petra's Straw Poll est complète gratuitement. Nous espérons que vous venez de trouver le site de vote de votre choix futur. Si vous voulez créer un court sondage pour voter sur des choses au hasard, vous êtes à la bonne place.</p>
@@ -31,7 +18,7 @@
     <p></p>
 
     <form action="@Url.Action("Creation")" method="post">
-        
+
         <div class="row">
             <div class="col">
                 <label class="btn col  btn-primary  ">Selectionnez si vous le désirez un nombre maximum de réponses :</label>
@@ -40,39 +27,13 @@
                 <div class=" card-body">
                     <input type="text" class="form-control text-dark" name="nombreReponseMax" checked placeholder="Par défaut c'est 2 réponses">
                 </div>
-            </div>                   
+            </div>
             <div class="col">
                 <input type="submit" class="btn btn-primary textall" value="Créer un sondage" : />
             </div>
             <p class="col">   </p>
             <p class="col">   </p>
         </div>
-        
-            </form>
-        <!-- Footer -->
-        <footer class="page-footer font-small  pt-4">
-            <div class=" footer-copyright card-group   text-white bg-primary mb-3 border-primary" ;">
-                <div class="card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("APropos") "><i class="fa fa-smile text-white">             A propos </i></a></h5>
-                </div>
-                <div class=" card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("Condition") "><i class="fa fa-info-circle text-white">    Conditions d'utilisation</i></a></h5>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("Confidentialite") "><i class="fa fa-lock text-white ">    Confidentialité et cookies</i></a></h5>
-                </div>
-            </div>
-            <div class="footer-copyright text-center py-3">
-                © 2019 Copyright:
-                <a href="@Url.Action("Accueil") ">    Petra's Straw Poll</a>
-            </div>
-        </footer>
 
-
-
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
-
-</html>
+    </form>
+ 

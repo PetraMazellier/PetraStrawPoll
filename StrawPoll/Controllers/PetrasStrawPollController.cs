@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using StrawPoll.Models;
+using System.Collections.Specialized;
+using System.Net;
 
 
 namespace StrawPoll.Controllers
@@ -263,41 +265,48 @@ namespace StrawPoll.Controllers
                             return RedirectToAction("VoteInterdit", new { idSondage = idSondage.Value });
                         }
                         #endregion
+                        #region si on a déjà voter on l'envoie au DejaVoter il ne pourrait pluss voter mais voir le résultat par contre
+                        if (VerifierSiSondageADejaVoter(Request.Cookies, idSondage.Value))
+                        {
+                            return RedirectToAction("VoteInterdit", new { idSondage = idSondage.Value });
+                        }
+                        #endregion
                         #region sinon on récupère les réponses correspondant au vote et on ajout un vote
+
+                        int nombreTotalModifie = 0;
+                        for (int i = 0; i < choix.Length; i++)
+                        {
+                            if (DataAccess.RecupererReponse(choix[i].Value, idSondage.Value, out Reponse detailReponse))
+                            {
+                                EnregistrerVotantDansLeCookie(idSondage.Value);
+                                #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
+                                detailReponse.AjoutVoteReponse();
+                                int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
+                                if (nombreModifie == 1)
+                                {
+                                    nombreTotalModifie = nombreTotalModifie + nombreModifie;
+                                }
+                                #endregion
+                            }
+                        }
+
+                        #region Si le vote s'est bien passé on envoi au ConfirmationVote
+                        if (nombreTotalModifie > 0)
+                        {
+                            return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
+                        }
+                        #endregion
+                        #region S' il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
                         else
                         {
-                            int nombreTotalModifie = 0;
-                            for (int i = 0; i < choix.Length; i++)
-                            {
-                                if (DataAccess.RecupererReponse(choix[i].Value, idSondage.Value, out Reponse detailReponse))
-                                {
-                                    #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
-                                    detailReponse.AjoutVoteReponse();
-                                    int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
-                                    if (nombreModifie == 1)
-                                    {
-                                        nombreTotalModifie = nombreTotalModifie + nombreModifie;
-                                    }
-                                    #endregion
-                                }
-                            }
-                            #region Si le vote s'est bien passé on envoi au ConfirmationVote
-                            if (nombreTotalModifie > 0)
-                            {
-                                return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
-                            }
-                            #endregion
-                            #region S' il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
-                            else
-                            {
-                                string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                                string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en votant le sondage";
-                                string commentaireErreur = "Prévenez l'administrateur !!";
-                                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-                                return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
-                            }
-                            #endregion
+                            string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                            string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en votant le sondage";
+                            string commentaireErreur = "Prévenez l'administrateur !!";
+                            ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                            return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                         }
+                        #endregion
+
                     }
                     #endregion
                     #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
@@ -332,6 +341,7 @@ namespace StrawPoll.Controllers
                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
             }
         }
+
         #endregion
         #endregion
         #region récuperer les votes  en cas vote uni
@@ -361,55 +371,61 @@ namespace StrawPoll.Controllers
             if (!(idSondage is null))
             {
                 #region si sondage existe est on a voté
-                if (!(idSondage is null))
+                if (!(reponseRadios is null))
                 {
                     #region si il y a une vote on récupère le sondage 
                     if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
                     {
-
                         #region si le sondage est désactiver on l'envoie au VoteInterdit il ne pourrait pas voter mais voir le résultat par contre
                         if (model.EtatSondage == true)
                         {
                             return RedirectToAction("VoteInterdit", new { idSondage = idSondage.Value });
                         }
                         #endregion
-                        #region sinon on récupère la réponse correspondant au vote et on ajout un vote
-                        else
+                        #region si lon a déjà voter on l'envoie au DejaVoter il ne pourrait pluss voter mais voir le résultat par contre
+                        if (VerifierSiSondageADejaVoter(Request.Cookies, idSondage.Value))
                         {
-                            if (DataAccess.RecupererReponse(reponseRadios.Value, idSondage.Value, out Reponse detailReponse))
+                            return RedirectToAction("VoteInterdit", new { idSondage = idSondage.Value });
+                        }
+                        #endregion
+                        #region sinon on récupère la réponse correspondant au vote et on ajout un vote
+
+                        if (DataAccess.RecupererReponse(reponseRadios.Value, idSondage.Value, out Reponse detailReponse))
+                        {
+
+                            #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
+                            detailReponse.AjoutVoteReponse();
+                            int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
+                            #endregion
+                            EnregistrerVotantDansLeCookie(idSondage.Value);
+                            #region Si le vote s'est bien passé on envoi au ConfirmationVote
+                            if (nombreModifie == 1)
                             {
-                                #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
-                                detailReponse.AjoutVoteReponse();
-                                int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
-                                #endregion
-                                #region Si le vote s'est bien passé on envoi au ConfirmationVote
-                                if (nombreModifie == 1)
-                                {
-                                    return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
-                                }
-                                #endregion
-                                #region Si il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
-                                else
-                                {
-                                    string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                                    string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en en votant le sondage";
-                                    string commentaireErreur = "Prévenez l'administrateur !!";
-                                    ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-                                    return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
-                                }
+                                return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
                             }
                             #endregion
-                            #endregion
-                            #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
+                            #region Si il y a un problème au ajout d'un vote sur la table de réponse on envoie message erreur avec possiblilité de retourner à l'acceuil
                             else
                             {
                                 string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                                string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en votant le sondage";
+                                string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en en votant le sondage";
                                 string commentaireErreur = "Prévenez l'administrateur !!";
                                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                             }
                         }
+                        #endregion
+                        #endregion
+                        #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
+                        else
+                        {
+                            string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                            string messageErreur = "Raison de l'arrêt du programme : Problème de base de donnée en votant le sondage";
+                            string commentaireErreur = "Prévenez l'administrateur !!";
+                            ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+                            return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
+                        }
+                       
                         #endregion
                     }
 
@@ -515,7 +531,7 @@ namespace StrawPoll.Controllers
                     if (DataAccess.CompteNombreVoteTotal(model, out Sondage modelAvecTotalVote))
                     {
                         #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
-                        List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondageAvecNombreVote(modelAvecTotalVote);
+                        List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(modelAvecTotalVote);
                         ResultatSondage nouveauResultat = new ResultatSondage(modelAvecTotalVote, toutLesReponseDuSondage);
                         return View(nouveauResultat);
                         #endregion
@@ -684,8 +700,24 @@ namespace StrawPoll.Controllers
         public ActionResult Erreur(string messageTitre, string messageErreur, string commentaireErreur)
         {
             ErreurGrave erreurTrouve = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-
+            
             return View(erreurTrouve);
+        }
+        #endregion
+        #region On enregistre l'adresse user dans le cookies avec le sondage correspondant
+        public void EnregistrerVotantDansLeCookie( int idSondage)
+        {
+            string Votant = Request.UserHostAddress;
+            HttpCookie cookie = new HttpCookie("CookieUser" + idSondage);
+            cookie.Value = "";
+            cookie.Expires = DateTime.MaxValue;
+            this.Response.Cookies.Add(cookie);           
+        }
+        #endregion
+        #region On teste si l'adresse user se trouve déjà dans le cookie avec l'idSondage correspondant 
+        public static bool VerifierSiSondageADejaVoter(HttpCookieCollection cookies, int idSondage)
+        {
+            return cookies["CookieUser" + idSondage] != null;
         }
         #endregion
     }

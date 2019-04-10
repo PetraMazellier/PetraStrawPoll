@@ -1,96 +1,71 @@
 ﻿@using StrawPoll.Models;
 @model VoteDesactiver
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/MaDisposition.cshtml";
+}
+@{
+    ViewBag.Title = "VoteDesactiver";
+}
+@section Title
+{
+    Désactivation du sondage
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>VoteDesactiver</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <meta name="viewport" content="width=device-width" />
+        <h2 class="card-title  text-primary  text-center">
+           
+        </h2>
+        <p></p>
+        <h3 class="card-title text-danger text-center">
+            Voulez vous vraiment arrêter les votes ?
+        </h3>
+        <p></p>
+        <div>
+            <h4 class="card-title mb3 text-primary text-center col-sm-10">
+                Question :
 
-</head>
-<body class="card bg-light  mb-3">
-
-        <div class="card mb-3 card-header text-dark bg-primary mb-3 text-center"><h1> <img src="../../Content/logo.jpg" />                        Petra's Straw Poll</h1></div>
-        <div class="card-body text-primary">
-            <h2 class="card-title text-dark text-center">
-                Désactivation du sondage
-            </h2>
+                <label class="card-title text-dark text-center col-sm-10">
+                    @Model.SondageADesactiver.NomSondage
+                </label>
+            </h4>
             <p></p>
-            <h3 class="card-title text-danger text-center">
-                Voulez vous vraiment arrêter les votes ?
-            </h3>
             <p></p>
-            <div>
-                <h4 class="card-title mb3 text-center col-sm-10">
-                    Question :
-
-                    <label class="card-title text-dark text-center col-sm-10">
-                        @Model.SondageADesactiver.NomSondage
-                    </label>
-                </h4>
-                @foreach (var reponseCourant in Model.ReponseADesactiver)
-                {
+            <p></p>
+            <p></p>
+            @foreach (var reponseCourant in Model.ReponseADesactiver)
+            {
                 <h5 class="card-title  text-dark text-center col-sm-10">
-                    Réponse @reponseCourant.CompteurReponse : 
+                    Réponse @reponseCourant.CompteurReponse :
 
                     <label class="card-title text-primary text-center col-sm-10">
                         @reponseCourant.NomReponse
                     </label>
                 </h5>
-                   
-                }
-            </div>
+
+            }
         </div>
+    </div>
 
-        <p></p>
-        <form>
-            <div class="row">
-                <p class="col">   </p>
-                <div class="col">
-                    <a href="@Url.Action("ConfirmationDesactiver", new { idSondage = Model.SondageADesactiver.IdSondage , numSecurite = Model.SondageADesactiver.NumSecurite})" class="btn col  btn-primary  ">Confirmer</a>
-                </div>
-                <p class="col">   </p>
-                <div class="col">
-                    <a href="@Url.Action("Resultat", new { idSondage = Model.SondageADesactiver.IdSondage })" class="btn col btn-primary  ">Résultat</a>
-                </div>
-                <p class="col">   </p>
+    <p></p>
+    <form>
+        <div class="row">
+            <p class="col">   </p>
+            <div class="col">
+                <a href="@Url.Action("ConfirmationDesactiver", new { idSondage = Model.SondageADesactiver.IdSondage , numSecurite = Model.SondageADesactiver.NumSecurite})" class="btn col  btn-primary  ">Confirmer</a>
             </div>
-        </form>
-        <p></p>
-        <fieldset style="text-align:center">
-            <a href="@Url.Action("Accueil")" class="btn btn-primary textall">Accueil</a>
+            <p class="col">   </p>
+            <div class="col">
+                <a href="@Url.Action("Resultat", new { idSondage = Model.SondageADesactiver.IdSondage })" class="btn col btn-primary  ">Résultat</a>
+            </div>
+            <p class="col">   </p>
+        </div>
+    </form>
+    <p></p>
+    <fieldset style="text-align:center">
+        <a href="@Url.Action("Accueil")" class="btn btn-primary textall">Accueil</a>
 
-        </fieldset>
-        <p></p>
-        <p></p>
-        <p></p>
-        <!-- Footer -->
-        <footer class="page-footer font-small  pt-4">
-            <div class=" footer-copyright card-group   text-white bg-primary mb-3 border-primary" ;">
-                <div class="card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("APropos") "><i class="fa fa-smile text-white">             A propos </i></a></h5>
-                </div>
-                <div class=" card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("Condition") "><i class="fa fa-info-circle text-white">    Conditions d'utilisation</i></a></h5>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-text"> <a href="@Url.Action("Confidentialite") "><i class="fa fa-lock text-white ">    Confidentialité et cookies</i></a></h5>
-                </div>
-            </div>
-            <div class="footer-copyright text-center py-3">
-                © 2019 Copyright:
-                <a href="@Url.Action("Accueil") ">    Petra's Straw Poll</a>
-            </div>
-        </footer>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
-</html>
+    </fieldset>
+    <p></p>
+    <p></p>
+    <p></p>
+   
