@@ -73,8 +73,7 @@ namespace StrawPoll.Models
             }
         }
         public  void GetPourcentageVote(int nombreVoteTotal)
-        {
-            
+        {            
             if (nombreVoteTotal > 0)
             {
                  PourcentageVote = NombreVoteReponse * 100 / nombreVoteTotal;
@@ -87,13 +86,7 @@ namespace StrawPoll.Models
         public void AjoutVoteReponse()
         {
             this.NombreVoteReponse = NombreVoteReponse + 1;
-        }
-
-       /* public enum Etat
-        {
-            Creer = 1,
-            Desactiver = 2
-        }*/
+        }       
     }
 }
 

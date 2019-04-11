@@ -78,8 +78,7 @@ namespace StrawPoll.Models
             string lettreSpecial = let.ToString();
             return lettreSpecial;
         }
-
-
+        
       
         public void DesactiverSondage()
         {
@@ -116,21 +115,14 @@ namespace StrawPoll.Models
 
         public void ChoixMultiple(string multiChoix)
         {
-
             if (multiChoix == "on")
             {
-
                 MultiSondage = true;
             }
             else
             {
                 MultiSondage = false;
             }
-
-
         }
-
-
-
     }
 }

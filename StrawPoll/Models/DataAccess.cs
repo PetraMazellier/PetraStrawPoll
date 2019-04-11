@@ -160,7 +160,6 @@ namespace StrawPoll.Models
             {
                 throw new Exception("Problème base de donnée table Réponse !!!");
             }
-
         }
         public static List<Reponse> RecupererToutLesReponsesDuSondage(Sondage model)
         {
@@ -185,7 +184,6 @@ namespace StrawPoll.Models
             sondageEnCours.Close();
 
             return resultats;
-
         }
         public static List<Reponse> RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(Sondage modelAvecTotalVote)
         {
@@ -211,7 +209,6 @@ namespace StrawPoll.Models
             sondageEnCours.Close();
 
             return resultats;
-
         }
 
         public static bool CompteNombreVoteTotal(Sondage model, out Sondage modelAvecNombreTotal)
