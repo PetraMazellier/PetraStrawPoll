@@ -144,7 +144,7 @@ namespace StrawPoll.Controllers
         }
         #endregion
         #region Envoi page web avec confirmation pour dire que la creation s'est bien passé
-        public ActionResult ConfirmationCreation(int idSondage, int numSecurite)
+        public ActionResult ConfirmationCreation(int idSondage, string numSecurite)
         {
 
             if (DataAccess.RecupererSondagePourDesactiver(idSondage, numSecurite, out Sondage model))
@@ -268,7 +268,7 @@ namespace StrawPoll.Controllers
                         #region si on a déjà voter on l'envoie au DejaVoter il ne pourrait pluss voter mais voir le résultat par contre
                         if (VerifierSiSondageADejaVoter(Request.Cookies, idSondage.Value))
                         {
-                            return RedirectToAction("VoteInterdit", new { idSondage = idSondage.Value });
+                            return RedirectToAction("DejaVoter", new { idSondage = idSondage.Value });
                         }
                         #endregion
                         #region sinon on récupère les réponses correspondant au vote et on ajout un vote
@@ -385,7 +385,7 @@ namespace StrawPoll.Controllers
                         #region si lon a déjà voter on l'envoie au DejaVoter il ne pourrait pluss voter mais voir le résultat par contre
                         if (VerifierSiSondageADejaVoter(Request.Cookies, idSondage.Value))
                         {
-                            return RedirectToAction("VoteInterdit", new { idSondage = idSondage.Value });
+                            return RedirectToAction("DejaVoter", new { idSondage = idSondage.Value });
                         }
                         #endregion
                         #region sinon on récupère la réponse correspondant au vote et on ajout un vote
@@ -587,14 +587,14 @@ namespace StrawPoll.Controllers
         /// <param name="idSondage"></param>
         /// <param name="numSecurite"></param>
         /// <returns></returns>
-        public ActionResult VoteDesactiver(int? idSondage, int? numSecurite)
+        public ActionResult VoteDesactiver(int? idSondage, string numSecurite)
         {
 
             if (!(idSondage is null) &
                 !(numSecurite is null))
             {
 
-                if (DataAccess.RecupererSondagePourDesactiver(idSondage.Value, numSecurite.Value, out Sondage model))
+                if (DataAccess.RecupererSondagePourDesactiver(idSondage.Value, numSecurite, out Sondage model))
                 {
                     #region Le sondage est déja désactiver
                     if (model.EtatSondage == true)
@@ -651,7 +651,7 @@ namespace StrawPoll.Controllers
         /// <param name="idSondage"></param>
         /// <param name="numSecurite"></param>
         /// <returns></returns>
-        public ActionResult ConfirmationDesactiver(int idSondage, int numSecurite)
+        public ActionResult ConfirmationDesactiver(int idSondage, string numSecurite)
         {
             if (DataAccess.RecupererSondagePourDesactiver(idSondage, numSecurite, out Sondage model))
             {
@@ -708,7 +708,7 @@ namespace StrawPoll.Controllers
         public void EnregistrerVotantDansLeCookie( int idSondage)
         {
             string Votant = Request.UserHostAddress;
-            HttpCookie cookie = new HttpCookie("CookieUser" + idSondage);
+            HttpCookie cookie = new HttpCookie("CookieUtilisateur" + idSondage);           
             cookie.Value = "";
             cookie.Expires = DateTime.MaxValue;
             this.Response.Cookies.Add(cookie);           
@@ -717,7 +717,7 @@ namespace StrawPoll.Controllers
         #region On teste si l'adresse user se trouve déjà dans le cookie avec l'idSondage correspondant 
         public static bool VerifierSiSondageADejaVoter(HttpCookieCollection cookies, int idSondage)
         {
-            return cookies["CookieUser" + idSondage] != null;
+            return cookies["CookieUtilisateur" + idSondage] != null;
         }
         #endregion
     }

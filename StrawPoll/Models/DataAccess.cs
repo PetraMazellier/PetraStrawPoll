@@ -41,7 +41,7 @@ namespace StrawPoll.Models
                 string nomSondage = (string)dataReader["NomSondage"];
                 bool etatSondage = (bool)dataReader["EtatSondage"];
                 bool multiSondage = (bool)dataReader["MultiSondage"];
-                int numSecurite = (int)dataReader["NumSecurite"];
+                string numSecurite = (string)dataReader["NumSecurite"];
                 detailSondage = Sondage.RecupererSondageComplet(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
                 return true;
             }
@@ -51,7 +51,7 @@ namespace StrawPoll.Models
                 return false;
             }
         }
-        public static bool RecupererSondagePourDesactiver(int idSondage, int numSecurite , out Sondage detailSondage)
+        public static bool RecupererSondagePourDesactiver(int idSondage, string numSecurite , out Sondage detailSondage)
         {
             SqlConnection SelectSondage = new SqlConnection(SqlConnectionString);
             SelectSondage.Open();

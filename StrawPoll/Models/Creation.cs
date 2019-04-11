@@ -9,7 +9,7 @@ namespace StrawPoll.Models
     
     public class Creation
     {
-        private const int REPONSE_PAR_DEFAULT = 2;
+        private const int REPONSE_PAR_DEFAULT = 4;
         public int NombreReponseMaximum { set; get; }
         public Creation() : this(REPONSE_PAR_DEFAULT)
         {

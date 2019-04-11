@@ -13,15 +13,15 @@ namespace StrawPoll.Models
     {
         private const bool ETAT_UNISONDAGE_DEFAULT = false;
         private const bool ETAT_SONDAGE_NON_DESACTIVER = false;
-    
+
         public int IdSondage { get; private set; }
         public string NomSondage { get; private set; }
         public bool MultiSondage { get; private set; }
         public bool EtatSondage { get; private set; }
-        public int NumSecurite { get; private set; }
+        public string NumSecurite { get; private set; }
         public int NombreVoteTotal { get; private set; }
 
-        public Sondage(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, int numSecurite, int nombreVoteTotal)
+        public Sondage(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, string numSecurite, int nombreVoteTotal)
         {
             NomSondage = nomSondage;
             MultiSondage = multiSondage;
@@ -31,34 +31,60 @@ namespace StrawPoll.Models
             NombreVoteTotal = nombreVoteTotal;
         }
 
-       
+
         public static Sondage AvantInsertionEnBDD(string nomSondage)
         {
-            return new Sondage(nomSondage, ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, 0, 0, 0);           
+            return new Sondage(nomSondage, ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, 0, "", 0);
         }
-       
+
         public static Sondage RecupererIdSondagePourEcranSuivant(int idSondage)
         {
-            return new Sondage("", ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, idSondage, 0, 0);            
+            return new Sondage("", ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, idSondage, "", 0);
         }
 
 
-        public static Sondage RecupererSondageComplet(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, int numSecurite) 
+        public static Sondage RecupererSondageComplet(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, string numSecurite)
         {
             return new Sondage(nomSondage, multiSondage, etatSondage, idSondage, numSecurite, 0);
-            
+
         }
 
-       
+
         public void GetNumSecurite()
         {
-            Random aleatoire = new Random();
-            NumSecurite = aleatoire.Next(10000); //Génère un entier compris entre 0 et 9999            
+            string numSecurite = GetLettre();                    
+            numSecurite += GetChiffre();
+            numSecurite += GetLettre();
+            NumSecurite = numSecurite;
         }
+
+        public static string GetChiffre()
+        {
+            Random aleatoire = new Random();
+            int chiffre = aleatoire.Next(1000, 1000000); //Génère un entier compris entre 0 et 9999   
+            string chiffreTrouve = chiffre.ToString();
+
+            return chiffreTrouve;
+        }
+
+
+        public static string GetLettre()
+        {
+            Random _random = new Random();
+            // Cette methode returns un lettre aleatoire miniscule ou majuscule 
+            // ... Entre 'a' et 'Z' inclus.
+            int num = _random.Next(0, 25); // Zero à 25
+            char let = (char)('A' + num);
+            string lettreSpecial = let.ToString();
+            return lettreSpecial;
+        }
+
+
+      
         public void DesactiverSondage()
         {
             EtatSondage = true;
-                  
+
         }
         public bool IsValide()
         {
@@ -87,7 +113,7 @@ namespace StrawPoll.Models
                     }
             }
         }
-       
+
         public void ChoixMultiple(string multiChoix)
         {
 
@@ -104,7 +130,7 @@ namespace StrawPoll.Models
 
         }
 
-        
-       
+
+
     }
 }
