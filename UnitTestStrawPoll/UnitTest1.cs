@@ -58,6 +58,16 @@ namespace UnitTestStrawPoll
             Assert.IsTrue(testChoixMultiple.MultiSondage == true, "le résultat doit être false");
         }
         [TestMethod]
+        public void RecupererNumeroSecurite()
+        {
+            Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
+           
+            Assert.AreEqual("", testNomSondage.NumSecurite, "Numéro Sécurite doit être zero");
+            testNomSondage.GetNumSecurite();
+            Assert.AreNotEqual("", testNomSondage.NumSecurite, "Numéro Sécurite ne doit plus être zero");
+
+        }
+        [TestMethod]
         public void NomQuestionValide()
         {
             Reponse testNomReponse = Reponse.AvantTestSaisieValide("Cinema");
