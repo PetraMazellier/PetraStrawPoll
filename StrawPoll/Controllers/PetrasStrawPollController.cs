@@ -425,7 +425,7 @@ namespace StrawPoll.Controllers
                             ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                             return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
                         }
-                       
+
                         #endregion
                     }
 
@@ -570,6 +570,30 @@ namespace StrawPoll.Controllers
         }
         #endregion
         #endregion
+        public JsonResult GetNombresVotantsEnTempsReel(int idSondage)
+        {
+
+            if (DataAccess.RecupererSondage(idSondage, out Sondage model))
+            {
+                if (DataAccess.CompteNombreVoteTotal(model, out Sondage modelAvecTotalVote))
+                {
+                    #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
+                    List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(modelAvecTotalVote);
+                    ResultatSondage nouveauResultat = new ResultatSondage(modelAvecTotalVote, toutLesReponseDuSondage);
+                    return Json(nouveauResultat, JsonRequestBehavior.AllowGet);
+                    #endregion
+                }
+
+            }
+            #region Affichage d'un écran avec message d'erreur de problème de base de donnée
+            ResultatSondage nouveauResultatErreur = null;
+            return Json(nouveauResultatErreur, JsonRequestBehavior.AllowGet);
+
+            #endregion
+
+        }
+
+
         #region tous les pages concernant de la désactivation du sondage 
         #region Affichage de l'écran de désactivation
         /// <summary>
@@ -700,18 +724,18 @@ namespace StrawPoll.Controllers
         public ActionResult Erreur(string messageTitre, string messageErreur, string commentaireErreur)
         {
             ErreurGrave erreurTrouve = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-            
+
             return View(erreurTrouve);
         }
         #endregion
         #region On enregistre l'adresse user dans le cookies avec le sondage correspondant
-        public void EnregistrerVotantDansLeCookie( int idSondage)
+        public void EnregistrerVotantDansLeCookie(int idSondage)
         {
             string Votant = Request.UserHostAddress;
-            HttpCookie cookie = new HttpCookie("CookieUtilisateur" + idSondage);           
+            HttpCookie cookie = new HttpCookie("CookieUtilisateur" + idSondage);
             cookie.Value = "";
             cookie.Expires = DateTime.MaxValue;
-            this.Response.Cookies.Add(cookie);           
+            this.Response.Cookies.Add(cookie);
         }
         #endregion
         #region On teste si l'adresse user se trouve déjà dans le cookie avec l'idSondage correspondant 

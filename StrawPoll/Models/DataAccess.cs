@@ -29,51 +29,55 @@ namespace StrawPoll.Models
        
         public static bool RecupererSondage(int idSondage, out Sondage detailSondage)        {
 
-            SqlConnection SelectSondage = new SqlConnection(SqlConnectionString);
-            SelectSondage.Open();
-            SqlCommand selectSondage =
-                new SqlCommand("SELECT NomSondage,EtatSondage, MultiSondage,NumSecurite FROM Sondage where IdSondage = @idSondage", SelectSondage);
-            selectSondage.Parameters.AddWithValue("@idSondage", idSondage);
-            SqlDataReader dataReader = selectSondage.ExecuteReader();
+            using (SqlConnection SelectSondage = new SqlConnection(SqlConnectionString))
+            {
+                SelectSondage.Open();
+                SqlCommand selectSondage =
+                    new SqlCommand("SELECT NomSondage,EtatSondage, MultiSondage,NumSecurite FROM Sondage where IdSondage = @idSondage", SelectSondage);
+                selectSondage.Parameters.AddWithValue("@idSondage", idSondage);
+                SqlDataReader dataReader = selectSondage.ExecuteReader();
 
-            if (dataReader.Read())
-            {
-                string nomSondage = (string)dataReader["NomSondage"];
-                bool etatSondage = (bool)dataReader["EtatSondage"];
-                bool multiSondage = (bool)dataReader["MultiSondage"];
-                string numSecurite = (string)dataReader["NumSecurite"];
-                detailSondage = Sondage.RecupererSondageComplet(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
-                return true;
-            }
-            else
-            {
-                detailSondage = null;
-                return false;
+                if (dataReader.Read())
+                {
+                    string nomSondage = (string)dataReader["NomSondage"];
+                    bool etatSondage = (bool)dataReader["EtatSondage"];
+                    bool multiSondage = (bool)dataReader["MultiSondage"];
+                    string numSecurite = (string)dataReader["NumSecurite"];
+                    detailSondage = Sondage.RecupererSondageComplet(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
+                    return true;
+                }
+                else
+                {
+                    detailSondage = null;
+                    return false;
+                }
             }
         }
         public static bool RecupererSondagePourDesactiver(int idSondage, string numSecurite , out Sondage detailSondage)
         {
-            SqlConnection SelectSondage = new SqlConnection(SqlConnectionString);
-            SelectSondage.Open();
-            SqlCommand selectSondage =
-                new SqlCommand("SELECT NomSondage, MultiSondage, EtatSondage, NumSecurite FROM Sondage where IdSondage = @idSondage AND NumSecurite = @numSecurite", SelectSondage);
-            selectSondage.Parameters.AddWithValue("@idSondage", idSondage);
-            selectSondage.Parameters.AddWithValue("@numSecurite", numSecurite);
-            SqlDataReader dataReader = selectSondage.ExecuteReader();
+            using (SqlConnection SelectSondage = new SqlConnection(SqlConnectionString))
+            {
+                SelectSondage.Open();
+                SqlCommand selectSondage =
+                    new SqlCommand("SELECT NomSondage, MultiSondage, EtatSondage, NumSecurite FROM Sondage where IdSondage = @idSondage AND NumSecurite = @numSecurite", SelectSondage);
+                selectSondage.Parameters.AddWithValue("@idSondage", idSondage);
+                selectSondage.Parameters.AddWithValue("@numSecurite", numSecurite);
+                SqlDataReader dataReader = selectSondage.ExecuteReader();
 
-            if (dataReader.Read())
-            {
-                string nomSondage = (string)dataReader["NomSondage"];               
-                bool etatSondage = (bool)dataReader["EtatSondage"];
-                bool multiSondage = (bool)dataReader["MultiSondage"];
-                detailSondage = Sondage.RecupererSondageComplet(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
-                
-                return true;
-            }
-            else
-            {
-                detailSondage = null;
-                return false;
+                if (dataReader.Read())
+                {
+                    string nomSondage = (string)dataReader["NomSondage"];
+                    bool etatSondage = (bool)dataReader["EtatSondage"];
+                    bool multiSondage = (bool)dataReader["MultiSondage"];
+                    detailSondage = Sondage.RecupererSondageComplet(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
+
+                    return true;
+                }
+                else
+                {
+                    detailSondage = null;
+                    return false;
+                }
             }
         }
         public static int DesactiverVoteSondage(Sondage desactiverSondage)
@@ -88,6 +92,7 @@ namespace StrawPoll.Models
                 updateCommand.Parameters.AddWithValue("@idSondage", desactiverSondage.IdSondage);
                 updateCommand.Parameters.AddWithValue("@etatSondage", desactiverSondage.EtatSondage);
                 int nombreSondageModifiees = updateCommand.ExecuteNonQuery();
+                connection.Close();
                 return nombreSondageModifiees;
             }
             catch
@@ -114,27 +119,29 @@ namespace StrawPoll.Models
         }
         public static bool RecupererReponse( int idReponse,int fKIdSondage, out Reponse detailReponse)
         {
-
-            SqlConnection SelectReponse = new SqlConnection(SqlConnectionString);
-            SelectReponse.Open();
-            SqlCommand selectSondage =
-                new SqlCommand("SELECT NombreVoteReponse, NomReponse FROM Reponse WHERE IdReponse = @idReponse AND FKIdSondage = fKIdSondage", SelectReponse);
-            selectSondage.Parameters.AddWithValue("@idReponse", idReponse);
-            selectSondage.Parameters.AddWithValue("@fKIdSondage", fKIdSondage);
-            SqlDataReader dataReader = selectSondage.ExecuteReader();
-
-            if (dataReader.Read())
+            using (SqlConnection SelectReponse = new SqlConnection(SqlConnectionString))
             {
-                int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
-                string nomReponse = (string)dataReader["NomReponse"];
 
-                detailReponse = Reponse.RecuperationDansLaBDD(nomReponse, fKIdSondage,idReponse, nombreVoteReponse);
-                return true;
-            }
-            else
-            {
-                detailReponse = null;
-                return false;
+                SelectReponse.Open();
+                SqlCommand selectSondage =
+                    new SqlCommand("SELECT NombreVoteReponse, NomReponse FROM Reponse WHERE IdReponse = @idReponse AND FKIdSondage = fKIdSondage", SelectReponse);
+                selectSondage.Parameters.AddWithValue("@idReponse", idReponse);
+                selectSondage.Parameters.AddWithValue("@fKIdSondage", fKIdSondage);
+                SqlDataReader dataReader = selectSondage.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
+                    string nomReponse = (string)dataReader["NomReponse"];
+
+                    detailReponse = Reponse.RecuperationDansLaBDD(nomReponse, fKIdSondage, idReponse, nombreVoteReponse);
+                    return true;
+                }
+                else
+                {
+                    detailReponse = null;
+                    return false;
+                }
             }
         }
         public static int AjoutNombreVoteReponse(Reponse ajoutNombreSondage)
@@ -153,6 +160,7 @@ namespace StrawPoll.Models
                 updateCommand.Parameters.AddWithValue("@nombreVoteReponse", ajoutNombreSondage.NombreVoteReponse);
 
                 int nombreSondageModifiees = updateCommand.ExecuteNonQuery();
+                connection.Close();
                 return nombreSondageModifiees;
             }
 
@@ -213,26 +221,30 @@ namespace StrawPoll.Models
 
         public static bool CompteNombreVoteTotal(Sondage model, out Sondage modelAvecNombreTotal)
         {
-            SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString);
-            sondageEnCours.Open();
-            SqlCommand selectSondage =
-                new SqlCommand("SELECT SUM(NombreVoteReponse) as 'NombreVoteTotal' FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
-            selectSondage.Parameters.AddWithValue("@fKIdSondage", model.IdSondage);
 
-            SqlDataReader dataReader = selectSondage.ExecuteReader();
-            if (dataReader.Read())
+            using (SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString))
             {
-                int nombreVoteTotal = (int)dataReader["NombreVoteTotal"];
+
+                sondageEnCours.Open();
+                SqlCommand selectSondage =
+                    new SqlCommand("SELECT SUM(NombreVoteReponse) as 'NombreVoteTotal' FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
+                selectSondage.Parameters.AddWithValue("@fKIdSondage", model.IdSondage);
+
+                SqlDataReader dataReader = selectSondage.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    int nombreVoteTotal = (int)dataReader["NombreVoteTotal"];
 
 
-                modelAvecNombreTotal = new Sondage(model.NomSondage, model.MultiSondage,model.EtatSondage, model.IdSondage,model.NumSecurite, nombreVoteTotal);
-           
-                return true;
-            }
-            else
-            {
-                modelAvecNombreTotal = null;
-                return false;
+                    modelAvecNombreTotal = new Sondage(model.NomSondage, model.MultiSondage, model.EtatSondage, model.IdSondage, model.NumSecurite, nombreVoteTotal);
+
+                    return true;
+                }
+                else
+                {
+                    modelAvecNombreTotal = null;
+                    return false;
+                }
             }
         }
     }
