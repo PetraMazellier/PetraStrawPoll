@@ -219,6 +219,37 @@ namespace StrawPoll.Models
             return resultats;
         }
 
+<<<<<<< HEAD
       
+=======
+        public static bool CompteNombreVoteTotal(Sondage model, out Sondage modelAvecNombreTotal)
+        {
+
+            using (SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString))
+            {
+
+                sondageEnCours.Open();
+                SqlCommand selectSondage =
+                    new SqlCommand("SELECT SUM(NombreVoteReponse) as 'NombreVoteTotal' FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
+                selectSondage.Parameters.AddWithValue("@fKIdSondage", model.IdSondage);
+
+                SqlDataReader dataReader = selectSondage.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    int nombreVoteTotal = (int)dataReader["NombreVoteTotal"];
+
+
+                    modelAvecNombreTotal = new Sondage(model.NomSondage, model.MultiSondage, model.EtatSondage, model.IdSondage, model.NumSecurite, nombreVoteTotal);
+
+                    return true;
+                }
+                else
+                {
+                    modelAvecNombreTotal = null;
+                    return false;
+                }
+            }
+        }
+>>>>>>> d77725494f11aabc305090bcc67e0b105becd80d
     }
 }
