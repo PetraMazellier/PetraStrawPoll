@@ -11,8 +11,6 @@
     Résultat
 }
 
-
-<<<<<<< HEAD
 <p></p>
 <form>
     <h3 class="form-group row col-sm-10">
@@ -27,56 +25,7 @@
             <input type="text" readonly class="form-control-plaintext text-dark nomReponse col" value="@reponseCourant.NomReponse" />
             <div class="col progress col">
                 <div class=" pourcentageVoteAni pourcentageVoteAni2 progress-bar progress-bar-striped progress-bar-animated " role="progressbar" aria-valuenow="@(reponseCourant.PourcentageVote)" aria-valuemin="0" aria-valuemax="100" style="width: @(reponseCourant.PourcentageVote)%"></div>
-=======
-        <p></p>
-        <form>
-            <h3 class="form-group row col-sm-10">
 
-                <input type="text" readonly class="form-control-plaintext col text-primary text-center" value="Question : ">
-                <input type="text" readonly class="form-control-plaintext col text-left" value="@Model.SondageResultat.NomSondage">
-            </h3>
-            @foreach (var reponseCourant in Model.ReponseResultatSondage)
-            {
-                <h5 class="form-group row">
-                    <input type="text" readonly class="form-control-plaintext text-primary  col" value="Réponse @reponseCourant.CompteurReponse : " />
-                    <input type="text" readonly class="form-control-plaintext text-dark  col" value="@reponseCourant.NomReponse" />
-                    <div class="col progress col">
-                        <div class=" progress-bar progress-bar-striped progress-bar-animated " role="progressbar" aria-valuenow="@(reponseCourant.PourcentageVote)" aria-valuemin="0" aria-valuemax="100" style="width: @(reponseCourant.PourcentageVote)%"></div>
-                    </div>
-                    <input type="text" readonly class="form-control-plaintext text-dark  col" value=" @(reponseCourant.PourcentageVote) %">
-                    <input type="text" readonly class="form-control-plaintext text-primary  col" value=" @reponseCourant.NombreVoteReponse  Votes">
-                </h5>
-            }
-            <div class="form-group row">
-                <h2 class="col-sm-10">
-                    <input id="nombreVoteTotal" type="text" readonly class="form-control-plaintext text-center" value="@Model.SondageResultat.NombreVoteTotal Votes">
-                </h2>
-            </div>
-            <script>
-                var idSondage = @Model.SondageResultat.IdSondage;
-                setInterval(() => {
-                    fetch('/PetrasStrawPoll/GetNombresVotantsEnTempsReel?idSondage=' + idSondage).then((response) => {
-                        response.json().then((json) => {
-                            document.getElementById('nombreVoteTotal').textContent = json.SondageResultat.NombreVoteTotal;
-                        });
-                    });
-                },1000);
-
-
-            </script>
-        </form>   
-    <p></p>
-    <p></p>
-    <form>
-        <div class="row">
-            <p class="col">   </p>
-            <div class="col">
-                <a href="@Url.Action("Vote", new { idSondage = Model.SondageResultat.IdSondage})" class="btn col  btn-primary  ">Voter</a>
-            </div>
-            <p class="col">   </p>
-            <div class="col">
-                <a href="@Url.Action("Resultat", new { idSondage = Model.SondageResultat.IdSondage})" class="btn col btn-primary  ">Réactualisation</a>
->>>>>>> d77725494f11aabc305090bcc67e0b105becd80d
             </div>
             <input type="text" readonly class="form-control-plaintext text-dark  col pourcentageVote" value=" @(reponseCourant.PourcentageVote) %">
             <input type="text" readonly class="form-control-plaintext text-primary  col nombreVote" value=" @reponseCourant.NombreVoteReponse  Votes">
