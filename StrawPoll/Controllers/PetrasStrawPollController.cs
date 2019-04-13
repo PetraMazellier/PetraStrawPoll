@@ -571,9 +571,7 @@ namespace StrawPoll.Controllers
         {
 
             if (DataAccess.RecupererSondage(idSondage, out Sondage model))
-            {
-<<<<<<< HEAD
-               
+            {               
                     #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
                     List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(model);
                     foreach (var reponseCourant in toutLesReponseDuSondage)
@@ -586,18 +584,7 @@ namespace StrawPoll.Controllers
                     }
                     ResultatSondage nouveauResultat = new ResultatSondage(model, toutLesReponseDuSondage);
                     return Json(nouveauResultat, JsonRequestBehavior.AllowGet);
-                    #endregion
-               
-=======
-                if (DataAccess.CompteNombreVoteTotal(model, out Sondage modelAvecTotalVote))
-                {
-                    #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
-                    List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(modelAvecTotalVote);
-                    ResultatSondage nouveauResultat = new ResultatSondage(modelAvecTotalVote, toutLesReponseDuSondage);
-                    return Json(nouveauResultat, JsonRequestBehavior.AllowGet);
-                    #endregion
-                }
->>>>>>> d77725494f11aabc305090bcc67e0b105becd80d
+                    #endregion               
 
             }
             #region Affichage d'un écran avec message d'erreur de problème de base de donnée
