@@ -50,8 +50,7 @@
                                 document.querySelector('.row_' + reponseCourant.CompteurReponse + ' .nomReponse').value = reponseCourant.NomReponse;                               
                                 document.querySelector('.row_' + reponseCourant.CompteurReponse + ' .nombreVote').value = reponseCourant.NombreVoteReponse + "  Votes";
                                 document.querySelector('.row_' + reponseCourant.CompteurReponse + ' .pourcentageVote').value = reponseCourant.PourcentageVote + " %";
-                             //   document.querySelector('.row_' + reponseCourant.IdReponse + ' .pourcentageVoteAni').value = reponseCourant.PourcentageVote;
-                            
+                          
                                 document.querySelector('.row_' + reponseCourant.CompteurReponse + ' .pourcentageVoteAni').setAttribute("aria-valuenow", reponseCourant.PourcentageVote);
                                 document.querySelector('.row_' + reponseCourant.CompteurReponse + ' .pourcentageVoteAni2').setAttribute("style", "width: " + reponseCourant.PourcentageVote + "%");
 

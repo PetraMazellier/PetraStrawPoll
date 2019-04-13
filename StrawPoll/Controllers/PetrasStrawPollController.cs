@@ -280,7 +280,7 @@ namespace StrawPoll.Controllers
                             {
                                 EnregistrerVotantDansLeCookie(idSondage.Value);
                                 #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
-                                detailReponse.AjoutVoteReponse();
+                                
                                 int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
                                 if (nombreModifie == 1)
                                 {
@@ -394,7 +394,7 @@ namespace StrawPoll.Controllers
                         {
 
                             #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
-                            detailReponse.AjoutVoteReponse();
+                        
                             int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
                             #endregion
                             EnregistrerVotantDansLeCookie(idSondage.Value);
@@ -528,24 +528,21 @@ namespace StrawPoll.Controllers
             {
                 if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
                 {
-                    if (DataAccess.CompteNombreVoteTotal(model, out Sondage modelAvecTotalVote))
-                    {
+                    
                         #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
-                        List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(modelAvecTotalVote);
-                        ResultatSondage nouveauResultat = new ResultatSondage(modelAvecTotalVote, toutLesReponseDuSondage);
+                        List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(model);
+                        foreach (var reponseCourant in toutLesReponseDuSondage)
+                        {
+                            model.GetNombreVoteTotal(reponseCourant.NombreVoteReponse); 
+                        }
+                        foreach (var reponseCourant in toutLesReponseDuSondage)
+                        {  
+                            reponseCourant.GetPourcentageVote(model.NombreVoteTotal);
+                        }
+                        ResultatSondage nouveauResultat = new ResultatSondage(model, toutLesReponseDuSondage);
                         return View(nouveauResultat);
                         #endregion
-                    }
-                    else
-                    {
-                        #region Affichage d'un écran avec message d'erreur de problème de base de donnée
-                        string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                        string messageErreur = "Raison de l'arrêt du programme : Problème en récuperant le sondage d'un résultat";
-                        string commentaireErreur = "Prévenez l'administrateur !!";
-                        ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-                        return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
-                        #endregion
-                    }
+                   
                 }
                 #endregion
                 #region sinon on envoi un écran en invitant la peronne de verifier son numéro de sondage
@@ -575,14 +572,21 @@ namespace StrawPoll.Controllers
 
             if (DataAccess.RecupererSondage(idSondage, out Sondage model))
             {
-                if (DataAccess.CompteNombreVoteTotal(model, out Sondage modelAvecTotalVote))
-                {
+               
                     #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
-                    List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(modelAvecTotalVote);
-                    ResultatSondage nouveauResultat = new ResultatSondage(modelAvecTotalVote, toutLesReponseDuSondage);
+                    List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(model);
+                    foreach (var reponseCourant in toutLesReponseDuSondage)
+                    {
+                        model.GetNombreVoteTotal(reponseCourant.NombreVoteReponse);
+                    }
+                    foreach (var reponseCourant in toutLesReponseDuSondage)
+                    {
+                        reponseCourant.GetPourcentageVote(model.NombreVoteTotal);
+                    }
+                    ResultatSondage nouveauResultat = new ResultatSondage(model, toutLesReponseDuSondage);
                     return Json(nouveauResultat, JsonRequestBehavior.AllowGet);
                     #endregion
-                }
+               
 
             }
             #region Affichage d'un écran avec message d'erreur de problème de base de donnée

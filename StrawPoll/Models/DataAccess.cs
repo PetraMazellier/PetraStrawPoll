@@ -153,11 +153,11 @@ namespace StrawPoll.Models
                 SqlCommand updateCommand = connection.CreateCommand();
                 updateCommand.CommandText = String.Format(
                     "UPDATE Reponse " +
-                    "SET NombreVoteReponse =  @nombreVoteReponse " +
+                    "SET NombreVoteReponse = NombreVoteReponse + 1" +
                     "WHERE IdReponse =  @idReponse AND FKIdSondage = @fKIdSondage");
                 updateCommand.Parameters.AddWithValue("@idReponse", ajoutNombreSondage.IdReponse);
                 updateCommand.Parameters.AddWithValue("@fKIdSondage", ajoutNombreSondage.FKIdSondage);
-                updateCommand.Parameters.AddWithValue("@nombreVoteReponse", ajoutNombreSondage.NombreVoteReponse);
+          
 
                 int nombreSondageModifiees = updateCommand.ExecuteNonQuery();
                 connection.Close();
@@ -219,33 +219,6 @@ namespace StrawPoll.Models
             return resultats;
         }
 
-        public static bool CompteNombreVoteTotal(Sondage model, out Sondage modelAvecNombreTotal)
-        {
-
-            using (SqlConnection sondageEnCours = new SqlConnection(SqlConnectionString))
-            {
-
-                sondageEnCours.Open();
-                SqlCommand selectSondage =
-                    new SqlCommand("SELECT SUM(NombreVoteReponse) as 'NombreVoteTotal' FROM Reponse WHERE FKIdSondage = @fKIdSondage ", sondageEnCours);
-                selectSondage.Parameters.AddWithValue("@fKIdSondage", model.IdSondage);
-
-                SqlDataReader dataReader = selectSondage.ExecuteReader();
-                if (dataReader.Read())
-                {
-                    int nombreVoteTotal = (int)dataReader["NombreVoteTotal"];
-
-
-                    modelAvecNombreTotal = new Sondage(model.NomSondage, model.MultiSondage, model.EtatSondage, model.IdSondage, model.NumSecurite, nombreVoteTotal);
-
-                    return true;
-                }
-                else
-                {
-                    modelAvecNombreTotal = null;
-                    return false;
-                }
-            }
-        }
+      
     }
 }

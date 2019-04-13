@@ -124,5 +124,9 @@ namespace StrawPoll.Models
                 MultiSondage = false;
             }
         }
+        public void GetNombreVoteTotal(int nombreVote)
+        {
+            NombreVoteTotal = NombreVoteTotal + nombreVote;
+        }
     }
 }

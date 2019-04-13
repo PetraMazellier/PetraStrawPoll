@@ -83,10 +83,7 @@ namespace StrawPoll.Models
                  PourcentageVote = 0;
             }
         }
-        public void AjoutVoteReponse()
-        {
-            this.NombreVoteReponse = NombreVoteReponse + 1;
-        }       
+         
     }
 }
 
