@@ -79,7 +79,7 @@ namespace StrawPoll.Controllers
 
             #region Contrôle que la question et au moins deux réponses sont saisie
             Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
-            bool reponseValide = VerifierSaisieReponseCorrect(nouveauSondage, reponse);
+            bool reponseValide = nouveauSondage.VerifierSaisieReponseCorrect(reponse);
             if (reponseValide == false)
             {
                 return RedirectToAction("CreationInvalide", new { nombreReponseMaximum = nombreReponseMaximum });
@@ -92,7 +92,7 @@ namespace StrawPoll.Controllers
             int idSondageCreation = DataAccess.CreationSondage(nouveauSondage);
             #endregion
             #region Création autant de réponses que saisie
-            int nombreTotalCreer = CreationNouveauReponseDuSondage(reponse, idSondageCreation);
+            int nombreTotalCreer = Reponse.CreationNouveauReponseDuSondage(reponse, idSondageCreation);
             if (nombreTotalCreer > 1)
             {
                 return RedirectToAction("ConfirmationCreation", new { idSondage = idSondageCreation, numSecurite = nouveauSondage.NumSecurite });
@@ -116,7 +116,7 @@ namespace StrawPoll.Controllers
         {
             #region Contrôle que la question et au moins deux réponses sont saisie
             Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
-            bool reponseValide = VerifierSaisieReponseCorrect(nouveauSondage, reponse);
+            bool reponseValide = nouveauSondage.VerifierSaisieReponseCorrect( reponse);
 
             if (reponseValide == false)
             {
@@ -134,7 +134,7 @@ namespace StrawPoll.Controllers
             Sondage detailSondage = Sondage.RecupererSondageComplet(nouveauSondage.NomSondage, nouveauSondage.MultiSondage, nouveauSondage.EtatSondage, idSondageCreation, nouveauSondage.NumSecurite);
             #endregion
             #region Création autant de réponses que saisie
-            int nombreTotalCreer = CreationNouveauReponseDuSondage(reponse, idSondageCreation);
+            int nombreTotalCreer = Reponse.CreationNouveauReponseDuSondage(reponse, idSondageCreation);
             #region si la création de réponse s'est mal passé on envoie message erreur avec possiblilté de retourner à l'accueil
 
             return Json(detailSondage);
@@ -701,59 +701,9 @@ namespace StrawPoll.Controllers
             return cookies["CookieUtilisateur" + idSondage] != null;
         }
         #endregion
-        #region Test saisie  reponse correct
-        public static bool VerifierSaisieReponseCorrect(Sondage question, string[] reponse)
-        {
-
-            int nombreDeReponseValide = 0;
-            bool reponseValide = true;
-            bool reponseDouble = false;
-            if (!question.IsValide())
-            {
-                return reponseValide = false;
-            }
-            for (int i = 0; i < reponse.Length; i++)
-            {
-                Reponse testReponse = Reponse.AvantTestSaisieValide(reponse[i]);
-
-                for (int j = i + 1; j < reponse.Length; j++)
-                {
-                    if (reponse[i] == reponse[j] & testReponse.IsValide())
-                    {
-                        reponseDouble = true;
-                    }
-                }
-                if (testReponse.IsValide())
-                {
-                    nombreDeReponseValide = nombreDeReponseValide + 1;
-                }
-            }
-            if (reponseDouble == true | nombreDeReponseValide < 2)
-            {
-                reponseValide = false;
-            }
-                     
-            return reponseValide;
-
-        }
-        #endregion
+      
         
-        #region Création des enregistrements reponse pour chaque reponse valide
-        public static int CreationNouveauReponseDuSondage(string[] reponse, int idSondageCreation)
-        {
-            int nombreTotalCreer = 0;
-            for (int i = 0; i < reponse.Length; i++)
-            {
-                Reponse reponseDetail = Reponse.AvantInsertionEnBDD(reponse[i], idSondageCreation);
-                if (reponseDetail.IsValide())
-                {
-                    int idReponseCreation = DataAccess.CreationReponse(reponseDetail);
-                    nombreTotalCreer = nombreTotalCreer + 1;
-                }
-            }
-            return nombreTotalCreer;
-        }
-        #endregion
+       
         #region récuperer reponse pour chaque choix et appel mise à jour vote
         public int VoterPourChaqueReponse(int? idSondage, int?[] choix)
         {
