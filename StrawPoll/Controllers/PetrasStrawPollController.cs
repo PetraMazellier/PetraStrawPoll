@@ -79,6 +79,7 @@ namespace StrawPoll.Controllers
 
             #region Contrôle que la question et au moins deux réponses sont saisie
             Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
+
             bool reponseValide = nouveauSondage.VerifierSaisieReponseCorrect(reponse);
             if (reponseValide == false)
             {
@@ -116,7 +117,9 @@ namespace StrawPoll.Controllers
         {
             #region Contrôle que la question et au moins deux réponses sont saisie
             Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
+
             bool reponseValide = nouveauSondage.VerifierSaisieReponseCorrect( reponse);
+
 
             if (reponseValide == false)
             {

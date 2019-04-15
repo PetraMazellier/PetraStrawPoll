@@ -93,8 +93,10 @@ namespace UnitTestStrawPoll
         public void TestCreationSondageSaisieCorrect()
         {
             Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
+
             string[] reponse = { "Cinema", "Restaurant" };
             bool saisieCorrect = testNomSondage.VerifierSaisieReponseCorrect(reponse);
+
             Assert.IsTrue(saisieCorrect == true, "la saisie doit être correct");
         }
         [TestMethod]
@@ -102,15 +104,19 @@ namespace UnitTestStrawPoll
         {
             Sondage testNomSondage = Sondage.AvantInsertionEnBDD("   ");
             string[] reponse = { "Cinema", "Restaurant" };
+
             bool saisieCorrect = testNomSondage.VerifierSaisieReponseCorrect(reponse);
             Assert.IsTrue(saisieCorrect == false, "la saisie ne  doit pas être correct");
+
         }
         [TestMethod]
         public void TestCreationSondageReponseIncorrect()
         {
             Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
             string[] reponse = { "Cinema", "" };
+
             bool saisieCorrect = testNomSondage.VerifierSaisieReponseCorrect(reponse);
+
             Assert.IsTrue(saisieCorrect == false, "la saisie ne  doit pas être correct");
         }
         [TestMethod]
@@ -125,10 +131,12 @@ namespace UnitTestStrawPoll
         public void RecupererIdSondageEnCreation()
         {
             string choixMultiSondageCoche = "on";
+
             Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
 
             string[] reponse = { "Cinema", "Restaurant" };
             bool saisieCorrect = testNomSondage.VerifierSaisieReponseCorrect(reponse);
+
             Assert.IsTrue(saisieCorrect == true, "la saisie doit être correct");
             testNomSondage.ChoixMultiple(choixMultiSondageCoche);
             testNomSondage.GetNumSecurite();
@@ -139,11 +147,13 @@ namespace UnitTestStrawPoll
             Sondage nouveauNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
             string[] nouveauReponse = { "Cinema", "Restaurant", "Télé" };
 
+
             saisieCorrect = nouveauNomSondage.VerifierSaisieReponseCorrect(nouveauReponse);
             Assert.IsTrue(saisieCorrect == true, "la saisie doit être correct");
             nouveauNomSondage.ChoixMultiple(choixMultiSondageNonCoche);
             nouveauNomSondage.GetNumSecurite();
             int idSondageNouveauCreation = DataAccess.CreationSondage(nouveauNomSondage);
+
             int nombreCreer = Reponse.CreationNouveauReponseDuSondage(nouveauReponse, idSondageNouveauCreation);
             Assert.AreEqual(3, nombreCreer, "le nombre d'enregistrement de reponse doit être 3");
             int resultat = idSondageNouveauCreation - idSondageCreation;
@@ -161,6 +171,7 @@ namespace UnitTestStrawPoll
 
             try
             {
+
                 DataAccess.RecupererSondage(idSondageNouveauCreation, out Sondage model1);
 
             }
@@ -170,19 +181,22 @@ namespace UnitTestStrawPoll
             }
             try
             {
+
                 DataAccess.RecupererSondage(54544, out Sondage model2);
+
                 Assert.Fail("Il ne devrait pas trouver le Id ");
 
             }
             catch (Exception)
             {
+
                 // cas attendu
             }
             DataAccess.RecupererSondage(idSondageNouveauCreation, out Sondage model);
             List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondage(model);
             resultat = toutLesReponseDuSondage.Count;
             Assert.AreEqual(3, resultat, "le nombre de réponse trouve doit être de 3");
-           
+
             foreach (var operationCourant in toutLesReponseDuSondage)
             {
                 try
@@ -200,6 +214,7 @@ namespace UnitTestStrawPoll
 
 
             }
+
         }
     }
 }

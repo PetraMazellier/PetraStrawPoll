@@ -129,13 +129,16 @@ namespace StrawPoll.Models
             NombreVoteTotal = NombreVoteTotal + nombreVote;
         }
         #region Test saisie  reponse correct
+
         public  bool VerifierSaisieReponseCorrect( string[] reponse)
         {
 
             int nombreDeReponseValide = 0;
             bool reponseValide = true;
             bool reponseDouble = false;
+
             if (!(IsValide()))
+
             {
                 return reponseValide = false;
             }
