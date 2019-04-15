@@ -23,6 +23,7 @@ namespace StrawPoll.Models
             InsertSondage.Parameters.AddWithValue("@etatSondage", creationSondage.EtatSondage);
             InsertSondage.Parameters.AddWithValue("@numSecurite", creationSondage.NumSecurite);
             recupIdSondage = (int)InsertSondage.ExecuteScalar();
+          
             connection.Close();
             return recupIdSondage;
         }
@@ -115,6 +116,7 @@ namespace StrawPoll.Models
             InsertSondage.Parameters.AddWithValue("@nombreVoteReponse", reponseSaisie.NombreVoteReponse);
             InsertSondage.Parameters.AddWithValue("@fKIdSondage", reponseSaisie.FKIdSondage);
             recupIdReponse = (int)InsertSondage.ExecuteScalar();
+           
             connection.Close();
             return recupIdReponse;
         }

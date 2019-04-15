@@ -12,44 +12,87 @@
 }
 
 
-        <p></p>
+<p></p>
 
-        <form action="@Url.Action("SubmitCreation", new { nombreReponseMaximum = Model.NombreReponseMaximum })" method="post">
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Question :</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="question" checked placeholder="Saissisez votre question svp">
-                </div>
+<form class="confirmation " action="@Url.Action("SubmitCreation", new { nombreReponseMaximum = Model.NombreReponseMaximum })" method="post">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Question :</label>
+        <div class="col-sm-10">
+            <input type="text" id="question" class="form-control" name="question" checked placeholder="Saissisez votre question svp">
+        </div>
+    </div>
+    @for (int i = 1; i <= @Model.NombreReponseMaximum; i++)
+    {
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Réponse @i :</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control reponse" name="reponse" checked placeholder="Entrez votre réponse svp">
             </div>
-            @for (int i = 1; i <= @Model.NombreReponseMaximum; i++)
-            {
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Réponse @i :</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" name="reponse" checked placeholder="Entrez votre réponse svp">
-                    </div>
-                </div>
-            }        
-            <div class="form-group row">
-                <div class="col-sm-2">  </div>
-                <div class="col-sm-10">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="multiSondageString">
-                        <label class="form-check-label">
-                            Choix multiples
-                        </label>
-                    </div>
-                </div>
+        </div>
+    }
+    <div class="form-group row">
+        <div class="col-sm-2">  </div>
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input class="form-check-input multiSondageString" type="checkbox" id="multiSondageString" name="multiSondageString">
+                <label class="form-check-label">
+                    Choix multiples
+                </label>
             </div>
+        </div>
+    </div>
 
-            <p></p>
-            <p></p>
-            <p></p>
-            <p></p>
-            <fieldset style="text-align:center">
-                <input type="submit" class="btn btn-primary textall" value="Créer le sondage" : />
-            </fieldset>
-        </form>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <fieldset style="text-align:center">
+        <input type="submit" id="submitFormulaire" class="btn btn-primary textall" value="Créer le sondage" : />
+    </fieldset>
+</form>
 
-        <p></p>
-   
+<p></p>
+<script>
+    document.getElementById("submitFormulaire").addEventListener('click',
+        (evenement) => {
+            // Pour que le formulaite ne rafraichisse pas la page
+
+
+            var question = document.getElementById('question').value;
+            var reponses = [];
+            for (var reponse of document.getElementsByClassName('reponse')) {
+                reponses.push(reponse.value);
+            }
+            var multiSondageString = document.getElementById('multiSondageString').value;
+            var json = JSON.stringify({
+                question: question,
+                reponse: reponses,
+                multiSondageString: multiSondageString
+
+            });
+            fetch('/PetrasStrawPoll/CreerSondage',
+                {
+                    method: 'POST',
+                    headers: { 'Content-type': 'application/json' },
+                    body: json
+                }).then((reponseDuServeur) => {
+                    reponseDuServeur.json().then((detailSondage) => {
+                     
+                        if (detailSondage.IdSondage == 0) {
+                            alert(prompt('Saisie de donnée invalide\n ','localhost: @Request.Url.Port @Url.Action("Vote")?idSondage= '));
+                            }
+                            else
+                            {
+                            
+                                alert(prompt(' GARDER LE LIEN DESACTIVER SUR UN LIEU SÛR !!','localhost:@Request.Url.Port@Url.Action("VoteDesactiver")?idSondage=' + detailSondage.IdSondage + '&numSecurite=' + detailSondage.NumSecurite +''));
+                            alert(prompt(' A PARTAGER AVEC VOS AMIS !!', 'localhost:@Request.Url.Port@Url.Action("Vote")?idSondage=' + detailSondage.IdSondage + ''));
+                            alert(prompt(' A PARTAGER AVEC VOS AMIS !!','localhost:@Request.Url.Port@Url.Action("Resultat")?idSondage=' + detailSondage.IdSondage + ''));
+                            }
+                      
+
+                        });
+        });
+        });
+
+</script>
+

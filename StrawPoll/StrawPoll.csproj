@@ -136,6 +136,7 @@
     <Compile Include="Models\DejaVoter.cs" />
     <Compile Include="Models\DesactiverInterdit.cs" />
     <Compile Include="Models\Erreur.cs" />
+    <Compile Include="Models\FormulaireCreationSondage.cs" />
     <Compile Include="Models\Reponse.cs" />
     <Compile Include="Models\ResultatSondage.cs" />
     <Compile Include="Models\Sondage.cs" />

@@ -76,11 +76,14 @@ namespace StrawPoll.Controllers
         /// <returns></returns>
         public ActionResult SubmitCreation(int nombreReponseMaximum, string question, string[] reponse, string multiSondageString)
         {
+            return RedirectToAction("Creation", new { nombreReponseMaximum = nombreReponseMaximum });
+
             #region Contrôle que la question et au moins deux réponses sont saisie
             Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
             int nombreDeReponseValide = 0;
             nouveauSondage.ChoixMultiple(multiSondageString);
             nouveauSondage.GetNumSecurite();
+           
 
             for (int i = 0; i < reponse.Length; i++)
             {
@@ -133,6 +136,68 @@ namespace StrawPoll.Controllers
 
             }
             #endregion
+        }
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult CreerSondage(string question, string[] reponse, string multiSondageString)
+        {
+            #region Contrôle que la question et au moins deux réponses sont saisie
+            Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
+            int nombreDeReponseValide = 0;
+            nouveauSondage.ChoixMultiple(multiSondageString);
+            nouveauSondage.GetNumSecurite();
+
+            for (int i = 0; i < reponse.Length; i++)
+            {
+                Reponse testReponse = Reponse.AvantTestSaisieValide(reponse[i]);
+                if (testReponse.IsValide())
+                {
+                    nombreDeReponseValide = nombreDeReponseValide + 1;
+                }
+            }
+            if (!nouveauSondage.IsValide() || nombreDeReponseValide < 2)
+            {
+                
+                return Json(nouveauSondage);
+            }
+            #endregion
+            #region Création du sondage et les réponses saisies
+            else
+            {
+                #region création du sondage avec le numéro sécurité et multiSondage
+
+                int idSondageCreation = DataAccess.CreationSondage(nouveauSondage);
+                Sondage detailSondage = Sondage.RecupererSondageComplet(nouveauSondage.NomSondage, nouveauSondage.MultiSondage, nouveauSondage.EtatSondage, idSondageCreation, nouveauSondage.NumSecurite);
+                #region Création autant de réponses que saisie
+                int nombreTotalCreer = 0;
+                for (int i = 0; i < reponse.Length; i++)
+                {
+                    Reponse reponseDetail = Reponse.AvantInsertionEnBDD(reponse[i], idSondageCreation);
+                    if (reponseDetail.IsValide())
+                    {
+                        int idReponseCreation = DataAccess.CreationReponse(reponseDetail);
+                        nombreTotalCreer = nombreTotalCreer + 1;
+                    }
+                }
+                if (nombreTotalCreer > 1)
+                {
+                   
+                    return Json(detailSondage);
+
+                }
+                #endregion
+                #region si la création de réponse s'est mal passé on envoie message erreur avec possiblilté de retourner à l'accueil
+                else
+                {
+                    
+                    return Json(detailSondage);
+                }
+                #endregion
+
+                #endregion
+
+            }
+            #endregion
+
         }
         #endregion
         #region Envoi page web avec affichage que la saisie du sondage n'est pas correcte
@@ -280,7 +345,7 @@ namespace StrawPoll.Controllers
                             {
                                 EnregistrerVotantDansLeCookie(idSondage.Value);
                                 #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
-                                
+
                                 int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
                                 if (nombreModifie == 1)
                                 {
@@ -394,7 +459,7 @@ namespace StrawPoll.Controllers
                         {
 
                             #region on ajoute 1 au nombreVoteReponse et on met à jour la table réponse
-                        
+
                             int nombreModifie = DataAccess.AjoutNombreVoteReponse(detailReponse);
                             #endregion
                             EnregistrerVotantDansLeCookie(idSondage.Value);
@@ -528,21 +593,21 @@ namespace StrawPoll.Controllers
             {
                 if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
                 {
-                    
-                        #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
-                        List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(model);
-                        foreach (var reponseCourant in toutLesReponseDuSondage)
-                        {
-                            model.GetNombreVoteTotal(reponseCourant.NombreVoteReponse); 
-                        }
-                        foreach (var reponseCourant in toutLesReponseDuSondage)
-                        {  
-                            reponseCourant.GetPourcentageVote(model.NombreVoteTotal);
-                        }
-                        ResultatSondage nouveauResultat = new ResultatSondage(model, toutLesReponseDuSondage);
-                        return View(nouveauResultat);
-                        #endregion
-                   
+
+                    #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
+                    List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(model);
+                    foreach (var reponseCourant in toutLesReponseDuSondage)
+                    {
+                        model.GetNombreVoteTotal(reponseCourant.NombreVoteReponse);
+                    }
+                    foreach (var reponseCourant in toutLesReponseDuSondage)
+                    {
+                        reponseCourant.GetPourcentageVote(model.NombreVoteTotal);
+                    }
+                    ResultatSondage nouveauResultat = new ResultatSondage(model, toutLesReponseDuSondage);
+                    return View(nouveauResultat);
+                    #endregion
+
                 }
                 #endregion
                 #region sinon on envoi un écran en invitant la peronne de verifier son numéro de sondage
@@ -566,25 +631,25 @@ namespace StrawPoll.Controllers
 
         }
         #endregion
-        #endregion
+        #region Récuperer la page résulat tout les 1000 secondes et reaffficher la page résultat ==> Affichage dynamique 
         public JsonResult GetNombresVotantsEnTempsReel(int idSondage)
         {
 
             if (DataAccess.RecupererSondage(idSondage, out Sondage model))
-            {               
-                    #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
-                    List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(model);
-                    foreach (var reponseCourant in toutLesReponseDuSondage)
-                    {
-                        model.GetNombreVoteTotal(reponseCourant.NombreVoteReponse);
-                    }
-                    foreach (var reponseCourant in toutLesReponseDuSondage)
-                    {
-                        reponseCourant.GetPourcentageVote(model.NombreVoteTotal);
-                    }
-                    ResultatSondage nouveauResultat = new ResultatSondage(model, toutLesReponseDuSondage);
-                    return Json(nouveauResultat, JsonRequestBehavior.AllowGet);
-                    #endregion               
+            {
+                #region Calcul du pourcentage et nombre total de vote avec affichage du résultat
+                List<Reponse> toutLesReponseDuSondage = DataAccess.RecupererToutLesReponsesDuSondagePourResultatTrierParNombreVote(model);
+                foreach (var reponseCourant in toutLesReponseDuSondage)
+                {
+                    model.GetNombreVoteTotal(reponseCourant.NombreVoteReponse);
+                }
+                foreach (var reponseCourant in toutLesReponseDuSondage)
+                {
+                    reponseCourant.GetPourcentageVote(model.NombreVoteTotal);
+                }
+                ResultatSondage nouveauResultat = new ResultatSondage(model, toutLesReponseDuSondage);
+                return Json(nouveauResultat, JsonRequestBehavior.AllowGet);
+                #endregion
 
             }
             #region Affichage d'un écran avec message d'erreur de problème de base de donnée
@@ -594,8 +659,8 @@ namespace StrawPoll.Controllers
             #endregion
 
         }
-
-
+        #endregion
+        #endregion
         #region tous les pages concernant de la désactivation du sondage 
         #region Affichage de l'écran de désactivation
         /// <summary>
