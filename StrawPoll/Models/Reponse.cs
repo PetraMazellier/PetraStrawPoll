@@ -83,7 +83,24 @@ namespace StrawPoll.Models
                  PourcentageVote = 0;
             }
         }
-         
+        #region Création des enregistrements reponse pour chaque reponse valide
+        public static int CreationNouveauReponseDuSondage(string[] reponse, int idSondageCreation)
+        {
+            int nombreTotalCreer = 0;
+            for (int i = 0; i < reponse.Length; i++)
+            {
+                Reponse reponseDetail = Reponse.AvantInsertionEnBDD(reponse[i], idSondageCreation);
+                if (reponseDetail.IsValide())
+                {
+                    int idReponseCreation = DataAccess.CreationReponse(reponseDetail);
+                    nombreTotalCreer = nombreTotalCreer + 1;
+                }
+            }
+            return nombreTotalCreer;
+        }
+        #endregion
+        
+       
     }
 }
 

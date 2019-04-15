@@ -89,6 +89,98 @@ namespace UnitTestStrawPoll
             bool resultat = testNomReponse.IsValide();
             Assert.IsTrue(resultat == false, "le résultat doit être false");
         }
+        [TestMethod]
+        public void TestCreationSondageSaisieCorrect()
+        {
+            Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
+            string[] reponse = { "Cinema","Restaurant" };
+            bool saisieCorrect = Sondage.VerifierSaisieReponseCorrect(testNomSondage, reponse);           
+            Assert.IsTrue(saisieCorrect == true, "la saisie doit être correct");
+        }
+        [TestMethod]
+        public void TestCreationSondageQuestionIncorrect()
+        {
+            Sondage testNomSondage = Sondage.AvantInsertionEnBDD("   ");
+            string[] reponse = { "Cinema", "Restaurant" };
+            bool saisieCorrect = Sondage.VerifierSaisieReponseCorrect(testNomSondage, reponse);
+            Assert.IsTrue(saisieCorrect == false, "la saisie ne  doit pas être correct");            
+        }
+        [TestMethod]
+        public void TestCreationSondageReponseIncorrect()
+        {
+            Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
+            string[] reponse = { "Cinema", "" };
+            bool saisieCorrect = Sondage.VerifierSaisieReponseCorrect(testNomSondage, reponse);
+            Assert.IsTrue(saisieCorrect == false, "la saisie ne  doit pas être correct");
+        }
+        [TestMethod]
+        public void TestCreationSondageReponseDoubleIncorrect()
+        {
+            Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
+            string[] reponse = { "Cinema", "Cinema" };
+            bool saisieCorrect = Sondage.VerifierSaisieReponseCorrect(testNomSondage, reponse);
+            Assert.IsTrue(saisieCorrect == false, "la saisie ne  doit pas être correct");
+        }
+        [TestMethod]
+        public void RecupererIdSondageEnCreation()
+        {
+            string choixMultiSondageCoche = "on";
+            Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");          
+            
+            string[] reponse = { "Cinema", "Restaurant" };
+            bool saisieCorrect = Sondage.VerifierSaisieReponseCorrect(testNomSondage, reponse);
+            Assert.IsTrue(saisieCorrect == true, "la saisie doit être correct");
+            testNomSondage.ChoixMultiple(choixMultiSondageCoche);
+            testNomSondage.GetNumSecurite();
+            int idSondageCreation = DataAccess.CreationSondage(testNomSondage);
+            int nombreTotalCreer = Reponse.CreationNouveauReponseDuSondage(reponse, idSondageCreation);
+            Assert.AreEqual(2, nombreTotalCreer, "le nombre d'enregistrement de reponse doit être 2");
+            string choixMultiSondageNonCoche = "";
+            Sondage nouveauNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
+            string[] nouveauReponse = { "Cinema", "Restaurant", "Télé" };
+
+            saisieCorrect = Sondage.VerifierSaisieReponseCorrect(nouveauNomSondage, reponse);
+            Assert.IsTrue(saisieCorrect == true, "la saisie doit être correct");
+            nouveauNomSondage.ChoixMultiple(choixMultiSondageNonCoche);
+            nouveauNomSondage.GetNumSecurite();
+            int idSondageNouveauCreation = DataAccess.CreationSondage(nouveauNomSondage);
+            int nombreCreer = Reponse.CreationNouveauReponseDuSondage(nouveauReponse, idSondageCreation);
+            Assert.AreEqual(3, nombreCreer, "le nombre d'enregistrement de reponse doit être 3");
+            int resultat = idSondageNouveauCreation - idSondageCreation;
+            Assert.AreEqual(1, resultat, "le nombre id doit augmente de 1");
+
+            try
+            {
+                DataAccess.CreationSondage(nouveauNomSondage);
+                
+            }
+            catch (Exception)
+            {
+                Assert.Fail("La création doit récuperer un id");
+            }
+
+            try
+            {
+                DataAccess.RecupererSondage(idSondageNouveauCreation, out Sondage model);
+
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Id doit exister");
+            }
+            try
+            {
+                DataAccess.RecupererSondage(54544, out Sondage model);
+                Assert.Fail("Il ne devrait pas trouver le Id ");
+
+            }
+            catch (Exception)
+            {
+               // cas attendu
+            }
+
+
+        }
     }
 }
 

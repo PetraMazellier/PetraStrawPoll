@@ -128,5 +128,41 @@ namespace StrawPoll.Models
         {
             NombreVoteTotal = NombreVoteTotal + nombreVote;
         }
+        #region Test saisie  reponse correct
+        public static bool VerifierSaisieReponseCorrect(Sondage question, string[] reponse)
+        {
+
+            int nombreDeReponseValide = 0;
+            bool reponseValide = true;
+            bool reponseDouble = false;
+            if (!question.IsValide())
+            {
+                return reponseValide = false;
+            }
+            for (int i = 0; i < reponse.Length; i++)
+            {
+                Reponse testReponse = Reponse.AvantTestSaisieValide(reponse[i]);
+
+                for (int j = i + 1; j < reponse.Length; j++)
+                {
+                    if (reponse[i] == reponse[j] & testReponse.IsValide())
+                    {
+                        reponseDouble = true;
+                    }
+                }
+                if (testReponse.IsValide())
+                {
+                    nombreDeReponseValide = nombreDeReponseValide + 1;
+                }
+            }
+            if (reponseDouble == true | nombreDeReponseValide < 2)
+            {
+                reponseValide = false;
+            }
+
+            return reponseValide;
+
+        }
+        #endregion
     }
 }
