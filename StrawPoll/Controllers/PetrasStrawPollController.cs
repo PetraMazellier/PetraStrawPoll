@@ -76,7 +76,7 @@ namespace StrawPoll.Controllers
         /// <returns></returns>
         public ActionResult SubmitCreation(int nombreReponseMaximum, string question, string[] reponse, string multiSondageString)
         {
-            return RedirectToAction("Creation", new { nombreReponseMaximum = nombreReponseMaximum });
+          //  return RedirectToAction("Creation", new { nombreReponseMaximum = nombreReponseMaximum });
 
             #region Contrôle que la question et au moins deux réponses sont saisie
             Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);

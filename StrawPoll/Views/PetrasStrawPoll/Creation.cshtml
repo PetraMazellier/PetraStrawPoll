@@ -52,6 +52,7 @@
 </form>
 
 <p></p>
+<!--
 <script>
     document.getElementById("submitFormulaire").addEventListener('click',
         (evenement) => {
@@ -77,22 +78,21 @@
                     body: json
                 }).then((reponseDuServeur) => {
                     reponseDuServeur.json().then((detailSondage) => {
-                     
+
                         if (detailSondage.IdSondage == 0) {
                             alert(prompt('Saisie de donnée invalide\n ','localhost: @Request.Url.Port @Url.Action("Vote")?idSondage= '));
                             }
                             else
                             {
-                            
+
                                 alert(prompt(' GARDER LE LIEN DESACTIVER SUR UN LIEU SÛR !!','localhost:@Request.Url.Port@Url.Action("VoteDesactiver")?idSondage=' + detailSondage.IdSondage + '&numSecurite=' + detailSondage.NumSecurite +''));
                             alert(prompt(' A PARTAGER AVEC VOS AMIS !!', 'localhost:@Request.Url.Port@Url.Action("Vote")?idSondage=' + detailSondage.IdSondage + ''));
                             alert(prompt(' A PARTAGER AVEC VOS AMIS !!','localhost:@Request.Url.Port@Url.Action("Resultat")?idSondage=' + detailSondage.IdSondage + ''));
                             }
-                      
+
 
                         });
         });
         });
 
-</script>
-
+</script>... -->
