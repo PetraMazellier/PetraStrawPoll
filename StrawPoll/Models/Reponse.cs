@@ -18,33 +18,28 @@ namespace StrawPoll.Models
         public int PourcentageVote { get; private set; }
         public int CompteurReponse { get; private set; }
 
-        public Reponse(string nomReponse, int fKIdSondage, int idReponse, int nombreVoteReponse, int compteurReponse)
+        public Reponse(string nomReponse, int fKIdSondage, int idReponse, int nombreVoteReponse)
         {
 
             NombreVoteReponse = nombreVoteReponse;
             NomReponse = nomReponse;
             FKIdSondage = fKIdSondage;
             IdReponse = idReponse;
-            CompteurReponse = compteurReponse;
+           
         }
         
         public static Reponse AvantTestSaisieValide(string nomReponse)
         {
-            return new Reponse(nomReponse, 0, 0, 0, 0);
+            return new Reponse(nomReponse, 0, 0, 0);
         }
       
         public static Reponse AvantInsertionEnBDD(string nomReponse, int fKIdSondage)
         {
             
-            return new Reponse(nomReponse, fKIdSondage, 0, 0, 0);
+            return new Reponse(nomReponse, fKIdSondage, 0, 0);
         }
        
-        public static Reponse RecuperationDansLaBDD(string nomReponse, int fKIdSondage, int idReponse, int nombreVoteReponse)
-        {
-            return new Reponse(nomReponse, fKIdSondage, idReponse, nombreVoteReponse, 0);           
-
-        }        
-
+        
         public bool IsValide()
         {
             switch (NomReponse)
@@ -83,6 +78,11 @@ namespace StrawPoll.Models
                  PourcentageVote = 0;
             }
         }
+        public void GetCompteurReponse(int compteurReponse)
+        {
+            CompteurReponse = compteurReponse;
+        }
+
         #region Création des enregistrements reponse pour chaque reponse valide
         public static int CreationNouveauReponseDuSondage(string[] reponse, int idSondageCreation)
         {

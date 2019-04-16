@@ -21,34 +21,27 @@ namespace StrawPoll.Models
         public string NumSecurite { get; private set; }
         public int NombreVoteTotal { get; private set; }
 
-        public Sondage(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, string numSecurite, int nombreVoteTotal)
+        public Sondage(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, string numSecurite)
         {
             NomSondage = nomSondage;
             MultiSondage = multiSondage;
             EtatSondage = etatSondage;
             IdSondage = idSondage;
             NumSecurite = numSecurite;
-            NombreVoteTotal = nombreVoteTotal;
+           
         }
 
 
         public static Sondage AvantInsertionEnBDD(string nomSondage)
         {
-            return new Sondage(nomSondage, ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, 0, "", 0);
+            return new Sondage(nomSondage, ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, 0, "");
         }
 
         public static Sondage RecupererIdSondagePourEcranSuivant(int idSondage)
         {
-            return new Sondage("", ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, idSondage, "", 0);
+            return new Sondage("", ETAT_UNISONDAGE_DEFAULT, ETAT_SONDAGE_NON_DESACTIVER, idSondage, "");
         }
-
-
-        public static Sondage RecupererSondageComplet(string nomSondage, bool multiSondage, bool etatSondage, int idSondage, string numSecurite)
-        {
-            return new Sondage(nomSondage, multiSondage, etatSondage, idSondage, numSecurite, 0);
-
-        }
-
+       
 
         public void GetNumSecurite()
         {
@@ -66,8 +59,6 @@ namespace StrawPoll.Models
 
             return chiffreTrouve;
         }
-
-
         public static string GetLettre()
         {
             Random _random = new Random();
@@ -77,8 +68,7 @@ namespace StrawPoll.Models
             char let = (char)('A' + num);
             string lettreSpecial = let.ToString();
             return lettreSpecial;
-        }
-        
+        }        
       
         public void DesactiverSondage()
         {

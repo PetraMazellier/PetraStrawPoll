@@ -45,7 +45,7 @@ namespace StrawPoll.Models
                     bool etatSondage = (bool)dataReader["EtatSondage"];
                     bool multiSondage = (bool)dataReader["MultiSondage"];
                     string numSecurite = (string)dataReader["NumSecurite"];
-                    detailSondage = Sondage.RecupererSondageComplet(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
+                    detailSondage = new Sondage(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
                     return true;
                 }
                 else
@@ -71,7 +71,7 @@ namespace StrawPoll.Models
                     string nomSondage = (string)dataReader["NomSondage"];
                     bool etatSondage = (bool)dataReader["EtatSondage"];
                     bool multiSondage = (bool)dataReader["MultiSondage"];
-                    detailSondage = Sondage.RecupererSondageComplet(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
+                    detailSondage = new Sondage(nomSondage, multiSondage, etatSondage, idSondage, numSecurite);
 
                     return true;
                 }
@@ -137,7 +137,7 @@ namespace StrawPoll.Models
                     int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
                     string nomReponse = (string)dataReader["NomReponse"];
 
-                    detailReponse = Reponse.RecuperationDansLaBDD(nomReponse, fKIdSondage, idReponse, nombreVoteReponse);
+                    detailReponse = new Reponse(nomReponse, fKIdSondage, idReponse, nombreVoteReponse);
                     return true;
                 }
                 else
@@ -189,7 +189,8 @@ namespace StrawPoll.Models
                 int idReponse = (int)dataReader["IdReponse"];
                 string nomReponse = (string)dataReader["NomReponse"];
                 int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
-                Reponse detailList = new Reponse(nomReponse, model.IdSondage, idReponse, nombreVoteReponse, compteur);
+                Reponse detailList = new Reponse(nomReponse, model.IdSondage, idReponse, nombreVoteReponse);
+                detailList.GetCompteurReponse(compteur);
                 resultats.Add(detailList);
             }
             sondageEnCours.Close();
@@ -213,7 +214,8 @@ namespace StrawPoll.Models
                 int idReponse = (int)dataReader["IdReponse"];
                 string nomReponse = (string)dataReader["NomReponse"];
                 int nombreVoteReponse = (int)dataReader["NombreVoteReponse"];
-                Reponse detailList = new Reponse(nomReponse, modelAvecTotalVote.IdSondage, idReponse, nombreVoteReponse, compteur);
+                Reponse detailList = new Reponse(nomReponse, modelAvecTotalVote.IdSondage, idReponse, nombreVoteReponse);
+                detailList.GetCompteurReponse(compteur);
                 detailList.GetPourcentageVote(modelAvecTotalVote.NombreVoteTotal);
                 resultats.Add(detailList);
             }

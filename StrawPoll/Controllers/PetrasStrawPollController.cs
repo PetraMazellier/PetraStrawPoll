@@ -111,14 +111,35 @@ namespace StrawPoll.Controllers
             #endregion
         }
         #endregion
-        #region Version avec Json la function ne marche pas encore à 100 % du coup j'ai mi en commentaire dans creation.html
+        #region Version avec Json juset avec message box quand il y a une mauvaise saisie
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult CreerSondage(string question, string[] reponse, string multiSondageString)
         {
             #region Contrôle que la question et au moins deux réponses sont saisie
             Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
 
-            bool reponseValide = nouveauSondage.VerifierSaisieReponseCorrect( reponse);
+            bool reponseValide = nouveauSondage.VerifierSaisieReponseCorrect(reponse);
+
+
+            if (reponseValide == false)
+            {
+                return Json(nouveauSondage);
+            }
+            nouveauSondage = Sondage.RecupererIdSondagePourEcranSuivant(2);
+            return Json(nouveauSondage);
+            #endregion
+        }
+
+        
+        #endregion
+        #region Version avec Json la function ne marche pas encore à 100 % du coup j'ai mi en commentaire dans creation.html
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult CreerSondageSauvegarde(string question, string[] reponse, string multiSondageString)
+        {
+            #region Contrôle que la question et au moins deux réponses sont saisie
+            Sondage nouveauSondage = Sondage.AvantInsertionEnBDD(question);
+
+            bool reponseValide = nouveauSondage.VerifierSaisieReponseCorrect(reponse);
 
 
             if (reponseValide == false)
@@ -134,7 +155,7 @@ namespace StrawPoll.Controllers
             nouveauSondage.GetNumSecurite();
             int idSondageCreation = DataAccess.CreationSondage(nouveauSondage);
 
-            Sondage detailSondage = Sondage.RecupererSondageComplet(nouveauSondage.NomSondage, nouveauSondage.MultiSondage, nouveauSondage.EtatSondage, idSondageCreation, nouveauSondage.NumSecurite);
+            Sondage detailSondage = new Sondage(nouveauSondage.NomSondage, nouveauSondage.MultiSondage, nouveauSondage.EtatSondage, idSondageCreation, nouveauSondage.NumSecurite);
             #endregion
             #region Création autant de réponses que saisie
             int nombreTotalCreer = Reponse.CreationNouveauReponseDuSondage(reponse, idSondageCreation);
@@ -217,7 +238,7 @@ namespace StrawPoll.Controllers
                     return View(nouveauVote);
                     #endregion
                 }
-               
+
                 #region le sondage saisit n'existe pas et on envoie un message erreur on invitant la personne de redemander le numéro sondage à l'ami
                 else
                 {
@@ -291,7 +312,7 @@ namespace StrawPoll.Controllers
                             return RedirectToAction("ConfirmationVote", new { idSondage = idSondage.Value });
                         }
                         #endregion
-                       
+
                     }
                     #endregion
                     #region si la lecture du sondage s'est mal passé on envoi un message erreur correpondant avec possiblilité de retourner à l'accueil
@@ -357,7 +378,7 @@ namespace StrawPoll.Controllers
                 if (!(reponseRadios is null))
                 {
                     int?[] choix = { reponseRadios };
-                   
+
 
                     if (DataAccess.RecupererSondage(idSondage.Value, out Sondage model))
                     {
@@ -503,7 +524,7 @@ namespace StrawPoll.Controllers
 
                 }
                 #endregion
-        #region sinon on envoi un écran en invitant la peronne de verifier son numéro de sondage
+                #region sinon on envoi un écran en invitant la peronne de verifier son numéro de sondage
                 else
                 {
                     string messageTitre = "Le Sondage n'existe pas ! ";
@@ -637,40 +658,50 @@ namespace StrawPoll.Controllers
         /// <returns></returns>
         public ActionResult ConfirmationDesactiver(int idSondage, string numSecurite)
         {
+            #region on teste si on recupère bien le sondage
             if (DataAccess.RecupererSondagePourDesactiver(idSondage, numSecurite, out Sondage model))
             {
+                #region Le sondage est déja désactiver
                 if (model.EtatSondage == true)
                 {
                     return RedirectToAction("DesactiverInterdit", new { idSondage = idSondage });
                 }
+                #endregion
+                #region On desactive le sondage et on met à jour la table sondage
                 model.DesactiverSondage();
                 int nombreModifie = DataAccess.DesactiverVoteSondage(model);
+                #endregion
+                #region si tout s'est passé on affiche écran confirmation desactivation
                 if (nombreModifie == 1)
                 {
                     ConfirmationDesactiver nouveauSondage = new ConfirmationDesactiver(model);
                     return View(nouveauSondage);
                 }
-                else
-                {
-                    string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                    string messageErreur = "Raison de l'arrêt du programme : Problème en désactivant le sondage";
-                    string commentaireErreur = "Prévenez l'administrateur !!";
-                    ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-                    return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
-                }
+                #endregion
+                #region sinon on affiche un message d'erreur
+
+                string desMessageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
+                    string desMessageErreur = "Raison de l'arrêt du programme : Problème en désactivant le sondage";
+                    string desCommentaireErreur = "Prévenez l'administrateur !!";
+                    ErreurGrave desNouveauErreur = new ErreurGrave(desMessageTitre, desMessageErreur, desCommentaireErreur);
+                    return RedirectToAction("Erreur", new { messageTitre = desNouveauErreur.MessageTitre, messageErreur = desNouveauErreur.MessageErreur, commentaireErreur = desNouveauErreur.CommentaireErreur });
+                
+                #endregion
             }
-            else
-            {
+            #endregion
+            #region on affiche un message d'erreur
+            
                 string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
                 string messageErreur = "Raison de l'arrêt du programme : Problème en désactivant le sondage";
                 string commentaireErreur = "Prévenez l'administrateur !!";
                 ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
                 return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
-            }
+           
+            #endregion
 
         }
         #endregion
-        #region Affichage écran DesactiverInterdit dans le cas que le sondage est déjà désactiver
+        #region Affichage écran DésactiverInterdit dans le cas que le sondage est déjà désactiver
         public ActionResult DesactiverInterdit(int idSondage)
         {
             Sondage model = Sondage.RecupererIdSondagePourEcranSuivant(idSondage);
@@ -680,7 +711,7 @@ namespace StrawPoll.Controllers
         }
         #endregion
         #endregion
-        #region L'écran Erreur est utilisé pour envoyer soit si poroblème avec la base de donnée soir que l'identifiant n'existe pas
+        #region L'écran Erreur est utilisé pour envoyer soit si problème avec la base de donnée soit que l'identifiant n'existe pas
         public ActionResult Erreur(string messageTitre, string messageErreur, string commentaireErreur)
         {
             ErreurGrave erreurTrouve = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
@@ -704,9 +735,9 @@ namespace StrawPoll.Controllers
             return cookies["CookieUtilisateur" + idSondage] != null;
         }
         #endregion
-      
-        
-       
+
+
+
         #region récuperer reponse pour chaque choix et appel mise à jour vote
         public int VoterPourChaqueReponse(int? idSondage, int?[] choix)
         {
