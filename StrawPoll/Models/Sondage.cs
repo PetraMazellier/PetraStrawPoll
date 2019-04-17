@@ -46,8 +46,7 @@ namespace StrawPoll.Models
         public void GetNumSecurite()
         {
             string numSecurite = GetLettre();                    
-            numSecurite += GetChiffre();
-            numSecurite += GetLettre();
+            numSecurite += GetChiffre();            
             NumSecurite = numSecurite;
         }
 
@@ -73,7 +72,6 @@ namespace StrawPoll.Models
         public void DesactiverSondage()
         {
             EtatSondage = true;
-
         }
         public bool IsValide()
         {

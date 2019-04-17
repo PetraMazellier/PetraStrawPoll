@@ -680,23 +680,23 @@ namespace StrawPoll.Controllers
                 #endregion
                 #region sinon on affiche un message d'erreur
 
-                string desMessageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                    string desMessageErreur = "Raison de l'arrêt du programme : Problème en désactivant le sondage";
-                    string desCommentaireErreur = "Prévenez l'administrateur !!";
-                    ErreurGrave desNouveauErreur = new ErreurGrave(desMessageTitre, desMessageErreur, desCommentaireErreur);
-                    return RedirectToAction("Erreur", new { messageTitre = desNouveauErreur.MessageTitre, messageErreur = desNouveauErreur.MessageErreur, commentaireErreur = desNouveauErreur.CommentaireErreur });
-                
+                string desMessageTitre = "Le Sondage n'existe pas ! ";
+                string desMessageErreur = "Veuillez revérifier le numéro d'acces pour désactiver le sondage svp !";
+                string desCommentaireErreur = "Vous pouvez retourner à l'accueil !!";
+                ErreurGrave desNouveauErreur = new ErreurGrave(desMessageTitre, desMessageErreur, desCommentaireErreur);
+                return RedirectToAction("Erreur", new { messageTitre = desNouveauErreur.MessageTitre, messageErreur = desNouveauErreur.MessageErreur, commentaireErreur = desNouveauErreur.CommentaireErreur });
+
                 #endregion
             }
             #endregion
             #region on affiche un message d'erreur
-            
-                string messageTitre = "Programme s'est arrêté à cause d'une grave erreur ! ";
-                string messageErreur = "Raison de l'arrêt du programme : Problème en désactivant le sondage";
-                string commentaireErreur = "Prévenez l'administrateur !!";
-                ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
-                return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
-           
+
+            string messageTitre = "Le Sondage n'existe pas ! ";
+            string messageErreur = "Veuillez revérifier le numéro d'acces pour désactiver le sondage svp !";
+            string commentaireErreur = "Vous pouvez retourner à l'accueil !!";
+            ErreurGrave nouveauErreur = new ErreurGrave(messageTitre, messageErreur, commentaireErreur);
+            return RedirectToAction("Erreur", new { messageTitre = nouveauErreur.MessageTitre, messageErreur = nouveauErreur.MessageErreur, commentaireErreur = nouveauErreur.CommentaireErreur });
+
             #endregion
 
         }
