@@ -45,8 +45,9 @@ namespace StrawPoll.Models
 
         public void GetNumSecurite()
         {
-            string numSecurite = GetLettre();                    
-            numSecurite += GetChiffre();            
+            string numSecurite = GetLettreMajuscule();                    
+            numSecurite += GetChiffre();
+            
             NumSecurite = numSecurite;
         }
 
@@ -58,17 +59,17 @@ namespace StrawPoll.Models
 
             return chiffreTrouve;
         }
-        public static string GetLettre()
+        public static string GetLettreMajuscule()
         {
-            Random _random = new Random();
-            // Cette methode returns un lettre aleatoire miniscule ou majuscule 
-            // ... Entre 'a' et 'Z' inclus.
-            int num = _random.Next(0, 25); // Zero à 25
-            char let = (char)('A' + num);
-            string lettreSpecial = let.ToString();
-            return lettreSpecial;
-        }        
-      
+            Random randomMajuscule = new Random();
+            // Cette methode returns un lettre aleatoire majuscule 
+            // ... Entre 'A' et 'Z' inclus.
+            int NumAleatoire = randomMajuscule.Next(0, 25); // Zero à 25
+            char letMajuscule = (char)('A' + NumAleatoire);
+            string lettreSpecialMajuscule = letMajuscule.ToString();
+            return lettreSpecialMajuscule;
+        }
+       
         public void DesactiverSondage()
         {
             EtatSondage = true;
@@ -116,17 +117,30 @@ namespace StrawPoll.Models
         {
             NombreVoteTotal = NombreVoteTotal + nombreVote;
         }
+
         #region Test saisie  reponse correct
-
-        public  bool VerifierSaisieReponseCorrect( string[] reponse)
+        public bool VerifierSaisieReponseCorrect(string[] reponse)
         {
-
             int nombreDeReponseValide = 0;
             bool reponseValide = true;
             bool reponseDouble = false;
+           
+            string[] resultat = new string[reponse.Length];
 
+            for (int i = 0; i < reponse.Length; i++)
+            {
+                var reponseSansBlanc = "";
+
+                foreach (char c in reponse[i])
+                {
+                    if (c != ' ')
+                    {
+                        reponseSansBlanc = reponseSansBlanc + c;
+                    }
+                }
+                resultat[i] = reponseSansBlanc;
+            }
             if (!(IsValide()))
-
             {
                 return reponseValide = false;
             }
@@ -136,7 +150,7 @@ namespace StrawPoll.Models
 
                 for (int j = i + 1; j < reponse.Length; j++)
                 {
-                    if (reponse[i] == reponse[j] & testReponse.IsValide())
+                    if (resultat[i] == resultat[j] & testReponse.IsValide())
                     {
                         reponseDouble = true;
                     }
@@ -150,10 +164,10 @@ namespace StrawPoll.Models
             {
                 reponseValide = false;
             }
-
             return reponseValide;
-
         }
         #endregion
     }
+
 }
+

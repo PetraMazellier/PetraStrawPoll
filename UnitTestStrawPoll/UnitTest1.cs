@@ -136,6 +136,15 @@ namespace UnitTestStrawPoll
             bool saisieCorrect = testNomSondage.VerifierSaisieReponseCorrect(reponse);
             Assert.IsTrue(saisieCorrect == false, "la saisie ne  doit pas être correct");
         }
+        // test contrôle la question et tous les Reponses quand il y a deux fois exactement la même reponse avec function  du blanc en plus VerifierSaisieReponseCorrect
+        [TestMethod]
+        public void TestCreationSondageReponseDoubleAvecBlancIncorrect()
+        {
+            Sondage testNomSondage = Sondage.AvantInsertionEnBDD("On fait quoi ce soir ?");
+            string[] reponse = { "Cinema", "Cinema   " };
+            bool saisieCorrect = testNomSondage.VerifierSaisieReponseCorrect(reponse);
+            Assert.IsTrue(saisieCorrect == false, "la saisie ne  doit pas être correct");
+        }
         // test qu'on on crée une sondage le constructeur doit mettre par defaut simple vote
         [TestMethod]
         public void SimpleVoteParDefaut()
