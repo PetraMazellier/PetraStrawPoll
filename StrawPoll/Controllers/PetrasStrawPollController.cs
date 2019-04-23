@@ -722,7 +722,7 @@ namespace StrawPoll.Controllers
         #region On enregistre l'adresse user dans le cookies avec le sondage correspondant
         public void EnregistrerVotantDansLeCookie(int idSondage)
         {
-            string Votant = Request.UserHostAddress;
+           
             HttpCookie cookie = new HttpCookie("CookieUtilisateur" + idSondage);
             cookie.Value = "";
             cookie.Expires = DateTime.MaxValue;
